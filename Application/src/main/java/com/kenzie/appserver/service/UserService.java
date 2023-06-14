@@ -3,6 +3,7 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.repositories.UserRespository;
 import com.kenzie.appserver.repositories.model.ExampleRecord;
 import com.kenzie.appserver.service.model.Example;
+import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.ExampleData;
 import org.springframework.stereotype.Service;
@@ -17,21 +18,21 @@ public class UserService {
         this.lambdaServiceClient = lambdaServiceClient;
     }
 
-    public Example findById(String id) {
+    public User findById(String id) {
 
         // Example getting data from the lambda
         ExampleData dataFromLambda = lambdaServiceClient.getExampleData(id);
 
         // Example getting data from the local repository
-        Example dataFromDynamo = userRespository
+        User dataFromDynamo = userRespository
                 .findById(id)
-                .map(example -> new Example(example.getId(), example.getName()))
+                .map(example -> new User(example.getId(), example.getName()))
                 .orElse(null);
 
         return dataFromDynamo;
     }
 
-    public Example addNewExample(String name) {
+    public User addNewExample(String name) {
         // Example sending data to the lambda
         ExampleData dataFromLambda = lambdaServiceClient.setExampleData(name);
 
@@ -41,7 +42,7 @@ public class UserService {
         exampleRecord.setName(dataFromLambda.getData());
         userRespository.save(exampleRecord);
 
-        Example example = new Example(dataFromLambda.getId(), name);
+        User example = new User(dataFromLambda.getId(), name);
         return example;
     }
 }

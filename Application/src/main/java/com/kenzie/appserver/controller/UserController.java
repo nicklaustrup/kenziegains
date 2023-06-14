@@ -28,14 +28,14 @@ public class UserController {
         }
 
         UserResponse exampleResponse = new UserResponse();
-        exampleResponse.setId(example.getId());
-        exampleResponse.setName(example.getName());
+//        exampleResponse.setId(example.getId());
+//        exampleResponse.setName(example.getName());
         return ResponseEntity.ok(exampleResponse);
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> addNewUser(@RequestBody UserCreateRequest userCreateRequest) {
-        User user = userService.addNewExample(userCreateRequest.getName());
+        User user = userService.addNewExample(userCreateRequest.getUserId());
 
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
