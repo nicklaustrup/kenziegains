@@ -1,19 +1,18 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.repositories.model.ExampleRecord;
 import com.kenzie.appserver.repositories.UserRespository;
+import com.kenzie.appserver.repositories.model.ExampleRecord;
 import com.kenzie.appserver.service.model.Example;
-
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.ExampleData;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ExampleService {
+public class UserService {
     private UserRespository userRespository;
     private LambdaServiceClient lambdaServiceClient;
 
-    public ExampleService(UserRespository userRespository, LambdaServiceClient lambdaServiceClient) {
+    public UserService(UserRespository userRespository, LambdaServiceClient lambdaServiceClient) {
         this.userRespository = userRespository;
         this.lambdaServiceClient = lambdaServiceClient;
     }
