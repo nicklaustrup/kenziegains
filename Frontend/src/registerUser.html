@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="registerUserPage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body class="background">
+    <header class="header" id="header">
+        <div class="site-title">
+            <a class="header_home" href="index.html">Example App</a>
+        </div>
+        <div class="site-title">
+            <a class="header_home" href="registerUser.html">Register User</a>
+        </div>
+    </header>
+    <div class="card">
+        <h2>Register User</h2>
+        <form class="card-content" id="create-user-form">
+            <p class="form-field">
+                <label>username</label>
+                <input type="text" required class="validated-field" id="create-username-field">
+                <label>Password</label>
+                <input type="text" required class="validated-field" id="create-password-field">
+                <label>First Name</label>
+                <input type="text" required class="validated-field" id="create-firstname-field">
+                <label>Last Name</label>
+                <input type="text" required class="validated-field" id="create-lastname-field">
+                <label>Member or Instructor?</label>
+                <input type="text" required class="validated-field" id="create-usertype-field">
+                <label>Membership Type</label>
+                <input type="text" required class="validated-field" id="create-membership-field">
+            </p>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    <div class="card">
+        <h2>Login</h2>
+        <form class="card-content" id="get-by-user-id-form">
+            <p class="form-field">
+                <label>Username</label>
+                <input type="text" required class="validated-field" id="username-field">
+                <label>Password</label>
+                <input type="text" required class="validated-field" id="password-field">
+            </p>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div class="card" id="result">
+        <h2>Result:</h2>
+        <p id="result-info"></p>
+    </div>
+
+</body>
+</html>

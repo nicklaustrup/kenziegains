@@ -7,8 +7,12 @@ import javax.validation.constraints.NotEmpty;
 public class UserCreateRequest {
 
     @NotEmpty
-    @JsonProperty("userId")
-    private String userId;
+    @JsonProperty("username")
+    private String username;
+
+    @NotEmpty
+    @JsonProperty("password")
+    private String password;
 
     @NotEmpty
     @JsonProperty("firstName")
@@ -25,28 +29,6 @@ public class UserCreateRequest {
     @NotEmpty
     @JsonProperty("membership")
     private String membership;
-
-    @NotEmpty
-    @JsonProperty("status")
-    private String status;
-
-    @NotEmpty
-    @JsonProperty("username")
-    private String username;
-
-
-    //TODO Should this be retrievable or read only?
-    @NotEmpty
-    @JsonProperty("password")
-    private String password;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -78,14 +60,6 @@ public class UserCreateRequest {
 
     public void setMembership(String membership) {
         this.membership = membership;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getUsername() {

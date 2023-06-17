@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.repositories.UserRespository;
+import com.kenzie.appserver.repositories.ExampleRepository;
+import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.ExampleRecord;
 import com.kenzie.appserver.service.model.Example;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
@@ -15,15 +16,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ExampleServiceTest {
-    private UserRespository userRespository;
+    private ExampleRepository exampleRepository;
     private ExampleService exampleService;
     private LambdaServiceClient lambdaServiceClient;
 
     @BeforeEach
     void setup() {
-        userRespository = mock(UserRespository.class);
+        exampleRepository = mock(ExampleRepository.class);
         lambdaServiceClient = mock(LambdaServiceClient.class);
-        exampleService = new ExampleService(userRespository, lambdaServiceClient);
+        exampleService = new ExampleService(exampleRepository, lambdaServiceClient);
     }
     /** ------------------------------------------------------------------------
      *  exampleService.findById
@@ -39,7 +40,7 @@ public class ExampleServiceTest {
         record.setName("concertname");
 
         // WHEN
-        when(userRespository.findById(id)).thenReturn(Optional.of(record));
+        when(exampleRepository.findById(id)).thenReturn(Optional.of(record));
         Example example = exampleService.findById(id);
 
         // THEN
@@ -53,7 +54,7 @@ public class ExampleServiceTest {
         // GIVEN
         String id = randomUUID().toString();
 
-        when(userRespository.findById(id)).thenReturn(Optional.empty());
+        when(exampleRepository.findById(id)).thenReturn(Optional.empty());
 
         // WHEN
         Example example = exampleService.findById(id);

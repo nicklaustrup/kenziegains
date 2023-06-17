@@ -19,27 +19,41 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable("id") String id) {
+    @GetMapping("/{username}_{password}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable("username") String username, @PathVariable("password") String password) {
 
-        User user  = userService.findById(id);
+        User user  = userService.findById(username, password);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
 
-        UserResponse exampleResponse = new UserResponse();
-//        exampleResponse.setId(example.getId());
-//        exampleResponse.setName(example.getName());
-        return ResponseEntity.ok(exampleResponse);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUserId(user.getUserId());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setUserType(user.getUserType());
+        userResponse.setMembership(user.getMembership());
+        userResponse.setStatus(user.getStatus());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setPassword(user.getPassword());
+
+
+        return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> addNewUser(@RequestBody UserCreateRequest userCreateRequest) {
-        User user = userService.addNewExample(userCreateRequest.getUserId());
+        User user = userService.addNewUser(userCreateRequest);
 
         UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
+        userResponse.setUserId(user.getUserId());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setUserType(user.getUserType());
+        userResponse.setMembership(user.getMembership());
+        userResponse.setStatus(user.getStatus());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setPassword(user.getPassword());
 
         return ResponseEntity.ok(userResponse);
     }
