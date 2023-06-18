@@ -1,0 +1,11 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 1088
+      Handler: com.kenzie.capstone.service.lambda.SetUserData
+      CodeUri: C:\Users\nlaus\kenzie\ata-capstone-project-kenziegains\ServiceLambda
+      Runtime: java11
+      Architectures:
+        - x86_64

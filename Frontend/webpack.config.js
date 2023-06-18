@@ -9,6 +9,7 @@ module.exports = {
   },
   entry: {
     examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+    registerUserPage: path.resolve(__dirname, 'src', 'pages', 'registerUserPage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -24,6 +25,12 @@ module.exports = {
           '/example',
         ],
         target: 'http://localhost:5001'
+      },
+      {
+        context: [
+          '/user',
+        ],
+        target: 'http://localhost:5001'
       }
     ]
   },
@@ -31,6 +38,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/registerUser.html',
+      filename: 'registerUser.html',
       inject: false
     }),
     new CopyPlugin({

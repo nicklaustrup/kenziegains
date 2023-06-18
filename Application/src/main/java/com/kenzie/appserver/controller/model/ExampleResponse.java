@@ -1,24 +1,18 @@
 package com.kenzie.appserver.controller.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+import javax.validation.constraints.NotEmpty;
+
 public class ExampleResponse {
 
-    @JsonProperty("id")
-    private String id;
-
+    @NotEmpty
     @JsonProperty("name")
     private String name;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    @NotEmpty
+    @JsonProperty("id")
+    private String id;
 
     public String getName() {
         return name;
@@ -26,5 +20,13 @@ public class ExampleResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
