@@ -8,7 +8,6 @@ checkstyle {
 }
 
 dependencies {
-    implementation project(":ServiceLambda")
     implementation project(":ServiceLambdaModel")
 
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
@@ -26,7 +25,7 @@ dependencies {
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
     implementation 'com.amazonaws:aws-lambda-java-events:3.6.0'
     implementation 'com.google.dagger:dagger:2.30'
-    implementation project(path: ':Application')
+    implementation project(path: ':ServiceLambda')
     annotationProcessor 'com.google.dagger:dagger-compiler:2.30'
 
 

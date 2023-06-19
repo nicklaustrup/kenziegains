@@ -33,6 +33,7 @@ public class User {
         this.username = username;
         this.password = password;
     }
+    public User(){}
 
     public String getUserId() {
         return userId;
