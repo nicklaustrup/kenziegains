@@ -12,6 +12,7 @@ import com.kenzie.capstone.service.model.ExampleRecord;
 import java.util.List;
 
 public class UserDao {
+    //TODO build this out
     private DynamoDBMapper mapper;
 
     /**

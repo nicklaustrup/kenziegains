@@ -1,12 +1,16 @@
 package com.kenzie.appserver.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.repositories.UserRepository;
-import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.User;
+import com.kenzie.capstone.service.client.ApiGatewayException;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.UserData;
+import com.kenzie.capstone.service.model.UserRecord;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -69,17 +73,24 @@ public class UserService {
 
 //        userRepository.save(userRecord);
         // Example sending data to the lambda
-        UserResponse dataFromLambda = lambdaServiceClient.setUserData(userRecord);
+        UserData dataFromLambda = lambdaServiceClient.setUserData(userRecord);
 
+        ObjectMapper mapper = new ObjectMapper();
+        User registeredUser;
+        try {
+            registeredUser = mapper.readValue(dataFromLambda.getData(), User.class);
+        } catch (JsonProcessingException a){
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + a);
+        }
 
-        User registeredUser = new User(dataFromLambda.getUserId(),
-                dataFromLambda.getFirstName(),
-                dataFromLambda.getLastName(),
-                dataFromLambda.getUserType(),
-                dataFromLambda.getMembership(),
-                dataFromLambda.getStatus(),
-                dataFromLambda.getUsername(),
-                dataFromLambda.getPassword());
+//        User registeredUser = new User(dataFromLambda.getUserId(),
+//                dataFromLambda.getFirstName(),
+//                dataFromLambda.getLastName(),
+//                dataFromLambda.getUserType(),
+//                dataFromLambda.getMembership(),
+//                dataFromLambda.getStatus(),
+//                dataFromLambda.getUsername(),
+//                dataFromLambda.getPassword());
 
         return registeredUser;
     }

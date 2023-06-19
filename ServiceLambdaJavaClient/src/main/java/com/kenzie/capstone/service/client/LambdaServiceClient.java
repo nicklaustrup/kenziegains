@@ -2,11 +2,9 @@ package com.kenzie.capstone.service.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kenzie.appserver.controller.model.UserResponse;
-import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.capstone.service.model.ExampleData;
 import com.kenzie.capstone.service.model.UserData;
-import com.kenzie.appserver.controller.model.UserCreateRequest;
+import com.kenzie.capstone.service.model.UserRecord;
 
 
 public class LambdaServiceClient {
@@ -47,7 +45,7 @@ public class LambdaServiceClient {
     }
 
                             /***************        USERS         *********************/
-    public UserResponse setUserData(UserRecord data) {
+    public UserData setUserData(UserRecord data) {
         EndpointUtility endpointUtility = new EndpointUtility();
         String request;
         try {
@@ -57,18 +55,18 @@ public class LambdaServiceClient {
         }
 
         String response = endpointUtility.postEndpoint(SET_USER_ENDPOINT, request);
-        UserResponse userData;
+        UserData userData;
         try {
-            userData = mapper.readValue(response, UserResponse.class);
+            userData = mapper.readValue(response, UserData.class);
         } catch (Exception e) {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
         return userData;
     }
 
-    public UserData getUserData(String id) {
+    public UserData getUserData(String username) {
         EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.getEndpoint(GET_EXAMPLE_ENDPOINT.replace("{id}", id));
+        String response = endpointUtility.getEndpoint(GET_USER_ENDPOINT.replace("{username}", username));
         UserData userData;
         try {
             userData = mapper.readValue(response, UserData.class);
