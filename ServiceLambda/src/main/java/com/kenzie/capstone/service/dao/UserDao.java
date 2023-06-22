@@ -1,5 +1,6 @@
 package com.kenzie.capstone.service.dao;
 
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
@@ -8,11 +9,12 @@ import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
 import com.kenzie.capstone.service.model.ExampleData;
 import com.kenzie.capstone.service.model.ExampleRecord;
+import com.kenzie.capstone.service.model.UserRecord;
+import com.kenzie.marketing.referral.service.model.ReferralRecord;
 
 import java.util.List;
 
 public class UserDao {
-    //TODO build this out
     private DynamoDBMapper mapper;
 
     /**
