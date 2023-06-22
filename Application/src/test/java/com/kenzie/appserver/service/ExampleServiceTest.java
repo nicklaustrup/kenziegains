@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.repositories.ExampleRepository;
+import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.ExampleRecord;
 import com.kenzie.appserver.service.model.Example;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
