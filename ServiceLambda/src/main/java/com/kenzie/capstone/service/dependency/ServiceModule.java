@@ -15,7 +15,6 @@ import javax.inject.Singleton;
 )
 public class ServiceModule {
 
-    //TODO add provide Users
 
     @Singleton
     @Provides

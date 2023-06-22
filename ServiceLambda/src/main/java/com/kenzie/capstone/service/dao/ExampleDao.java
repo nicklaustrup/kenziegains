@@ -1,7 +1,6 @@
 package com.kenzie.capstone.service.dao;
 
-import com.kenzie.capstone.service.model.ExampleData;
-import com.kenzie.capstone.service.model.ExampleRecord;
+import com.kenzie.capstone.service.model.*;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
@@ -9,7 +8,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
-import com.kenzie.capstone.service.model.InstructorLeadClassRecord;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -102,5 +100,43 @@ public class ExampleDao {
         }
 
         return instructorLeadClassRecord;
+    }
+
+
+    //User Tables
+    public List<UserRecord> getUserData(String username) {
+        UserRecord record = new UserRecord();
+        record.setUsername(username);
+
+        DynamoDBQueryExpression<UserRecord> queryExpression = new DynamoDBQueryExpression<UserRecord>()
+                .withHashKeyValues(record)
+                .withConsistentRead(false);
+
+        return mapper.query(UserRecord.class, queryExpression);
+    }
+
+    public UserRecord setUserData(UserData data) {
+        UserRecord record = new UserRecord();
+        record.setUserId(data.getUserId());
+        record.setUsername(data.getUsername());
+        record.setFirstName(data.getFirstName());
+        record.setLastName(data.getLastName());
+        record.setMembership(data.getMembership());
+        record.setStatus(data.getStatus());
+        record.setUserType(record.getUserType());
+        record.setPassword(record.getPassword());
+
+
+        try {
+            mapper.save(record, new DynamoDBSaveExpression()
+                    .withExpected(ImmutableMap.of(
+                            "username",
+                            new ExpectedAttributeValue().withExists(false)
+                    )));
+        } catch (ConditionalCheckFailedException e) {
+            throw new IllegalArgumentException("username already exists");
+        }
+
+        return record;
     }
 }

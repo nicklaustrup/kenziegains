@@ -57,7 +57,7 @@ public class LambdaServiceClient {
         return exampleData;
     }
 
-                            /***************        USERS         *********************/
+    /***************        USERS         *********************/
     public UserData setUserData(UserRecord data) {
         EndpointUtility endpointUtility = new EndpointUtility();
         String request;
