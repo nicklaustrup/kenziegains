@@ -1,12 +1,12 @@
-package com.kenzie.appserver.repositories.model;
+package com.kenzie.capstone.service.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.kenzie.appserver.converter.LocalDateTimeConverter;
+import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@DynamoDBTable(tableName = "InstructorLeadClass")
+@DynamoDBTable(tableName = "LambdaInstructorLeadClass")
 public class InstructorLeadClassRecord {
     private String classId;
     private String name;
@@ -16,7 +16,6 @@ public class InstructorLeadClassRecord {
     private int classCapacity;
     private LocalDateTime dateTime;
     private boolean status;
-
     @DynamoDBHashKey(attributeName = "classId")
     public String getClassId() {
         return classId;
@@ -78,6 +77,7 @@ public class InstructorLeadClassRecord {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 
     public void setClassCapacity(int classCapacity) {
         this.classCapacity = classCapacity;

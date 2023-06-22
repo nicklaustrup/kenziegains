@@ -1,13 +1,9 @@
-package com.kenzie.appserver.repositories.model;
-
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.kenzie.appserver.converter.LocalDateTimeConverter;
+package com.kenzie.capstone.service.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@DynamoDBTable(tableName = "InstructorLeadClass")
-public class InstructorLeadClassRecord {
+public class InstructorLeadClassData {
     private String classId;
     private String name;
     private String description;
@@ -17,74 +13,77 @@ public class InstructorLeadClassRecord {
     private LocalDateTime dateTime;
     private boolean status;
 
-    @DynamoDBHashKey(attributeName = "classId")
+    public InstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
+        this.classId = classId;
+        this.name = name;
+        this.description = description;
+        this.classType = classType;
+        this.userId = userId;
+        this.classCapacity = classCapacity;
+        this.dateTime = dateTime;
+        this.status = status;
+    }
+
+    public InstructorLeadClassData(){};
+
     public String getClassId() {
         return classId;
-    }
-
-    @DynamoDBAttribute(attributeName = "name")
-    public String getName() {
-        return name;
-    }
-
-    @DynamoDBAttribute(attributeName = "description")
-    public String getDescription() {
-        return description;
-    }
-
-    @DynamoDBAttribute(attributeName = "classType")
-    public String getClassType() {
-        return classType;
-    }
-
-    @DynamoDBAttribute(attributeName = "userId")
-    public String getUserId() {
-        return userId;
-    }
-
-    @DynamoDBAttribute(attributeName = "classCapacity")
-    public int getClassCapacity() {
-        return classCapacity;
-    }
-
-    @DynamoDBAttribute(attributeName = "dateTime")
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    @DynamoDBAttribute(attributeName = "status")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL)
-    public boolean isStatus() {
-        return status;
     }
 
     public void setClassId(String classId) {
         this.classId = classId;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public String getClassType() {
+        return classType;
+    }
+
     public void setClassType(String classType) {
         this.classType = classType;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
+    public int getClassCapacity() {
+        return classCapacity;
+    }
+
     public void setClassCapacity(int classCapacity) {
         this.classCapacity = classCapacity;
     }
 
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 
     public void setStatus(boolean status) {
@@ -95,7 +94,7 @@ public class InstructorLeadClassRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        InstructorLeadClassRecord that = (InstructorLeadClassRecord) o;
+        InstructorLeadClassData that = (InstructorLeadClassData) o;
         return classCapacity == that.classCapacity && status == that.status && classId.equals(that.classId) && name.equals(that.name) && description.equals(that.description) && classType.equals(that.classType) && userId.equals(that.userId) && dateTime.equals(that.dateTime);
     }
 

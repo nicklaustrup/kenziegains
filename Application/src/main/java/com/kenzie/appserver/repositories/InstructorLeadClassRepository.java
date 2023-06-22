@@ -1,9 +1,10 @@
 package com.kenzie.appserver.repositories;
 
-import com.kenzie.appserver.repositories.model.ExampleRecord;
+import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
+
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
 
 @EnableScan
-public interface InstructorLeadClassRepository extends CrudRepository<ExampleRecord, String> {
+public interface InstructorLeadClassRepository extends CrudRepository<InstructorLeadClassRecord, String> {
 }
