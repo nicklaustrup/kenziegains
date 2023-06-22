@@ -10,6 +10,7 @@ import com.kenzie.capstone.service.LambdaService;
 import com.kenzie.capstone.service.dependency.DaggerServiceComponent;
 import com.kenzie.capstone.service.dependency.ServiceComponent;
 import com.kenzie.capstone.service.model.ExampleData;
+import com.kenzie.capstone.service.model.UserData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,17 +36,17 @@ public class GetUserData implements RequestHandler<APIGatewayProxyRequestEvent, 
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
 
-        String id = input.getPathParameters().get("id");
+        String username = input.getPathParameters().get("username");
 
-        if (id == null || id.length() == 0) {
+        if (username == null || username.length() == 0) {
             return response
                     .withStatusCode(400)
-                    .withBody("Id is invalid");
+                    .withBody("Username is invalid");
         }
 
         try {
-            ExampleData exampleData = lambdaService.getExampleData(id);
-            String output = gson.toJson(exampleData);
+            UserData userData = lambdaService.getUserData(username);
+            String output = gson.toJson(userData);
 
             return response
                     .withStatusCode(200)
