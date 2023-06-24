@@ -13,4 +13,5 @@ import javax.inject.Singleton;
 @Component(modules = {DaoModule.class, ServiceModule.class})
 public interface ServiceComponent {
     LambdaService provideLambdaService();
+//    LambdaService provideUserService();
 }

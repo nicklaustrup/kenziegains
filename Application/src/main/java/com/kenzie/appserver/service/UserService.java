@@ -60,7 +60,6 @@ public class UserService {
 //        userRespository.save(exampleRecord);
 
 
-        //TODO replace this with a lambda call
         UserRecord userRecord = new UserRecord();
         userRecord.setUserId(UUID.randomUUID().toString());
         userRecord.setFirstName(user.getFirstName());
@@ -75,22 +74,15 @@ public class UserService {
         // Example sending data to the lambda
         UserData dataFromLambda = lambdaServiceClient.setUserData(userRecord);
 
-        ObjectMapper mapper = new ObjectMapper();
-        User registeredUser;
-        try {
-            registeredUser = mapper.readValue(dataFromLambda.getData(), User.class);
-        } catch (JsonProcessingException a){
-            throw new ApiGatewayException("Unable to map deserialize JSON: " + a);
-        }
 
-//        User registeredUser = new User(dataFromLambda.getUserId(),
-//                dataFromLambda.getFirstName(),
-//                dataFromLambda.getLastName(),
-//                dataFromLambda.getUserType(),
-//                dataFromLambda.getMembership(),
-//                dataFromLambda.getStatus(),
-//                dataFromLambda.getUsername(),
-//                dataFromLambda.getPassword());
+        User registeredUser = new User(dataFromLambda.getUserId(),
+                dataFromLambda.getFirstName(),
+                dataFromLambda.getLastName(),
+                dataFromLambda.getUserType(),
+                dataFromLambda.getMembership(),
+                dataFromLambda.getStatus(),
+                dataFromLambda.getUsername(),
+                dataFromLambda.getPassword());
 
         return registeredUser;
     }

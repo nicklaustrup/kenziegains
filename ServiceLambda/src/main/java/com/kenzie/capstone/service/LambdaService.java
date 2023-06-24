@@ -1,10 +1,9 @@
 package com.kenzie.capstone.service;
 
-import com.kenzie.capstone.service.model.ExampleData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kenzie.capstone.service.model.*;
 import com.kenzie.capstone.service.dao.ExampleDao;
-import com.kenzie.capstone.service.model.ExampleRecord;
-import com.kenzie.capstone.service.model.InstructorLeadClassData;
-import com.kenzie.capstone.service.model.InstructorLeadClassRecord;
 
 import javax.inject.Inject;
 
@@ -13,13 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class LambdaService {
-    //TODO Build this out
 
     private ExampleDao exampleDao;
+    private ObjectMapper mapper;
 
     @Inject
     public LambdaService(ExampleDao exampleDao) {
         this.exampleDao = exampleDao;
+        this.mapper = new ObjectMapper();
     }
 
     public ExampleData getExampleData(String id) {
@@ -36,6 +36,7 @@ public class LambdaService {
         return new ExampleData(id, data);
     }
 
+
     /***************        INSTRUCTOR LEAD CLASS         *********************/
     public InstructorLeadClassData getInstructorLeadClassData(String classId) {
         List<InstructorLeadClassRecord> records = exampleDao.getInstructorLeadClassData(classId);
@@ -49,5 +50,27 @@ public class LambdaService {
         String id = UUID.randomUUID().toString();
         InstructorLeadClassRecord record = exampleDao.setInstructorLeadClassData(id, name, description, classType, userId, classCapacity, dateTime, status);
         return new InstructorLeadClassData(id, name, description, classType, userId, classCapacity, dateTime.toString(), status);
+    }
+
+    //Users
+    public UserData getUserData(String username) {
+        List<UserRecord> records = exampleDao.getUserData(username);
+        if (records.size() > 0) {
+            return new UserData(records.get(0).getUserId(), records.get(0).getFirstName(), records.get(0).getLastName(), records.get(0).getUserType(), records.get(0).getMembership(), records.get(0).getStatus(), records.get(0).getUsername(), records.get(0).getPassword());
+        }
+        return null;
+    }
+
+    public UserData setUserData(String data) {
+        UserData userData;
+
+        try{
+            userData = mapper.readValue(data, UserData.class);
+        } catch(JsonProcessingException e) {
+            throw new RuntimeException("Unable to map deserialize JSON: " + e);
+        }
+
+        UserRecord record = exampleDao.setUserData(userData);
+        return new UserData(record.getUserId(), record.getFirstName(), record.getLastName(), record.getUserType(), record.getMembership(), record.getStatus(), record.getUsername(), record.getPassword());
     }
 }
