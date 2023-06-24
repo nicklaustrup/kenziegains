@@ -11,9 +11,9 @@ public class CacheClient {
         public CacheClient(JedisPool jedisPool) {
             this.jedisPool = jedisPool;
         }
-        public void setValue(String key, int seconds, String val) {
+        public void setValue(String key, String instructorName, String className) {
             try (Jedis jedis = jedisPool.getResource()) {
-                jedis.setex(key, seconds, val);
+                jedis.hset(key, instructorName, className);
             }
         }
         public String getValue(String key) {
