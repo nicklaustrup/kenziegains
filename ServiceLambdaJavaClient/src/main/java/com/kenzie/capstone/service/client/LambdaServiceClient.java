@@ -125,7 +125,7 @@ public class LambdaServiceClient {
         //Serialization
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        InstructorLeadClassData instructorLeadClassData = new InstructorLeadClassData("temp_classId", name, description, classType, userId, classCapacity, dateTime, status);
+        InstructorLeadClassData instructorLeadClassData = new InstructorLeadClassData("temp_classId", name, description, classType, userId, classCapacity, dateTime.toString(), status);
 
         String response = endpointUtility.postEndpoint(SET_INSTRUCTORLEADCLASS_ENDPOINT, gson.toJson(instructorLeadClassData));
         InstructorLeadClassData instructorLeadClasData;

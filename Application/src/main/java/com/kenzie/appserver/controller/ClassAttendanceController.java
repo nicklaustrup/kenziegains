@@ -17,44 +17,44 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/classAttendance")
 public class ClassAttendanceController {
 
-    private ClassAttendanceService classAttendanceService;
-    private UserService userService;
-  //  private ClassService classService;
-
-    ClassAttendanceController(ClassAttendanceService classAttendanceService, UserService userService) {
-        this.classAttendanceService = classAttendanceService;
-        this.userService = userService;
-    }
-
-    @GetMapping("/{username}_{password}")
-    public ResponseEntity<ClassAttendanceResponse> getUsersClasses(@PathVariable("id") String id) {
-
-        ClassAttendanceCompositeId record = new ClassAttendanceCompositeId();
-                record.setUserId(id);
-                record.setClassId("xyz"); // WILL BE UPDATED ONCE CLASS IS SET
-
-        ClassAttendance classAttendance = classAttendanceService.findById(record);
-
-        if (classAttendance == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        ClassAttendanceResponse classAttendanceResponse = new ClassAttendanceResponse();
-        classAttendanceResponse.setUserId(classAttendance.getUserId());
-        classAttendanceResponse.setClassId(classAttendance.getClassId());
-        classAttendanceResponse.setClassAttendance(classAttendance.getAttendanceStatus());
-        return ResponseEntity.ok(classAttendanceResponse);
-    }
-
-    @PostMapping
-    public ResponseEntity<ClassAttendanceResponse> addNewClassAttendance(@RequestBody ClassAttendanceCreateRequest classAttendanceCreateRequest) {
-        ClassAttendance classAttendance = classAttendanceService.addNewClassAttendance(classAttendanceCreateRequest);
-
-        ClassAttendanceResponse classAttendanceResponse = new ClassAttendanceResponse();
-        classAttendanceResponse.setUserId(classAttendance.getUserId());
-        classAttendanceResponse.setClassId(classAttendance.getClassId());
-        classAttendanceResponse.setClassAttendance(classAttendance.getAttendanceStatus());
-
-        return ResponseEntity.ok(classAttendanceResponse);
-    }
+//    private ClassAttendanceService classAttendanceService;
+//    private UserService userService;
+//  //  private ClassService classService;
+//
+//    ClassAttendanceController(ClassAttendanceService classAttendanceService, UserService userService) {
+//        this.classAttendanceService = classAttendanceService;
+//        this.userService = userService;
+//    }
+//
+//    @GetMapping("/{username}_{password}")
+//    public ResponseEntity<ClassAttendanceResponse> getUsersClasses(@PathVariable("id") String id) {
+//
+//        ClassAttendanceCompositeId record = new ClassAttendanceCompositeId();
+//                record.setUserId(id);
+//                record.setClassId("xyz"); // WILL BE UPDATED ONCE CLASS IS SET
+//
+//        ClassAttendance classAttendance = classAttendanceService.findById(record);
+//
+//        if (classAttendance == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        ClassAttendanceResponse classAttendanceResponse = new ClassAttendanceResponse();
+//        classAttendanceResponse.setUserId(classAttendance.getUserId());
+//        classAttendanceResponse.setClassId(classAttendance.getClassId());
+//        classAttendanceResponse.setClassAttendance(classAttendance.getAttendanceStatus());
+//        return ResponseEntity.ok(classAttendanceResponse);
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<ClassAttendanceResponse> addNewClassAttendance(@RequestBody ClassAttendanceCreateRequest classAttendanceCreateRequest) {
+//        ClassAttendance classAttendance = classAttendanceService.addNewClassAttendance(classAttendanceCreateRequest);
+//
+//        ClassAttendanceResponse classAttendanceResponse = new ClassAttendanceResponse();
+//        classAttendanceResponse.setUserId(classAttendance.getUserId());
+//        classAttendanceResponse.setClassId(classAttendance.getClassId());
+//        classAttendanceResponse.setClassAttendance(classAttendance.getAttendanceStatus());
+//
+//        return ResponseEntity.ok(classAttendanceResponse);
+//    }
 }

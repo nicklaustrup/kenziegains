@@ -1,5 +1,6 @@
 package com.kenzie.capstone.service.dao;
 
+import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
 import com.kenzie.capstone.service.model.ExampleData;
 import com.kenzie.capstone.service.model.ExampleRecord;
 
@@ -80,7 +81,8 @@ public class ExampleDao {
         return mapper.query(InstructorLeadClassRecord.class, queryExpression);
     }
 
-    public InstructorLeadClassRecord setInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
+    public InstructorLeadClassRecord setInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
+        LocalDateTimeConverter converter = new LocalDateTimeConverter();
         InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
         instructorLeadClassRecord.setClassId(classId);
         instructorLeadClassRecord.setName(name);
@@ -88,7 +90,7 @@ public class ExampleDao {
         instructorLeadClassRecord.setClassType(classType);
         instructorLeadClassRecord.setUserId(userId);
         instructorLeadClassRecord.setClassCapacity(classCapacity);
-        instructorLeadClassRecord.setDateTime(dateTime);
+        instructorLeadClassRecord.setDateTime(converter.unconvert(dateTime));
         instructorLeadClassRecord.setStatus(status);
 
         try {
