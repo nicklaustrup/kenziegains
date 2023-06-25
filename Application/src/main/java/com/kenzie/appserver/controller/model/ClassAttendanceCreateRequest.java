@@ -9,7 +9,6 @@ public class ClassAttendanceCreateRequest {
     @NotEmpty
     @JsonProperty("userId")
     private String userId;
-
     @NotEmpty
     @JsonProperty("classId")
     private String classId;

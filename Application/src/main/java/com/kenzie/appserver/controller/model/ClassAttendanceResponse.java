@@ -10,7 +10,6 @@ public class ClassAttendanceResponse {
     @NotEmpty
     @JsonProperty("userId")
     private String userId;
-
     @NotEmpty
     @JsonProperty("classId")
     private String classId;

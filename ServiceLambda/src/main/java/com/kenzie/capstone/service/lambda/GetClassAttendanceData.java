@@ -9,6 +9,8 @@ import com.google.gson.GsonBuilder;
 import com.kenzie.capstone.service.LambdaService;
 import com.kenzie.capstone.service.dependency.DaggerServiceComponent;
 import com.kenzie.capstone.service.dependency.ServiceComponent;
+import com.kenzie.capstone.service.model.ClassAttendanceCompositeId;
+import com.kenzie.capstone.service.model.ClassAttendanceData;
 import com.kenzie.capstone.service.model.ExampleData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,17 +37,25 @@ public class GetClassAttendanceData implements RequestHandler<APIGatewayProxyReq
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
 
-        String id = input.getPathParameters().get("id");
+        String userId = input.getPathParameters().get("userId");
+        String classId = input.getPathParameters().get("classId");
 
-        if (id == null || id.length() == 0) {
+
+        if (userId == null || userId.length() == 0) {
             return response
                     .withStatusCode(400)
-                    .withBody("Id is invalid");
-        }
+                    .withBody("UserId is invalid");
 
+        }
+        if (classId == null || classId.length() == 0) {
+            return response
+                    .withStatusCode(400)
+                    .withBody("ClassId is invalid");
+
+        }
         try {
-            ExampleData exampleData = lambdaService.getExampleData(id);
-            String output = gson.toJson(exampleData);
+            ClassAttendanceData classAttendanceData = lambdaService.getClassAttendanceData(userId,classId);
+            String output = gson.toJson(classAttendanceData);
 
             return response
                     .withStatusCode(200)

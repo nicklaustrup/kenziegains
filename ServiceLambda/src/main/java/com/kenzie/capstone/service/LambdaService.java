@@ -7,7 +7,6 @@ import com.kenzie.capstone.service.dao.ExampleDao;
 
 import javax.inject.Inject;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,4 +72,19 @@ public class LambdaService {
         UserRecord record = exampleDao.setUserData(userData);
         return new UserData(record.getUserId(), record.getFirstName(), record.getLastName(), record.getUserType(), record.getMembership(), record.getStatus(), record.getUsername(), record.getPassword());
     }
+
+    /***************        CLASS ATTENDANCE CLASS         *********************/
+    public ClassAttendanceData getClassAttendanceData(String userId, String classId) {
+        List<ClassAttendanceRecord> records = exampleDao.getAttendanceData(userId, classId);
+        if (records.size() > 0) {
+            return new ClassAttendanceData(records.get(0).getUserId(), records.get(0).getClassId(), records.get(0).getAttendanceStatus());
+        }
+        return null;
+    }
+
+    public ClassAttendanceData setClassAttendanceData(String userId, String classId, String attendanceStatus) {
+        ClassAttendanceRecord record = exampleDao.setAttendanceData(userId, classId, attendanceStatus);
+        return new ClassAttendanceData(userId, classId, attendanceStatus);
+    }
+
 }
