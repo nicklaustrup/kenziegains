@@ -93,7 +93,7 @@ public class LambdaServiceClient {
 
     public ClassAttendanceData getClassAttendanceData(String userId, String classId) {
         EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.getEndpoint(GET_CLASS_ATTENDANCE_ENDPOINT.replace("{userId}_{classid}", userId+classId));
+        String response = endpointUtility.getEndpoint(GET_CLASS_ATTENDANCE_ENDPOINT.replace("{userId}/{classid}", userId+classId));
         ClassAttendanceData classAttendanceData;
         try {
             classAttendanceData = mapper.readValue(response, ClassAttendanceData.class);

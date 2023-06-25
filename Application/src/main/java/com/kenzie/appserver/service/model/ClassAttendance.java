@@ -1,13 +1,13 @@
 package com.kenzie.appserver.service.model;
 
 public class ClassAttendance {
-    private final String classId;
     private final String userId;
+    private final String classId;
     private final String attendanceStatus;
 
-    public ClassAttendance(String classId, String userId, String attendanceStatus) {
-        this.classId = classId;
+    public ClassAttendance(String userId, String classId, String attendanceStatus) {
         this.userId = userId;
+        this.classId = classId;
         this.attendanceStatus = attendanceStatus;
     }
 

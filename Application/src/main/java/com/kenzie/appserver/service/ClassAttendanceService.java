@@ -4,7 +4,6 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.repositories.ClassAttendanceRepository;
 import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
 import com.kenzie.appserver.repositories.model.ClassAttendanceRecord;
-import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.service.model.ClassAttendance;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.ClassAttendanceData;
