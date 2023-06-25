@@ -11,11 +11,13 @@ public class CacheClient {
         public CacheClient(JedisPool jedisPool) {
             this.jedisPool = jedisPool;
         }
-        public void setValue(String key, String instructorName, String className) {
+        public void setValue(String key, int expiryTime, String val) {
+
             try (Jedis jedis = jedisPool.getResource()) {
-                jedis.hset(key, instructorName, className);
+                jedis.setex(key, expiryTime, val);
             }
         }
+
         public String getValue(String key) {
             try (Jedis jedis = jedisPool.getResource()) {
                 return jedis.get(key);
