@@ -4,12 +4,16 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kenzie.capstone.service.LambdaService;
 import com.kenzie.capstone.service.dependency.DaggerServiceComponent;
 import com.kenzie.capstone.service.dependency.ServiceComponent;
+import com.kenzie.capstone.service.model.ClassAttendanceData;
 import com.kenzie.capstone.service.model.ExampleData;
+import com.kenzie.capstone.service.model.InstructorLeadClassData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,9 +47,17 @@ public class SetClassAttendanceData implements RequestHandler<APIGatewayProxyReq
                     .withBody("data is invalid");
         }
 
+        ObjectMapper mapper = new ObjectMapper();
+        ClassAttendanceData deserializedValue;
         try {
-            ExampleData exampleData = lambdaService.setExampleData(data);
-            String output = gson.toJson(exampleData);
+            deserializedValue = mapper.readValue(data, ClassAttendanceData.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Unable to map deserialize JSON: " + e);
+        }
+
+        try {
+            ClassAttendanceData classAttendanceData = lambdaService.setClassAttendanceData(deserializedValue.getUserId(), deserializedValue.getClassId(), deserializedValue.getAttendanceStatus());
+            String output = gson.toJson(classAttendanceData);
 
             return response
                     .withStatusCode(200)

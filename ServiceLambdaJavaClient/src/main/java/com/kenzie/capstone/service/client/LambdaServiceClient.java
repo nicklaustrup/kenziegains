@@ -23,6 +23,7 @@ public class LambdaServiceClient {
     private static final String SET_EXAMPLE_ENDPOINT = "example";
     private static final String GET_USER_ENDPOINT = "user/{username}";
     private static final String SET_USER_ENDPOINT = "user";
+    private static final String GET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/{userId}_{classid}";
     private static final String SET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance";
     private static final String GET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/{classid}";
     private static final String SET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
@@ -89,16 +90,27 @@ public class LambdaServiceClient {
         return userData;
     }
     /***************        CLASS ATTENDANCE         *********************/
-    public ClassAttendanceData setClassAttendanceData(ClassAttendanceRecord data) {
-        EndpointUtility endpointUtility = new EndpointUtility();
-        String request;
-        try {
-            request = mapper.writeValueAsString(data);
-        } catch (JsonProcessingException e){
-            throw new ApiGatewayException("Unable to serialize request " + e);
-        }
 
-        String response = endpointUtility.postEndpoint(SET_CLASS_ATTENDANCE_ENDPOINT, request);
+    public ClassAttendanceData getClassAttendanceData(String userId, String classId) {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getEndpoint(GET_CLASS_ATTENDANCE_ENDPOINT.replace("{userId}_{classid}", userId+classId));
+        ClassAttendanceData classAttendanceData;
+        try {
+            classAttendanceData = mapper.readValue(response, ClassAttendanceData.class);
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return classAttendanceData;
+    }
+    public ClassAttendanceData setClassAttendanceData(String userId, String classId, String attendanceStatus) {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        //Serialization
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        ClassAttendanceData attendanceData = new ClassAttendanceData(userId, classId, attendanceStatus);
+
+
+        String response = endpointUtility.postEndpoint(SET_CLASS_ATTENDANCE_ENDPOINT, gson.toJson(attendanceData));
         ClassAttendanceData classAttendanceData;
         try {
             classAttendanceData = mapper.readValue(response, ClassAttendanceData.class);

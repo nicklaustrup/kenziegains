@@ -1,8 +1,7 @@
 package com.kenzie.capstone.service.dao;
 
 import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
-import com.kenzie.capstone.service.model.ExampleData;
-import com.kenzie.capstone.service.model.ExampleRecord;
+import com.kenzie.capstone.service.model.*;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
@@ -138,6 +137,44 @@ public class ExampleDao {
                     )));
         } catch (ConditionalCheckFailedException e) {
             throw new IllegalArgumentException("username already exists");
+        }
+
+        return record;
+    }
+
+    // Class Attendance Tables
+
+    public List<ClassAttendanceRecord> getAttendanceData(String userId, String classId) {
+        ClassAttendanceCompositeId compositeId = new ClassAttendanceCompositeId();
+        compositeId.setUserId(userId);
+        compositeId.setClassId(classId);
+
+        ClassAttendanceRecord record = new ClassAttendanceRecord();
+        record.setUserId(userId);
+        record.setClassId(classId);
+
+        DynamoDBQueryExpression<ClassAttendanceRecord> queryExpression = new DynamoDBQueryExpression<ClassAttendanceRecord>()
+                .withHashKeyValues(record)
+                .withConsistentRead(false);
+
+        return mapper.query(ClassAttendanceRecord.class, queryExpression);
+    }
+
+    public ClassAttendanceRecord setAttendanceData(String userId, String classId, String attendanceStatus) {
+
+        ClassAttendanceRecord record = new ClassAttendanceRecord();
+        record.setUserId(userId);
+        record.setClassId(classId);
+        record.setAttendanceStatus(attendanceStatus);
+
+        try {
+            mapper.save(record, new DynamoDBSaveExpression()
+                    .withExpected(ImmutableMap.of(
+                            "id",
+                            new ExpectedAttributeValue().withExists(false)
+                    )));
+        } catch (ConditionalCheckFailedException e) {
+            throw new IllegalArgumentException("Attendance already exists");
         }
 
         return record;
