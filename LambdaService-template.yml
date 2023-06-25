@@ -172,7 +172,7 @@ Resources:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /classAttendance/{userId}_{classid}
+            Path: /classAttendance/{userId}/{classid}
             Method: get
   SetClassAttendanceDataFunction:
     Type: AWS::Serverless::Function
