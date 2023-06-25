@@ -37,19 +37,19 @@ public class LambdaService {
     }
 
 
-    //Instructor
+    /***************        INSTRUCTOR LEAD CLASS         *********************/
     public InstructorLeadClassData getInstructorLeadClassData(String classId) {
         List<InstructorLeadClassRecord> records = exampleDao.getInstructorLeadClassData(classId);
         if (records.size() > 0) {
-            return new InstructorLeadClassData(records.get(0).getClassId(), records.get(0).getName(), records.get(0).getDescription(), records.get(0).getClassType(), records.get(0).getUserId(), records.get(0).getClassCapacity(), records.get(0).getDateTime(), records.get(0).isStatus());
+            return new InstructorLeadClassData(records.get(0).getClassId(), records.get(0).getName(), records.get(0).getDescription(), records.get(0).getClassType(), records.get(0).getUserId(), records.get(0).getClassCapacity(), records.get(0).getDateTime().toString(), records.get(0).isStatus());
         }
         return null;
     }
 
-    public InstructorLeadClassData setInstructorLeadClassData(String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
+    public InstructorLeadClassData setInstructorLeadClassData(String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
         String id = UUID.randomUUID().toString();
         InstructorLeadClassRecord record = exampleDao.setInstructorLeadClassData(id, name, description, classType, userId, classCapacity, dateTime, status);
-        return new InstructorLeadClassData(id, name, description, classType, userId, classCapacity, dateTime, status);
+        return new InstructorLeadClassData(id, name, description, classType, userId, classCapacity, dateTime.toString(), status);
     }
 
     //Users

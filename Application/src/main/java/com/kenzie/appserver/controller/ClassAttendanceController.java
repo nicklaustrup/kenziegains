@@ -1,22 +1,22 @@
-//package com.kenzie.appserver.controller;
-//
-//import com.kenzie.appserver.controller.model.ClassAttendanceCreateRequest;
-//import com.kenzie.appserver.controller.model.ClassAttendanceResponse;
-//import com.kenzie.appserver.controller.model.ExampleCreateRequest;
-//import com.kenzie.appserver.controller.model.ExampleResponse;
-//import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
-//import com.kenzie.appserver.service.ClassAttendanceService;
-//import com.kenzie.appserver.service.ExampleService;
-//import com.kenzie.appserver.service.UserService;
-//import com.kenzie.appserver.service.model.ClassAttendance;
-//import com.kenzie.appserver.service.model.Example;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//@RestController
-//@RequestMapping("/classAttendance")
-//public class ClassAttendanceController {
-//
+package com.kenzie.appserver.controller;
+
+import com.kenzie.appserver.controller.model.ClassAttendanceCreateRequest;
+import com.kenzie.appserver.controller.model.ClassAttendanceResponse;
+import com.kenzie.appserver.controller.model.ExampleCreateRequest;
+import com.kenzie.appserver.controller.model.ExampleResponse;
+import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
+import com.kenzie.appserver.service.ClassAttendanceService;
+import com.kenzie.appserver.service.ExampleService;
+import com.kenzie.appserver.service.UserService;
+import com.kenzie.appserver.service.model.ClassAttendance;
+import com.kenzie.appserver.service.model.Example;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/classAttendance")
+public class ClassAttendanceController {
+
 //    private ClassAttendanceService classAttendanceService;
 //    private UserService userService;
 //  //  private ClassService classService;
@@ -57,4 +57,4 @@
 //
 //        return ResponseEntity.ok(classAttendanceResponse);
 //    }
-//}
+}

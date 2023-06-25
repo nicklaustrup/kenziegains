@@ -1,18 +1,18 @@
-//package com.kenzie.appserver.service;
-//
-//import com.kenzie.appserver.controller.model.ClassAttendanceCreateRequest;
-//import com.kenzie.appserver.repositories.ClassAttendanceRepository;
-//import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
-//import com.kenzie.appserver.service.model.ClassAttendance;
-//import com.kenzie.appserver.service.model.Example;
-//import com.kenzie.capstone.service.client.LambdaServiceClient;
-//import com.kenzie.capstone.service.model.ClassAttendanceData;
-//import com.kenzie.capstone.service.model.ClassAttendanceRecord;
-//import com.kenzie.capstone.service.model.ExampleData;
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//public class ClassAttendanceService {
+package com.kenzie.appserver.service;
+
+import com.kenzie.appserver.controller.model.ClassAttendanceCreateRequest;
+import com.kenzie.appserver.repositories.ClassAttendanceRepository;
+import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
+import com.kenzie.appserver.service.model.ClassAttendance;
+import com.kenzie.appserver.service.model.Example;
+import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.model.ClassAttendanceData;
+import com.kenzie.capstone.service.model.ClassAttendanceRecord;
+import com.kenzie.capstone.service.model.ExampleData;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ClassAttendanceService {
 //    private ClassAttendanceRepository classAttendanceRepository;
 //    private LambdaServiceClient lambdaServiceClient;
 //
@@ -21,22 +21,22 @@
 //        this.lambdaServiceClient = lambdaServiceClient;
 //    }
 //
-////    public ClassAttendance findById(ClassAttendanceCompositeId compositeId) {
+//    public ClassAttendance findById(ClassAttendanceCompositeId compositeId) {
 //
 //        // Example getting data from the lambda
 //     //   ExampleData dataFromLambda = lambdaServiceClient.getExampleData(id);
 //
 //        // Example getting data from the local repository
-////        ClassAttendance dataFromDynamo = classAttendanceRepository
-////                .findById(compositeId)
-////                .map(classAttendance -> new ClassAttendance(
-////                        classAttendance.getUserId(),
-////                        classAttendance.getClassId(),
-////                        classAttendance.getAttendanceStatus()))
-////                .orElse(null);
+//        ClassAttendance dataFromDynamo = classAttendanceRepository
+//                .findById(compositeId)
+//                .map(classAttendance -> new ClassAttendance(
+//                        classAttendance.getUserId(),
+//                        classAttendance.getClassId(),
+//                        classAttendance.getAttendanceStatus()))
+//                .orElse(null);
 //
-////        return dataFromDynamo;
-////    }
+//        return dataFromDynamo;
+//    }
 //
 //    public ClassAttendance addNewClassAttendance(ClassAttendanceCreateRequest classAttendance) {
 //
@@ -63,4 +63,4 @@
 //
 //        return classAttendance1;
 //    }
-//}
+}

@@ -6,7 +6,7 @@ import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@DynamoDBTable(tableName = "LambdaInstructorLeadClass")
+@DynamoDBTable(tableName = "InstructorLeadClass")
 public class InstructorLeadClassRecord {
     private String classId;
     private String name;

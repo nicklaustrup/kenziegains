@@ -10,10 +10,12 @@ public class InstructorLeadClassData {
     private String classType;
     private String userId;
     private int classCapacity;
-    private LocalDateTime dateTime;
+//    private LocalDateTime dateTime;
+    private String dateTime;
     private boolean status;
 
-    public InstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
+//    public InstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
+public InstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
         this.classId = classId;
         this.name = name;
         this.description = description;
@@ -74,11 +76,13 @@ public class InstructorLeadClassData {
         this.classCapacity = classCapacity;
     }
 
-    public LocalDateTime getDateTime() {
+//    public LocalDateTime getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+//    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 

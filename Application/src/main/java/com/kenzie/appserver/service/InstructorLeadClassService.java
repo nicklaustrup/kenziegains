@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.converter.LocalDateTimeConverter;
 import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.repositories.InstructorLeadClassRepository;
 import com.kenzie.appserver.service.model.InstructorLeadClass;
@@ -42,6 +43,7 @@ public class InstructorLeadClassService {
         InstructorLeadClassData dataFromLambda = lambdaServiceClient.setInstructorLeadClassData(name, description, classType, userId, classCapacity, dateTime, status);
 
         // Example sending data to the local repository
+        LocalDateTimeConverter converter = new LocalDateTimeConverter();
         InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
         instructorLeadClassRecord.setClassId(dataFromLambda.getClassId());
         instructorLeadClassRecord.setName(dataFromLambda.getName());
@@ -49,7 +51,7 @@ public class InstructorLeadClassService {
         instructorLeadClassRecord.setClassType(dataFromLambda.getClassType());
         instructorLeadClassRecord.setUserId(dataFromLambda.getUserId());
         instructorLeadClassRecord.setClassCapacity(dataFromLambda.getClassCapacity());
-        instructorLeadClassRecord.setDateTime(dataFromLambda.getDateTime());
+        instructorLeadClassRecord.setDateTime(converter.unconvert(dataFromLambda.getDateTime()));
         instructorLeadClassRecord.setStatus(dataFromLambda.isStatus());
         instructorLeadClassRepository.save(instructorLeadClassRecord);
 
