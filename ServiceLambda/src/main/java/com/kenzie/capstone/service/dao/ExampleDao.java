@@ -134,8 +134,8 @@ public class ExampleDao {
         record.setLastName(data.getLastName());
         record.setMembership(data.getMembership());
         record.setStatus(data.getStatus());
-        record.setUserType(record.getUserType());
-        record.setPassword(record.getPassword());
+        record.setUserType(data.getUserType());
+        record.setPassword(data.getPassword());
 
 
         try {
