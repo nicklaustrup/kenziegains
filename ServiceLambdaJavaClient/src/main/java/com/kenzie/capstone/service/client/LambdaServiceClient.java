@@ -23,7 +23,7 @@ public class LambdaServiceClient {
     private static final String SET_EXAMPLE_ENDPOINT = "example";
     private static final String GET_USER_ENDPOINT = "user/{username}";
     private static final String SET_USER_ENDPOINT = "user";
-    private static final String GET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/{userId}_{classid}";
+    private static final String GET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/{userId}/{classid}";
     private static final String SET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance";
     private static final String GET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/{classid}";
     private static final String SET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
@@ -93,7 +93,7 @@ public class LambdaServiceClient {
 
     public ClassAttendanceData getClassAttendanceData(String userId, String classId) {
         EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.getEndpoint(GET_CLASS_ATTENDANCE_ENDPOINT.replace("{userId}_{classid}", userId+classId));
+        String response = endpointUtility.getEndpoint(GET_CLASS_ATTENDANCE_ENDPOINT.replace("{userId}/{classid}", userId+classId));
         ClassAttendanceData classAttendanceData;
         try {
             classAttendanceData = mapper.readValue(response, ClassAttendanceData.class);

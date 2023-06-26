@@ -1,26 +1,24 @@
 package com.kenzie.appserver.repositories.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @DynamoDBTable(tableName = "ClassAttendanceCompositeId")
-public class ClassAttendanceCompositeId {
+public class ClassAttendanceCompositeId implements Serializable {
 
     private String classId;
     private String userId;
 
-    @DynamoDBRangeKey(attributeName = "classId")
-    public String getClassId() {
-        return classId;
-    }
-
     @DynamoDBHashKey(attributeName = "userId")
     public String getUserId() {
         return userId;
+    }
+
+    @DynamoDBRangeKey(attributeName = "classId")
+    public String getClassId() {
+        return classId;
     }
 
     public void setClassId(String classId) {
