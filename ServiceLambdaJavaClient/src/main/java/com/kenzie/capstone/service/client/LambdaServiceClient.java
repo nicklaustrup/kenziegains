@@ -4,17 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kenzie.capstone.service.model.ExampleData;
+import com.kenzie.capstone.service.model.*;
 
 
-import com.kenzie.capstone.service.model.UserData;
-import com.kenzie.capstone.service.model.UserRecord;
-import com.kenzie.capstone.service.model.ClassAttendanceData;
-import com.kenzie.capstone.service.model.ClassAttendanceRecord;
-import com.kenzie.capstone.service.model.InstructorLeadClassData;
 import java.time.LocalDateTime;
-
-
+import java.util.List;
 
 
 public class LambdaServiceClient {
@@ -27,6 +21,7 @@ public class LambdaServiceClient {
     private static final String SET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance";
     private static final String GET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/{classid}";
     private static final String SET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
+    private static final String GET_ALLINSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/all";
 
     private ObjectMapper mapper;
 
@@ -130,6 +125,18 @@ public class LambdaServiceClient {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
         return instructorLeadClassData;
+    }
+
+    public List<InstructorLeadClassRecord> getAllInstructorLeadClassData() {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getEndpoint(GET_ALLINSTRUCTORLEADCLASS_ENDPOINT);
+        List<InstructorLeadClassRecord> instructorLeadClassListData;
+        try {
+            instructorLeadClassListData = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, InstructorLeadClassData.class));
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return instructorLeadClassListData;
     }
     public InstructorLeadClassData setInstructorLeadClassData(String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
         EndpointUtility endpointUtility = new EndpointUtility();
