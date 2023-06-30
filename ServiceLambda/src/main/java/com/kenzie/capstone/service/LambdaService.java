@@ -3,6 +3,7 @@ package com.kenzie.capstone.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
+//import com.kenzie.capstone.service.caching.CachingDao;
 import com.kenzie.capstone.service.model.*;
 import com.kenzie.capstone.service.dao.ExampleDao;
 
@@ -15,14 +16,21 @@ import java.util.stream.Collectors;
 
 public class LambdaService {
 
-    private ExampleDao exampleDao;
+//    private CachingDao exampleDao;
+private ExampleDao exampleDao;
     private ObjectMapper mapper;
 
-    @Inject
-    public LambdaService(ExampleDao exampleDao) {
-        this.exampleDao = exampleDao;
-        this.mapper = new ObjectMapper();
-    }
+//    @Inject
+//    public LambdaService(CachingDao exampleDao) {
+//        this.exampleDao = exampleDao;
+//        this.mapper = new ObjectMapper();
+//    }
+@Inject
+public LambdaService(ExampleDao exampleDao) {
+    this.exampleDao = exampleDao;
+    this.mapper = new ObjectMapper();
+}
+
 
     public ExampleData getExampleData(String id) {
         List<ExampleRecord> records = exampleDao.getExampleData(id);
