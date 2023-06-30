@@ -1,7 +1,6 @@
 package com.kenzie.capstone.service.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
 import com.kenzie.capstone.service.model.*;
 
@@ -13,7 +12,6 @@ import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ExampleDao {
@@ -71,7 +69,6 @@ public class ExampleDao {
     }
 
     //Set additional methods for each of the classes/tables
-    //InstructorLeadClass Tables
     public List<InstructorLeadClassRecord> getInstructorLeadClassData(String classId) {
         InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
         instructorLeadClassRecord.setClassId(classId);
@@ -88,7 +85,6 @@ public class ExampleDao {
         return mapper.scan(InstructorLeadClassRecord.class, scanQueryExpression);
 
     }
-
     public InstructorLeadClassRecord setInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
         LocalDateTimeConverter converter = new LocalDateTimeConverter();
         InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
@@ -127,6 +123,11 @@ public class ExampleDao {
         return mapper.query(UserRecord.class, queryExpression);
     }
 
+    public List<UserRecord> getAllUsersData() {
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+        return mapper.scan(UserRecord.class, scanExpression);
+    }
+
     public UserRecord setUserData(UserData data) {
         UserRecord record = new UserRecord();
         record.setUserId(data.getUserId());
@@ -135,8 +136,8 @@ public class ExampleDao {
         record.setLastName(data.getLastName());
         record.setMembership(data.getMembership());
         record.setStatus(data.getStatus());
-        record.setUserType(record.getUserType());
-        record.setPassword(record.getPassword());
+        record.setUserType(data.getUserType());
+        record.setPassword(data.getPassword());
 
 
         try {
