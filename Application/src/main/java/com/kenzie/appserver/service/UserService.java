@@ -13,6 +13,7 @@ import com.kenzie.capstone.service.model.UserData;
 import com.kenzie.capstone.service.model.UserRecord;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,30 +26,34 @@ public class UserService {
         this.lambdaServiceClient = lambdaServiceClient;
     }
 
-    public User findById(String username, String password) {
+    public UserData findById(String username, String password) {
 
         // Example getting data from the lambda
-//        UserData dataFromLambda = lambdaServiceClient.getUserData(id);
+        UserData dataFromLambda = lambdaServiceClient.getUserData(username);
 
 
         // Example getting data from the local repository
-        User dataFromDynamo = userRepository
-                .findById(username)
-                .map(user -> new User(user.getUserId(),
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getUserType(),
-                        user.getMembership(),
-                        user.getStatus(),
-                        user.getUsername(),
-                        user.getPassword()))
-                .orElse(null);
+//        User dataFromDynamo = userRepository
+//                .findById(username)
+//                .map(user -> new User(user.getUserId(),
+//                        user.getFirstName(),
+//                        user.getLastName(),
+//                        user.getUserType(),
+//                        user.getMembership(),
+//                        user.getStatus(),
+//                        user.getUsername(),
+//                        user.getPassword()))
+//                .orElse(null);
 
-        if (!dataFromDynamo.getPassword().equals(password)){
+        if (!dataFromLambda.getPassword().equals(password)){
             throw new IllegalArgumentException("Invalid Password!");
         }
 
-        return dataFromDynamo;
+        return dataFromLambda;
+    }
+
+    public List<UserData> findAll() {
+        return lambdaServiceClient.getAllUsersData();
     }
 
     public User addNewUser(UserCreateRequest user) {

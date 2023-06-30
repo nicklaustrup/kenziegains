@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class LambdaService {
 
@@ -74,13 +75,27 @@ public class LambdaService {
         return new InstructorLeadClassData(id, name, description, classType, userId, classCapacity, dateTime.toString(), status);
     }
 
-    //Users
+    /***************        USERS         *********************/
     public UserData getUserData(String username) {
         List<UserRecord> records = exampleDao.getUserData(username);
         if (records.size() > 0) {
             return new UserData(records.get(0).getUserId(), records.get(0).getFirstName(), records.get(0).getLastName(), records.get(0).getUserType(), records.get(0).getMembership(), records.get(0).getStatus(), records.get(0).getUsername(), records.get(0).getPassword());
         }
         return null;
+    }
+    public List<UserData> getAllUsersData() {
+        List<UserRecord> records = exampleDao.getAllUsersData();
+
+        return records.stream()
+                .map(record -> new UserData(record.getUserId(),
+                        record.getFirstName(),
+                        record.getLastName(),
+                        record.getUserType(),
+                        record.getMembership(),
+                        record.getStatus(),
+                        record.getUsername(),
+                        record.getPassword()))
+                .collect(Collectors.toList());
     }
 
     public UserData setUserData(String data) {

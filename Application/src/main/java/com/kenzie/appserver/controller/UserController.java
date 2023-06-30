@@ -6,8 +6,12 @@ import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.Example;
 import com.kenzie.appserver.service.model.User;
+import com.kenzie.capstone.service.model.UserData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -22,7 +26,7 @@ public class UserController {
     @GetMapping("/{username}_{password}")
     public ResponseEntity<UserResponse> getUser(@PathVariable("username") String username, @PathVariable("password") String password) {
 
-        User user  = userService.findById(username, password);
+        UserData user  = userService.findById(username, password);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -40,7 +44,28 @@ public class UserController {
 
         return ResponseEntity.ok(userResponse);
     }
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
 
+        List<UserData> users  = userService.findAll();
+
+        if (users == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<UserResponse> userResponses = users.stream()
+                .map(user -> new UserResponse(user.getUserId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getUserType(),
+                        user.getMembership(),
+                        user.getStatus(),
+                        user.getUsername(),
+                        user.getPassword()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(userResponses);
+    }
     @PostMapping
     public ResponseEntity<UserResponse> addNewUser(@RequestBody UserCreateRequest userCreateRequest) {
         User user = userService.addNewUser(userCreateRequest);
@@ -58,9 +83,4 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    /******************************  HELPER METHODS  *************************************/
-
-    //TODO from User Request to User Response
-
-    //TODO from User Resposne to User Request
 }

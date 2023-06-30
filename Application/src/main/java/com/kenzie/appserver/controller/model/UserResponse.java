@@ -39,6 +39,18 @@ public class UserResponse {
     @JsonProperty("password")
     private String password;
 
+    public UserResponse(){
+    }
+    public UserResponse(String userId, String firstName, String lastName, String userType, String membership, String status, String username, String password){
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userType = userType;
+        this.membership = membership;
+        this.status = status;
+        this.username = username;
+        this.password = password;
+    }
     public String getUserId() {
         return userId;
     }
