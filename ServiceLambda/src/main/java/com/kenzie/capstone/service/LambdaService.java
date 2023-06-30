@@ -2,11 +2,13 @@ package com.kenzie.capstone.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
 import com.kenzie.capstone.service.model.*;
 import com.kenzie.capstone.service.dao.ExampleDao;
 
 import javax.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +43,27 @@ public class LambdaService {
         List<InstructorLeadClassRecord> records = exampleDao.getInstructorLeadClassData(classId);
         if (records.size() > 0) {
             return new InstructorLeadClassData(records.get(0).getClassId(), records.get(0).getName(), records.get(0).getDescription(), records.get(0).getClassType(), records.get(0).getUserId(), records.get(0).getClassCapacity(), records.get(0).getDateTime().toString(), records.get(0).isStatus());
+        }
+        return null;
+    }
+    public List<InstructorLeadClassData> getAllInstructorLeadClassData() {
+        List<InstructorLeadClassRecord> records = exampleDao.getAllInstructorLeadClassData();
+        LocalDateTimeConverter converter = new LocalDateTimeConverter();
+        if (records.size() > 0) {
+            List<InstructorLeadClassData> instructorLeadClassDataList = new ArrayList<>();
+            for(InstructorLeadClassRecord record : records) {
+                InstructorLeadClassData instructorLeadClassData = new InstructorLeadClassData();
+                instructorLeadClassData.setClassId(record.getClassId());
+                instructorLeadClassData.setName(record.getName());
+                instructorLeadClassData.setDescription(record.getDescription());
+                instructorLeadClassData.setClassType(record.getClassType());
+                instructorLeadClassData.setUserId(record.getUserId());
+                instructorLeadClassData.setClassCapacity(record.getClassCapacity());
+                instructorLeadClassData.setDateTime(converter.convert(record.getDateTime()));
+                instructorLeadClassData.setStatus(record.isStatus());
+                instructorLeadClassDataList.add(instructorLeadClassData);
+            }
+            return instructorLeadClassDataList;
         }
         return null;
     }
