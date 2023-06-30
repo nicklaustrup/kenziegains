@@ -80,6 +80,11 @@ public class ExampleDao {
         return mapper.query(InstructorLeadClassRecord.class, queryExpression);
     }
 
+    public List<InstructorLeadClassRecord> getAllInstructorLeadClassData() {
+        DynamoDBScanExpression scanQueryExpression = new DynamoDBScanExpression();
+        return mapper.scan(InstructorLeadClassRecord.class, scanQueryExpression);
+
+    }
     public InstructorLeadClassRecord setInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
         LocalDateTimeConverter converter = new LocalDateTimeConverter();
         InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
