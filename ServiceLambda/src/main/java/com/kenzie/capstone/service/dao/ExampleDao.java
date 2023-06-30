@@ -1,5 +1,6 @@
 package com.kenzie.capstone.service.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
 import com.kenzie.capstone.service.model.*;
 
@@ -115,6 +116,11 @@ public class ExampleDao {
                 .withConsistentRead(false);
 
         return mapper.query(UserRecord.class, queryExpression);
+    }
+
+    public List<UserRecord> getAllUsersData() {
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+        return mapper.scan(UserRecord.class, scanExpression);
     }
 
     public UserRecord setUserData(UserData data) {
