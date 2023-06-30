@@ -86,6 +86,7 @@ public class ExampleDao {
     public List<InstructorLeadClassRecord> getAllInstructorLeadClassData() {
         DynamoDBScanExpression scanQueryExpression = new DynamoDBScanExpression();
         return mapper.scan(InstructorLeadClassRecord.class, scanQueryExpression);
+
     }
 
     public InstructorLeadClassRecord setInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
