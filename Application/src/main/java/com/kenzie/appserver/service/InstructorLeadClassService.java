@@ -28,7 +28,9 @@ public class InstructorLeadClassService {
         // Getting data from the lambda
         InstructorLeadClassData dataFromLambda = lambdaServiceClient.getInstructorLeadClassData(classId);
         LocalDateTimeConverter converter = new LocalDateTimeConverter();
-        InstructorLeadClass instructorLeadClass = new InstructorLeadClass(dataFromLambda.getClassId(), dataFromLambda.getName(), dataFromLambda.getDescription(), dataFromLambda.getClassType(), dataFromLambda.getUserId(), dataFromLambda.getClassCapacity(), converter.unconvert(dataFromLambda.getDateTime()), dataFromLambda.isStatus());
+        InstructorLeadClass instructorLeadClass = null;
+        if (dataFromLambda!= null)
+            instructorLeadClass = new InstructorLeadClass(dataFromLambda.getClassId(), dataFromLambda.getName(), dataFromLambda.getDescription(), dataFromLambda.getClassType(), dataFromLambda.getUserId(), dataFromLambda.getClassCapacity(), converter.unconvert(dataFromLambda.getDateTime()), dataFromLambda.isStatus());
 
         // Getting data from the local repository
 //        InstructorLeadClass dataFromDynamo = instructorLeadClassRepository
@@ -41,8 +43,20 @@ public class InstructorLeadClassService {
 
     public List<InstructorLeadClassRecord> findAll() {
         // Getting data from the lambda
-        //List<InstructorLeadClassRecord> dataFromLambda = lambdaServiceClient.getAllInstructorLeadClassData();
-
+//        List<InstructorLeadClassData> dataFromLambda = lambdaServiceClient.getAllInstructorLeadClassData();
+//        List<InstructorLeadClassRecord> instructorLeadClassRecordList = new ArrayList<>();
+//        LocalDateTimeConverter converter = new LocalDateTimeConverter();
+//        for(InstructorLeadClassData instructorLeadClassData : dataFromLambda) {
+//            InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
+//            instructorLeadClassRecord.setClassId(instructorLeadClassData.getClassId());
+//            instructorLeadClassRecord.setName(instructorLeadClassData.getName());
+//            instructorLeadClassRecord.setDescription(instructorLeadClassData.getDescription());
+//            instructorLeadClassRecord.setClassType(instructorLeadClassData.getClassType());
+//            instructorLeadClassRecord.setClassCapacity(instructorLeadClassData.getClassCapacity());
+//            instructorLeadClassRecord.setDateTime(converter.unconvert(instructorLeadClassData.getDateTime()));
+//            instructorLeadClassRecord.setStatus(instructorLeadClassData.isStatus());
+//            instructorLeadClassRecordList.add(instructorLeadClassRecord);
+//        }
         // Getting data from the local repository
         List<InstructorLeadClassRecord> instructorLeadClassRecordList = (List<InstructorLeadClassRecord>) instructorLeadClassRepository
                 .findAll();
@@ -71,6 +85,18 @@ public class InstructorLeadClassService {
     }
 
     public void updateInstructorLeadClass(InstructorLeadClass instructorLeadClass) {
+        if (lambdaServiceClient.getInstructorLeadClassData(instructorLeadClass.getClassId()) != null) {
+            InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
+            instructorLeadClassRecord.setClassId(instructorLeadClass.getClassId());
+            instructorLeadClassRecord.setName(instructorLeadClass.getName());
+            instructorLeadClassRecord.setDescription(instructorLeadClass.getDescription());
+            instructorLeadClassRecord.setClassType(instructorLeadClass.getClassType());
+            instructorLeadClassRecord.setUserId(instructorLeadClass.getUserId());
+            instructorLeadClassRecord.setClassCapacity(instructorLeadClass.getClassCapacity());
+            instructorLeadClassRecord.setDateTime(instructorLeadClass.getDateTime());
+            instructorLeadClassRecord.setStatus(instructorLeadClass.isStatus());
+//            lambdaServiceClient.putAllInstructorLeadClassData(instructorLeadClassRecord);
+        }
 
         //TODO implement but with Lambda similar to the above
         if (instructorLeadClassRepository.existsById(instructorLeadClass.getClassId())) {

@@ -22,6 +22,7 @@ public class LambdaServiceClient {
     private static final String GET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/{classid}";
     private static final String SET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
     private static final String GET_ALLINSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/all";
+    private static final String PUT_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
 
     private ObjectMapper mapper;
 
@@ -127,16 +128,16 @@ public class LambdaServiceClient {
         return instructorLeadClassData;
     }
 
-    public List<InstructorLeadClassRecord> getAllInstructorLeadClassData() {
+    public List<InstructorLeadClassData> getAllInstructorLeadClassData() {
         EndpointUtility endpointUtility = new EndpointUtility();
         String response = endpointUtility.getEndpoint(GET_ALLINSTRUCTORLEADCLASS_ENDPOINT);
-        List<InstructorLeadClassRecord> instructorLeadClassListData;
+        List<InstructorLeadClassData> instructorLeadClassDataList;
         try {
-            instructorLeadClassListData = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, InstructorLeadClassData.class));
+            instructorLeadClassDataList = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, InstructorLeadClassData.class));
         } catch (Exception e) {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
-        return instructorLeadClassListData;
+        return instructorLeadClassDataList;
     }
     public InstructorLeadClassData setInstructorLeadClassData(String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
         EndpointUtility endpointUtility = new EndpointUtility();
