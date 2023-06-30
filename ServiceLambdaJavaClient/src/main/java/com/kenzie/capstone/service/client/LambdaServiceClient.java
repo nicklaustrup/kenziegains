@@ -1,13 +1,20 @@
 package com.kenzie.capstone.service.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kenzie.capstone.service.model.*;
+import com.kenzie.capstone.service.model.ExampleData;
 
 
+import com.kenzie.capstone.service.model.UserData;
+import com.kenzie.capstone.service.model.UserRecord;
+import com.kenzie.capstone.service.model.ClassAttendanceData;
+import com.kenzie.capstone.service.model.ClassAttendanceRecord;
+import com.kenzie.capstone.service.model.InstructorLeadClassData;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,13 +23,12 @@ public class LambdaServiceClient {
     private static final String GET_EXAMPLE_ENDPOINT = "example/{id}";
     private static final String SET_EXAMPLE_ENDPOINT = "example";
     private static final String GET_USER_ENDPOINT = "user/{username}";
+    private static final String GET_ALL_USERS_ENDPOINT = "user/all";
     private static final String SET_USER_ENDPOINT = "user";
     private static final String GET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/{userId}/{classid}";
     private static final String SET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance";
     private static final String GET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/{classid}";
     private static final String SET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
-    private static final String GET_ALLINSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/all";
-    private static final String PUT_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
 
     private ObjectMapper mapper;
 
@@ -85,6 +91,18 @@ public class LambdaServiceClient {
         }
         return userData;
     }
+
+    public List<UserData> getAllUsersData() {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getEndpoint(GET_ALL_USERS_ENDPOINT);
+        List<UserData> userData;
+        try {
+            userData = mapper.readValue(response, new TypeReference<ArrayList<UserData>>() {});
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return userData;
+    }
     /***************        CLASS ATTENDANCE         *********************/
 
     public ClassAttendanceData getClassAttendanceData(String userId, String classId) {
@@ -126,18 +144,6 @@ public class LambdaServiceClient {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
         return instructorLeadClassData;
-    }
-
-    public List<InstructorLeadClassData> getAllInstructorLeadClassData() {
-        EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.getEndpoint(GET_ALLINSTRUCTORLEADCLASS_ENDPOINT);
-        List<InstructorLeadClassData> instructorLeadClassDataList;
-        try {
-            instructorLeadClassDataList = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, InstructorLeadClassData.class));
-        } catch (Exception e) {
-            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
-        }
-        return instructorLeadClassDataList;
     }
     public InstructorLeadClassData setInstructorLeadClassData(String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
         EndpointUtility endpointUtility = new EndpointUtility();

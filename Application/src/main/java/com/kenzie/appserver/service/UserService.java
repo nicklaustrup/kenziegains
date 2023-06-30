@@ -13,6 +13,7 @@ import com.kenzie.capstone.service.model.UserData;
 import com.kenzie.capstone.service.model.UserRecord;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -49,6 +50,10 @@ public class UserService {
         }
 
         return dataFromLambda;
+    }
+
+    public List<UserData> findAll() {
+        return lambdaServiceClient.getAllUsersData();
     }
 
     public User addNewUser(UserCreateRequest user) {
