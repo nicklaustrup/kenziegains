@@ -29,6 +29,8 @@ public class LambdaServiceClient {
     private static final String SET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance";
     private static final String GET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/{classid}";
     private static final String SET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
+    private static final String GET_ALLINSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/all";
+    private static final String PUT_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/update";
 
     private ObjectMapper mapper;
 
@@ -116,6 +118,17 @@ public class LambdaServiceClient {
         }
         return classAttendanceData;
     }
+    public List<InstructorLeadClassData> getAllInstructorLeadClassData() {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getEndpoint(GET_ALLINSTRUCTORLEADCLASS_ENDPOINT);
+        List<InstructorLeadClassData> instructorLeadClassDataList;
+        try {
+            instructorLeadClassDataList = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, InstructorLeadClassData.class));
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return instructorLeadClassDataList;
+    }
     public ClassAttendanceData setClassAttendanceData(String userId, String classId, String attendanceStatus) {
         EndpointUtility endpointUtility = new EndpointUtility();
         //Serialization
@@ -161,5 +174,23 @@ public class LambdaServiceClient {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
         return instructorLeadClasData;
-    }  
+    }
+
+    public InstructorLeadClassData updateInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
+        EndpointUtility endpointUtility = new EndpointUtility();
+
+        //Serialization
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        InstructorLeadClassData instructorLeadClassData = new InstructorLeadClassData(classId, name, description, classType, userId, classCapacity, dateTime.toString(), status);
+
+        String response = endpointUtility.postEndpoint(PUT_INSTRUCTORLEADCLASS_ENDPOINT, gson.toJson(instructorLeadClassData));
+        InstructorLeadClassData instructorLeadClasData;
+        try {
+            instructorLeadClasData = mapper.readValue(response, InstructorLeadClassData.class);
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return instructorLeadClasData;
+    }
 }

@@ -110,6 +110,32 @@ public class ExampleDao {
         return instructorLeadClassRecord;
     }
 
+    public InstructorLeadClassRecord updateInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
+        LocalDateTimeConverter converter = new LocalDateTimeConverter();
+        InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
+        instructorLeadClassRecord.setClassId(classId);
+        instructorLeadClassRecord.setName(name);
+        instructorLeadClassRecord.setDescription(description);
+        instructorLeadClassRecord.setClassType(classType);
+        instructorLeadClassRecord.setUserId(userId);
+        instructorLeadClassRecord.setClassCapacity(classCapacity);
+        instructorLeadClassRecord.setDateTime(converter.unconvert(dateTime));
+        instructorLeadClassRecord.setStatus(status);
+
+        try {
+            mapper.save(instructorLeadClassRecord);
+//            mapper.save(instructorLeadClassRecord, new DynamoDBSaveExpression()
+//                    .withExpected(ImmutableMap.of(
+//                            "classId",
+//                            new ExpectedAttributeValue().withExists(false)
+//                    )));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error updating");
+        }
+
+        return instructorLeadClassRecord;
+    }
+
 
     //User Tables
     public List<UserRecord> getUserData(String username) {
