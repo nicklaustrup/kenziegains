@@ -75,6 +75,11 @@ public class LambdaService {
         return new InstructorLeadClassData(id, name, description, classType, userId, classCapacity, dateTime.toString(), status);
     }
 
+    public InstructorLeadClassData updateInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, String dateTime, boolean status) {
+        InstructorLeadClassRecord record = exampleDao.updateInstructorLeadClassData(classId, name, description, classType, userId, classCapacity, dateTime, status);
+        return new InstructorLeadClassData(classId, name, description, classType, userId, classCapacity, dateTime.toString(), status);
+    }
+
     /***************        USERS         *********************/
     public UserData getUserData(String username) {
         List<UserRecord> records = exampleDao.getUserData(username);
