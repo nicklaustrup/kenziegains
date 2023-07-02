@@ -11,7 +11,6 @@ import com.kenzie.capstone.service.model.ExampleData;
 import com.kenzie.capstone.service.model.UserData;
 import com.kenzie.capstone.service.model.UserRecord;
 import com.kenzie.capstone.service.model.ClassAttendanceData;
-import com.kenzie.capstone.service.model.ClassAttendanceRecord;
 import com.kenzie.capstone.service.model.InstructorLeadClassData;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +25,9 @@ public class LambdaServiceClient {
     private static final String GET_ALL_USERS_ENDPOINT = "user/all";
     private static final String SET_USER_ENDPOINT = "user";
     private static final String GET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/{userId}/{classid}";
+    private static final String GET_ALL_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/all";
     private static final String SET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance";
+    private static final String PUT_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/update";
     private static final String GET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/{classid}";
     private static final String SET_INSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass";
     private static final String GET_ALLINSTRUCTORLEADCLASS_ENDPOINT = "instructorleadclass/all";
@@ -145,6 +146,36 @@ public class LambdaServiceClient {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
         return classAttendanceData;
+    }
+
+    public List<ClassAttendanceData> getAlLClassAttendanceData() {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getEndpoint(GET_ALL_CLASS_ATTENDANCE_ENDPOINT);
+        List<ClassAttendanceData> classAttendanceData;
+        try {
+            classAttendanceData = mapper.readValue(response, new TypeReference<ArrayList<ClassAttendanceData>>() {});
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return classAttendanceData;
+    }
+
+    public ClassAttendanceData updateClassAttendance(String userId, String classId, String classAttendance) {
+        EndpointUtility endpointUtility = new EndpointUtility();
+
+        //Serialization
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        ClassAttendanceData classAttendanceData = new ClassAttendanceData(userId, classId, classAttendance);
+
+        String response = endpointUtility.postEndpoint(PUT_CLASS_ATTENDANCE_ENDPOINT, gson.toJson(classAttendanceData));
+        ClassAttendanceData attendanceData;
+        try {
+            attendanceData = mapper.readValue(response, ClassAttendanceData.class);
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return attendanceData;
     }
   /***************        INSTRUCTOR LEAD CLASS         *********************/
     public InstructorLeadClassData getInstructorLeadClassData(String classId) {
