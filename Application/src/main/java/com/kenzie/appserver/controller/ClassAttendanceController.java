@@ -1,18 +1,21 @@
 package com.kenzie.appserver.controller;
 
-import com.kenzie.appserver.controller.model.ClassAttendanceCreateRequest;
-import com.kenzie.appserver.controller.model.ClassAttendanceResponse;
-import com.kenzie.appserver.controller.model.ExampleCreateRequest;
-import com.kenzie.appserver.controller.model.ExampleResponse;
+import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
+import com.kenzie.appserver.repositories.model.ClassAttendanceRecord;
+import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.service.ClassAttendanceService;
 import com.kenzie.appserver.service.ExampleService;
 import com.kenzie.appserver.service.InstructorLeadClassService;
 import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.ClassAttendance;
-import com.kenzie.appserver.service.model.Example;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/classAttendance")
@@ -28,7 +31,7 @@ public class ClassAttendanceController {
         this.instructorLeadClassService = instructorLeadClassService;
     }
 
-    @GetMapping("/{userId}_{classid}")
+    @GetMapping("/{userId}/{classid}")
     public ResponseEntity<ClassAttendanceResponse> getUsersClasses(@PathVariable("userId") String userId,
                                                                    @PathVariable("classid") String classId) {
 
@@ -62,6 +65,43 @@ public class ClassAttendanceController {
         classAttendanceResponse.setClassId(classAttendance.getClassId());
         classAttendanceResponse.setClassAttendance(classAttendance.getAttendanceStatus());
 
+        return ResponseEntity.ok(classAttendanceResponse);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<ClassAttendanceResponse>> getAllClassAttendance() {
+
+        List<ClassAttendanceRecord> classAttendanceDataList  = classAttendanceService.findAll();
+
+        if (classAttendanceDataList == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<ClassAttendanceResponse> classAttendanceResponses = new ArrayList<>();
+
+        for (ClassAttendanceRecord classAttendanceRecord: classAttendanceDataList) {
+            ClassAttendanceResponse classAttendanceResponse = new ClassAttendanceResponse();
+            classAttendanceResponse.setClassId(classAttendanceRecord.getClassId());
+            classAttendanceResponse.setUserId(classAttendanceRecord.getUserId());
+            classAttendanceResponse.setClassAttendance(classAttendanceRecord.getAttendanceStatus());
+
+            classAttendanceResponses.add(classAttendanceResponse);
+        }
+
+        return ResponseEntity.ok(classAttendanceResponses);
+    }
+
+    @PutMapping
+    public ResponseEntity<ClassAttendanceResponse> updateClassAttendance(@RequestBody ClassAttendanceUpdateRequest classAttendanceUpdateRequest) {
+
+        ClassAttendance updatedClassAttendance = new ClassAttendance(classAttendanceUpdateRequest.getUserId(),
+                classAttendanceUpdateRequest.getClassId(),  classAttendanceUpdateRequest.getClassAttendance());
+
+        classAttendanceService.updateClassAttendance(updatedClassAttendance);
+
+        ClassAttendanceResponse classAttendanceResponse = new ClassAttendanceResponse();
+        classAttendanceResponse.setUserId(updatedClassAttendance.getUserId());
+        classAttendanceResponse.setClassId(updatedClassAttendance.getClassId());
+        classAttendanceResponse.setClassAttendance(updatedClassAttendance.getAttendanceStatus());
         return ResponseEntity.ok(classAttendanceResponse);
     }
 }

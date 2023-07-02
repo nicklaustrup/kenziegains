@@ -130,4 +130,24 @@ public class LambdaService {
         return new ClassAttendanceData(userId, classId, attendanceStatus);
     }
 
+    public ClassAttendanceData updateClassAttendanceData(String userId, String classId, String attendanceStatus) {
+        ClassAttendanceRecord record = exampleDao.updateClassAttendanceData(userId, classId, attendanceStatus);
+        return new ClassAttendanceData(userId, classId, attendanceStatus);
+    }
+    public List<ClassAttendanceData> getAllClassAttendanceData() {
+        List<ClassAttendanceRecord> records = exampleDao.getAllClassAttendanceData();
+
+        if (records.size() > 0) {
+            List<ClassAttendanceData> attendanceDataArrayList = new ArrayList<>();
+            for(ClassAttendanceRecord record : records) {
+                ClassAttendanceData classAttendanceData = new ClassAttendanceData();
+                classAttendanceData.setClassId(record.getClassId());
+                classAttendanceData.setUserId(record.getUserId());
+                classAttendanceData.setAttendanceStatus(record.getAttendanceStatus());
+                attendanceDataArrayList.add(classAttendanceData);
+            }
+            return attendanceDataArrayList;
+        }
+        return null;
+    }
 }

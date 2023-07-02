@@ -1,12 +1,10 @@
 package com.kenzie.appserver.controller.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kenzie.appserver.service.ClassAttendanceService;
 
 import javax.validation.constraints.NotEmpty;
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ClassAttendanceResponse {
+
+public class ClassAttendanceUpdateRequest {
 
     @NotEmpty
     @JsonProperty("userId")
@@ -17,13 +15,6 @@ public class ClassAttendanceResponse {
     @NotEmpty
     @JsonProperty("classAttendance")
     private String classAttendance;
-
-    public ClassAttendanceResponse(){};
-    public ClassAttendanceResponse(String userId, String classId, String classAttendance){
-        this.userId = userId;
-        this.classId = classId;
-        this.classAttendance = classAttendance;
-    }
 
     public String getUserId() {
         return userId;
@@ -47,4 +38,6 @@ public class ClassAttendanceResponse {
     public void setClassAttendance(String classAttendance) {
         this.classAttendance = classAttendance;
     }
+
+
 }

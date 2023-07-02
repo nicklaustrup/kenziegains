@@ -270,3 +270,51 @@ Resources:
           Properties:
             Path: /users/all
             Method: get
+  GetAllClassAttendanceDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
+      Handler: com.kenzie.capstone.service.lambda.GetAllClassAttendanceData
+      Runtime: java11
+      Description: Get All ClassAttendance Data
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /classAttendance/all
+            Method: get
+  PutClassAttendanceDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
+      Handler: com.kenzie.capstone.service.lambda.UpdateClassAttendanceData
+      Runtime: java11
+      Description: Update ClassAttendance Data for given id
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /classAttendance/update
+            Method: put

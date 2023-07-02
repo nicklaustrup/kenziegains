@@ -216,4 +216,22 @@ public class ExampleDao {
 
         return record;
     }
+    public List<ClassAttendanceRecord> getAllClassAttendanceData() {
+        DynamoDBScanExpression scanQueryExpression = new DynamoDBScanExpression();
+        return mapper.scan(ClassAttendanceRecord.class, scanQueryExpression);
+
+    }
+
+    public ClassAttendanceRecord updateClassAttendanceData(String userId, String classId, String attendanceStatus) {
+        ClassAttendanceRecord classAttendanceRecord = new ClassAttendanceRecord();
+        classAttendanceRecord.setUserId(userId);
+        classAttendanceRecord.setClassId(classId);
+        classAttendanceRecord.setAttendanceStatus(attendanceStatus);
+        try {
+            mapper.save(classAttendanceRecord);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error updating");
+        }
+        return classAttendanceRecord;
+    }
 }

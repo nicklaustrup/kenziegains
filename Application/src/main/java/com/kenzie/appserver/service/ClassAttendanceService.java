@@ -1,14 +1,18 @@
 package com.kenzie.appserver.service;
 
 
+import com.kenzie.appserver.converter.LocalDateTimeConverter;
 import com.kenzie.appserver.repositories.ClassAttendanceRepository;
 import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
 import com.kenzie.appserver.repositories.model.ClassAttendanceRecord;
+import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.service.model.ClassAttendance;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.ClassAttendanceData;
+import com.kenzie.capstone.service.model.InstructorLeadClassData;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,9 +57,29 @@ public class ClassAttendanceService {
     }
 
     public List<ClassAttendanceRecord> findAll() {
-        List<ClassAttendanceRecord> rsvpFromBackend = (List<ClassAttendanceRecord>) classAttendanceRepository
-                .findAll();
+        List<ClassAttendanceData> dataFromLambda = lambdaServiceClient.getAlLClassAttendanceData();
+        List<ClassAttendanceRecord> classAttendanceRecords = new ArrayList<>();
 
-        return rsvpFromBackend;
+        for(ClassAttendanceData classAttendanceData : dataFromLambda) {
+            ClassAttendanceRecord classAttendanceRecord = new ClassAttendanceRecord();
+            classAttendanceRecord.setClassId(classAttendanceData.getClassId());
+            classAttendanceRecord.setUserId(classAttendanceData.getUserId());
+            classAttendanceRecord.setAttendanceStatus(classAttendanceData.getAttendanceStatus());
+            classAttendanceRecords.add(classAttendanceRecord);
+        }
+        return classAttendanceRecords;
+    }
+
+    public void updateClassAttendance(ClassAttendance classAttendance) {
+        String userId = classAttendance.getUserId();
+        String classId = classAttendance.getClassId();
+        if (lambdaServiceClient.getClassAttendanceData(userId,classId) != null) {
+            lambdaServiceClient.updateClassAttendance(userId,classId,classAttendance.getAttendanceStatus());
+        }
+        ClassAttendanceRecord classAttendanceRecordLocal = new ClassAttendanceRecord();
+        classAttendanceRecordLocal.setUserId(classAttendance.getUserId());
+        classAttendanceRecordLocal.setClassId(classAttendance.getClassId());
+        classAttendanceRecordLocal.setAttendanceStatus(classAttendance.getAttendanceStatus());
+        classAttendanceRepository.save(classAttendanceRecordLocal);
     }
 }
