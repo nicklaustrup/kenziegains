@@ -28,7 +28,7 @@ export default class BaseClass {
             position: 'right',
             close: true,
             style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)"
+                    background: "linear-gradient(to right, #a4c5ff, #c1d8ff)"
             }
         }).showToast();
     }

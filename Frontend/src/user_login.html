@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
+<head>
+    <script type="text/javascript" src="user_loginPage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <base href="/" />
+</head>
+<body class="background">
+<div class="logo"><img src="css/logo.png"alt="Kenzie Gains" height="100px"/></div>
+<div class="card" id="userLogin">
+    <h2>Login</h2>
+    <p class="form-field">
+    <table>
+        <tr>
+            <td class="bTop">
+                <p class="form-field">
+                    <label for="username" >User Name: </label>
+                </p>
+            </td>
+            <td>
+                <input type="text" class="validated-field" id="username" placeholder="User Name" required autofocus><br>
+            </td>
+        </tr>
+        <tr>
+            <td class="bTop">
+                <p class="form-field">
+                    <label for="password">Password: </label>
+                </p>
+            </td>
+            <td>
+                <input type="password" class="validated-field" id="password" placeholder="Password" required><br>
+            </td>
+        </tr>
+        <tr>
+            <td class="bTop">
+                <button id="login" class="button-12">Log In</button>
+            </td>
+            <td>
+                <button id="register" class="button-12">Register</button>
+            </td>
+        </tr>
+    </table>
+    <script>
+    // Sample code that should be in your .js file
+function login_validation_and_redirect(){ //stores values in the localStorage
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    // User API retrieves all the info based on the values above
+    // If it finds matching username and password and is active
+    // then do the following with the information retrieved from the api
+
+    localStorage.clear(); // this clear whatever is in the window.localStorage
+    window.localStorage.setItem('userId', userId);
+    window.localStorage.setItem('userType', userType);
+    window.localStorage.setItem('firstName', firstName);
+    window.localStorage.setItem('lastName', lastName);
+
+    //Then it should redirect to specific pages based on the userType value
+
+    //userType is gymMember
+    window.location.href="classes_member.html";
+
+    //userType is instructor
+    window.location.href="classes_instructor.html";
+
+    //userType is administrator
+    window.location.href="classes_administrator.html";
+}
+</script>
+</div>
+</body>
+</html>
