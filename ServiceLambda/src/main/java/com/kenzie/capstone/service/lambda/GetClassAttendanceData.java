@@ -37,8 +37,9 @@ public class GetClassAttendanceData implements RequestHandler<APIGatewayProxyReq
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
 
+
         String userId = input.getPathParameters().get("userId");
-        String classId = input.getPathParameters().get("classId");
+        String classId = input.getPathParameters().get("classid");
 
 
         if (userId == null || userId.length() == 0) {
