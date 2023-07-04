@@ -268,7 +268,7 @@ Resources:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /users/all
+            Path: /user/all
             Method: get
   GetAllClassAttendanceDataFunction:
     Type: AWS::Serverless::Function

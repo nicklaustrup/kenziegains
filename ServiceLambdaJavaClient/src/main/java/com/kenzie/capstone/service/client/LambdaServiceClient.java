@@ -119,17 +119,6 @@ public class LambdaServiceClient {
         }
         return classAttendanceData;
     }
-    public List<InstructorLeadClassData> getAllInstructorLeadClassData() {
-        EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.getEndpoint(GET_ALLINSTRUCTORLEADCLASS_ENDPOINT);
-        List<InstructorLeadClassData> instructorLeadClassDataList;
-        try {
-            instructorLeadClassDataList = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, InstructorLeadClassData.class));
-        } catch (Exception e) {
-            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
-        }
-        return instructorLeadClassDataList;
-    }
     public ClassAttendanceData setClassAttendanceData(String userId, String classId, String attendanceStatus) {
         EndpointUtility endpointUtility = new EndpointUtility();
         //Serialization
@@ -189,6 +178,17 @@ public class LambdaServiceClient {
         }
         return instructorLeadClassData;
     }
+    public List<InstructorLeadClassData> getAllInstructorLeadClassData() {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getEndpoint(GET_ALLINSTRUCTORLEADCLASS_ENDPOINT);
+        List<InstructorLeadClassData> instructorLeadClassDataList;
+        try {
+            instructorLeadClassDataList = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, InstructorLeadClassData.class));
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return instructorLeadClassDataList;
+    }
     public InstructorLeadClassData setInstructorLeadClassData(String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
         EndpointUtility endpointUtility = new EndpointUtility();
 
@@ -206,7 +206,6 @@ public class LambdaServiceClient {
         }
         return instructorLeadClasData;
     }
-
     public InstructorLeadClassData updateInstructorLeadClassData(String classId, String name, String description, String classType, String userId, int classCapacity, LocalDateTime dateTime, boolean status) {
         EndpointUtility endpointUtility = new EndpointUtility();
 
