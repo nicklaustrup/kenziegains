@@ -2,7 +2,7 @@
 <html lang="en-US">
 <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
 <head>
-    <script type="text/javascript" src="class_createPage.js"></script>
+    <script type="text/javascript" src="class_update_administratorPage.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <base href="/" />
@@ -11,23 +11,38 @@
 <div class="logo"><img src="css/logo.png"alt="Kenzie Gains" height="100px"/></div>
 <nav id="menu">
 </nav>
-<div class="card" id="classes">
-    <h2>Create Class</h2>
-    <form class="card-content" id="create-form">
+<div class="card" id="class">
+    <h2>Class Update</h2>
+    <form class="card-content" id="update-form">
+        <p class="form-field"><input type="hidden" required class="validated-field" id="classId"></p>
         <p class="form-field"><label for="name">Name:</label><input type="text" required class="validated-field" id="name"></p>
         <p class="form-field"><label for="description">Description:</label><input type="text" required class="validated-field" id="description"></p>
         <p class="form-field"><label for="classType">Class Type:</label>
             <select id="classType">
-                <option id="Boxing">Boxing</option>
-                <option id="Dancing">Dancing</option>
-                <option id="Spinning">Spinning</option>
+                <option id="Boxing" value="Boxing">Boxing</option>
+                <option id="Dancing" value="Dancing">Dancing</option>
+                <option id="Spinning" value="Spinning">Spinning</option>
             </select></p>
         <p class="form-field"><label for="instructor">Instructor:</label><select id="instructor"></select></p>
         <p class="form-field"><label for="classCapacity">Class Capacity:</label><input type="number" min="1" max="30" required class="validated-field" id="classCapacity"></p>
         <p class="form-field"><label for="dateTime">Date:</label><input type="datetime-local" required class="validated-field" id="dateTime"></p>
+        <p class="form-field"><label>Status?:</label></p>
+        <input type="radio" name="active_round" id="active_round_scheduled"><label class="radio-input" for="active_round_scheduled">Scheduled</label>
+        <input type="radio" name="active_round" id="active_round_cancelled"><label class="radio-input" for="active_round_cancelled">Cancelled</label>
         <br>
-        <button class="button-12" type="submit">Create</button>
+        <br>
+        <button class="button-12" type="submit">Update</button>
     </form>
+    <h3>Attendance List</h3>
+    <table id="results" border="1" cellpadding="1" cellspacing="1" style="width:200px;">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+        </tr>
+        </thead>
+        <tbody id="Attendance">
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

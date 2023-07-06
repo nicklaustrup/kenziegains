@@ -89,7 +89,7 @@ public class InstructorLeadClassController {
         return ResponseEntity.ok(instructorLeadClassResponse);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<InstructorLeadClassResponse> updateInstructorLeadClass(@RequestBody InstructorLeadClassUpdateRequest instructorLeadClassUpdateRequest) {
 
         InstructorLeadClass instructorLeadClass = new InstructorLeadClass(instructorLeadClassUpdateRequest.getClassId(), instructorLeadClassUpdateRequest.getName(), instructorLeadClassUpdateRequest.getDescription(), instructorLeadClassUpdateRequest.getClassType(), instructorLeadClassUpdateRequest.getUserId(), instructorLeadClassUpdateRequest.getClassCapacity(), instructorLeadClassUpdateRequest.getDateTime(), instructorLeadClassUpdateRequest.isStatus());
