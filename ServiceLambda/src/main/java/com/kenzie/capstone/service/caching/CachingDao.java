@@ -13,9 +13,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
-//import com.kenzie.capstone.service.dao.CachingDaoInterface;
+import com.kenzie.capstone.service.dao.CachingDaoInterface;
 import com.kenzie.capstone.service.dao.ExampleDao;
-//import com.kenzie.capstone.service.dao.NonCachingDao;
 import com.kenzie.capstone.service.model.*;
 
 import javax.inject.Inject;
@@ -41,22 +40,12 @@ public class CachingDao{
     }
 
 
-//    public ClassAttendanceRecord addRecord(ClassAttendanceRecord record){
-//        cacheClient.deleteValue(String.format(CACHING_KEY, record.getUserId()));
-//        return  nonCachingDao(record);
-//    }
-//
-//
-//    public List<ClassAttendanceRecord> getUserId(String userId){
-//        Json json = new Json();
-//        return cacheClient.getValue(String.format(CACHING_KEY, userId))
-//                .map(value -> this.fromJson(value))
-//                .orElseGet(() -> {
-//                    List<ClassAttendanceRecord> daoValue = nonCachingDao.getexampleId(userId);
-//                    this.addToCache(daoValue, userId);
-//                    return daoValue;
-//                });
-//    }
+    public ClassAttendanceRecord addRecord(ClassAttendanceRecord record){
+        cacheClient.deleteValue(String.format(CACHING_KEY, record.getUserId()));
+        return nonCachingDao.setAttendanceData(record.getUserId(),
+                record.getClassId(), record.getAttendanceStatus());
+    }
+
 
     GsonBuilder builder = new GsonBuilder().registerTypeAdapter(
             ZonedDateTime.class,
@@ -77,9 +66,9 @@ public class CachingDao{
     }
 
 
-//    public boolean setClassAttendance(String attendanceStatus){
-//        return attendanceStatus;
-//    }
+    public String setClassAttendance(String attendanceStatus){
+        return attendanceStatus;
+    }
 
     private void addToCache(List<ClassAttendanceRecord> records, String userId){
         cacheClient.setValue(
