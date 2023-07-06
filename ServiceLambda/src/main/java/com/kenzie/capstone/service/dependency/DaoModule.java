@@ -38,7 +38,7 @@ public class DaoModule {
     @Provides
     @Named("CachingDao")
     @Inject
-    public CachingeDao CachingDao(
+    public CachingDao CachingDao(
             @Named("CachingClient") CacheClient cacheClient,
             @Named("ExampleDao")ExampleDao nonCachingDao) {
         return new CachingDao(cacheClient, nonCachingDao);
