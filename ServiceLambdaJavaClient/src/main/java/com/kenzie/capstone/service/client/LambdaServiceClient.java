@@ -24,6 +24,7 @@ public class LambdaServiceClient {
     private static final String GET_USER_ENDPOINT = "user/{username}";
     private static final String GET_ALL_USERS_ENDPOINT = "user/all";
     private static final String SET_USER_ENDPOINT = "user";
+    private static final String POST_UPDATE_USER_ENDPOINT = "user/update";
     private static final String GET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/{userId}/{classid}";
     private static final String GET_ALL_CLASS_ATTENDANCE_ENDPOINT = "classAttendance/all";
     private static final String SET_CLASS_ATTENDANCE_ENDPOINT = "classAttendance";
@@ -74,6 +75,24 @@ public class LambdaServiceClient {
         }
 
         String response = endpointUtility.postEndpoint(SET_USER_ENDPOINT, request);
+        UserData userData;
+        try {
+            userData = mapper.readValue(response, UserData.class);
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return userData;
+    }
+    public UserData updateUserData(UserRecord data) {
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String request;
+        try {
+            request = mapper.writeValueAsString(data);
+        } catch (JsonProcessingException e){
+            throw new ApiGatewayException("Unable to serialize request " + e);
+        }
+
+        String response = endpointUtility.postEndpoint(POST_UPDATE_USER_ENDPOINT, request);
         UserData userData;
         try {
             userData = mapper.readValue(response, UserData.class);

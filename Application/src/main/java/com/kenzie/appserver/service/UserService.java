@@ -51,7 +51,37 @@ public class UserService {
 
         return dataFromLambda;
     }
+    public UserData updateUser(UserCreateRequest userCreateRequest) {
 
+        // Example getting data from the lambda
+        UserData dataFromLambda = lambdaServiceClient.getUserData(userCreateRequest.getUsername());
+
+
+        // Example getting data from the local repository
+//        User dataFromDynamo = userRepository
+//                .findById(username)
+//                .map(user -> new User(user.getUserId(),
+//                        user.getFirstName(),
+//                        user.getLastName(),
+//                        user.getUserType(),
+//                        user.getMembership(),
+//                        user.getStatus(),
+//                        user.getUsername(),
+//                        user.getPassword()))
+//                .orElse(null);
+
+        UserRecord userRecord = new UserRecord();
+        userRecord.setUserId(dataFromLambda.getUserId());
+        userRecord.setFirstName(dataFromLambda.getFirstName());
+        userRecord.setLastName(dataFromLambda.getLastName());
+        userRecord.setUserType(dataFromLambda.getUserType());
+        userRecord.setMembership(userCreateRequest.getMembership());
+        userRecord.setStatus(dataFromLambda.getStatus());
+        userRecord.setUsername(userCreateRequest.getUsername());
+        userRecord.setPassword(userCreateRequest.getPassword());
+
+        return lambdaServiceClient.updateUserData(userRecord);
+    }
     public List<UserData> findAll() {
         return lambdaServiceClient.getAllUsersData();
     }

@@ -115,6 +115,18 @@ public class LambdaService {
         UserRecord record = exampleDao.setUserData(userData);
         return new UserData(record.getUserId(), record.getFirstName(), record.getLastName(), record.getUserType(), record.getMembership(), record.getStatus(), record.getUsername(), record.getPassword());
     }
+    public UserData updateUserData(String data) {
+        UserData userData;
+
+        try{
+            userData = mapper.readValue(data, UserData.class);
+        } catch(JsonProcessingException e) {
+            throw new RuntimeException("Unable to map deserialize JSON: " + e);
+        }
+
+        UserRecord record = exampleDao.updateUserData(userData);
+        return new UserData(record.getUserId(), record.getFirstName(), record.getLastName(), record.getUserType(), record.getMembership(), record.getStatus(), record.getUsername(), record.getPassword());
+    }
 
     /***************        CLASS ATTENDANCE CLASS         *********************/
     public ClassAttendanceData getClassAttendanceData(String userId, String classId) {
