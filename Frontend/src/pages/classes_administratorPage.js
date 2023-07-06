@@ -49,7 +49,7 @@ class ClassesAdministratorPage extends BaseClass {
                 else {
                     classHTML += `<td><em><span style="color:#000000;"><strong>Cancelled</strong></span></em></td>`;
                 }
-                classHTML +=`<td><input type="button" class="button-12" onclick="store_redirect('${classes.classId}')" value="Update" /></td>
+                classHTML +=`<td><input type="button" class="button-12" onclick="store_redirect('${element.classId}')" value="Update" /></td>
                     </tr>`;
             }
             resultArea.innerHTML = classHTML;

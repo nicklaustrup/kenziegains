@@ -111,7 +111,7 @@ class ClassCreatePage extends BaseClass {
         let instructor = document.getElementById("instructor");
         let userId = instructor.options[instructor.selectedIndex].id;
         let classCapacity = document.getElementById("classCapacity").value;
-        let dateTime = document.getElementById("date").value;
+        let dateTime = document.getElementById("dateTime").value;
         let status = true;
 
         //Submits all the information in order to create the record
