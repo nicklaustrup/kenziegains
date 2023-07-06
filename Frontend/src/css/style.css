@@ -135,7 +135,7 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #d8e4f8;
+  background-color: #ABC8F9;
   color: white;
 }
 
@@ -163,7 +163,7 @@ h3 {
 
 nav {
 	margin: 0px 0;
-	background-color: #c7dafa;
+	background-color: #ABC8F9;
 }
 
 nav ul {
@@ -175,7 +175,7 @@ nav ul {
 
 nav ul li {
 	display:inline-block;
-	background-color: #c7dafa;
+	background-color: #ABC8F9;
 	}
 
 nav a {

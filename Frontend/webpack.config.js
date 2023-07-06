@@ -12,6 +12,8 @@ module.exports = {
     registerUserPage: path.resolve(__dirname, 'src', 'pages', 'registerUserPage.js'),
     user_loginPage: path.resolve(__dirname, 'src', 'pages', 'user_loginPage.js'),
     user_registerPage: path.resolve(__dirname, 'src', 'pages', 'user_registerPage.js'),
+    classes_administratorPage: path.resolve(__dirname, 'src', 'pages', 'classes_administratorPage.js'),
+    class_createPage: path.resolve(__dirname, 'src', 'pages', 'class_createPage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -55,6 +57,16 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/user_register.html',
       filename: 'user_register.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/classes_administrator.html',
+      filename: 'classes_administrator.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/class_create.html',
+      filename: 'class_create.html',
       inject: false
     }),
     new CopyPlugin({
