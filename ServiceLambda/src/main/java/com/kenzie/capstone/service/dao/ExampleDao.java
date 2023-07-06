@@ -178,6 +178,30 @@ public class ExampleDao {
 
         return record;
     }
+    public UserRecord updateUserData(UserData data) {
+        UserRecord record = new UserRecord();
+        record.setUserId(data.getUserId());
+        record.setUsername(data.getUsername());
+        record.setFirstName(data.getFirstName());
+        record.setLastName(data.getLastName());
+        record.setMembership(data.getMembership());
+        record.setStatus(data.getStatus());
+        record.setUserType(data.getUserType());
+        record.setPassword(data.getPassword());
+
+
+        try {
+            mapper.save(record, new DynamoDBSaveExpression()
+                    .withExpected(ImmutableMap.of(
+                            "username",
+                            new ExpectedAttributeValue().withExists(true)
+                    )));
+        } catch (ConditionalCheckFailedException e) {
+            throw new IllegalArgumentException("username does not exist, register a new user");
+        }
+
+        return record;
+    }
 
     // Class Attendance Tables
 
