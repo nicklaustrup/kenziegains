@@ -82,5 +82,25 @@ public class UserController {
 
         return ResponseEntity.ok(userResponse);
     }
+    @PostMapping("/update")
+    public ResponseEntity<UserResponse> getUser(@RequestBody UserCreateRequest userCreateRequest) {
 
+        UserData user  = userService.updateUser(userCreateRequest);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUserId(user.getUserId());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setUserType(user.getUserType());
+        userResponse.setMembership(user.getMembership());
+        userResponse.setStatus(user.getStatus());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setPassword(user.getPassword());
+
+
+        return ResponseEntity.ok(userResponse);
+    }
 }
