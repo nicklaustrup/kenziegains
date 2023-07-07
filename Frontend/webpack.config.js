@@ -15,6 +15,9 @@ module.exports = {
     classes_administratorPage: path.resolve(__dirname, 'src', 'pages', 'classes_administratorPage.js'),
     class_createPage: path.resolve(__dirname, 'src', 'pages', 'class_createPage.js'),
     class_update_administratorPage: path.resolve(__dirname, 'src', 'pages', 'class_update_administratorPage.js'),
+    classes_instructorPage: path.resolve(__dirname, 'src', 'pages', 'classes_instructorPage.js'),
+    class_create_instructorPage: path.resolve(__dirname, 'src', 'pages', 'class_create_instructorPage.js'),
+    class_update_instructorPage: path.resolve(__dirname, 'src', 'pages', 'class_update_instructorPage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -73,6 +76,21 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/class_update_administrator.html',
       filename: 'class_update_administrator.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/classes_instructor.html',
+      filename: 'classes_instructor.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/class_update_instructor.html',
+      filename: 'class_update_instructor.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/class_create_instructor.html',
+      filename: 'class_create_instructor.html',
       inject: false
     }),
     new CopyPlugin({

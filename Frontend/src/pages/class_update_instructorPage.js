@@ -1,6 +1,6 @@
 import BaseClass from "../util/baseClass";
 import DataStore from "../util/DataStore";
-import ClassUpdateClient from "../api/class_update_administratorClient";
+import ClassUpdateClient from "../api/class_update_instructorClient";
 
 /**
  * Logic needed for the view playlist page of the website.
@@ -19,7 +19,7 @@ class ClassUpdatePage extends BaseClass {
     async mount() {
         this.client = new ClassUpdateClient();
         //var userId = window.localStorage.getItem('userId'); //searches for the userId in localStorage
-        var username = 'hamza'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
+        var username = 'nick'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
         var password = '1234'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
         var classId = window.localStorage.getItem('classId'); //searches for the eventId in localStorage
         this.getUsers();
@@ -36,29 +36,30 @@ class ClassUpdatePage extends BaseClass {
 
     async renderClass() {
         const classUpdate = this.dataStore.get("class");
-        let resultInstructors = document.getElementById("instructor");
+//        let resultInstructors = document.getElementById("instructor");
         const users = this.dataStore.get("users");
         const attendees = this.dataStore.get("attendance");
         let instructorHTML = "";
         if (classUpdate) {
             //Setting the values for all the inputs using the response returned by getClass
-            document.getElementById('classId').value= classUpdate.classId;
-            document.getElementById('name').value= classUpdate.name;
-            document.getElementById('description').value= classUpdate.description;
-            document.getElementById('classType').value= classUpdate.classType;
+            document.getElementById('classId').value = classUpdate.classId;
+            document.getElementById('name').value = classUpdate.name;
+            document.getElementById('description').value = classUpdate.description;
+            document.getElementById('classType').value = classUpdate.classType;
+            document.getElementById('userId').value = classUpdate.userId;
 
             //Instructor elements for the dropdown list
-            if (users) {
-                for (let element of users) {
-                    if((element.userType == "instructor") && (element.status == "active")) {
-                        if (element.userId === classUpdate.userId)
-                            instructorHTML += `<option id="${element.userId}" selected>${element.firstName} ${element.lastName}</option>`
-                        else
-                            instructorHTML += `<option id="${element.userId}">${element.firstName} ${element.lastName}</option>`
-                    }
-                 }
-            }
-            resultInstructors.innerHTML = instructorHTML;
+//            if (users) {
+//                for (let element of users) {
+//                    if((element.userType == "instructor") && (element.status == "active")) {
+//                        if (element.userId === classUpdate.userId)
+//                            instructorHTML += `<option id="${element.userId}" selected>${element.firstName} ${element.lastName}</option>`
+//                        else
+//                            instructorHTML += `<option id="${element.userId}">${element.firstName} ${element.lastName}</option>`
+//                    }
+//                 }
+//            }
+//            resultInstructors.innerHTML = instructorHTML;
             document.getElementById('classCapacity').value= classUpdate.classCapacity;
 
             //Date should not be in the past
@@ -115,10 +116,10 @@ class ClassUpdatePage extends BaseClass {
     async renderMenu() {
         document.getElementById("menu").innerHTML = `
                   <ul>
-                    <li><a href="classes_administrator.html">Class +</a>
+                    <li><a href="classes_instructor.html">Class +</a>
                       <!-- First Tier Drop Down -->
                       <ul>
-                        <li><a href="class_create.html">Create Class</a></li>
+                        <li><a href="class_create_instructor.html">Create Class</a></li>
                       </ul>
                     </li>
                     <li><a href="index.html" id="login"></a></li>
@@ -180,8 +181,8 @@ class ClassUpdatePage extends BaseClass {
         let name = document.getElementById("name").value;
         let description = document.getElementById("description").value;
         let classType = document.getElementById("classType").value;
-        let instructor = document.getElementById("instructor");
-        let userId = instructor.options[instructor.selectedIndex].id;
+        let userId = document.getElementById("userId").value;
+//        let userId = instructor.options[instructor.selectedIndex].id;
         let classCapacity = document.getElementById("classCapacity").value;
         let dateTime = document.getElementById("dateTime").value;
         var activeRadioButtons = document.getElementsByName('active_round');

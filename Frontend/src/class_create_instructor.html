@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
+<head>
+    <script type="text/javascript" src="class_create_instructorPage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <base href="/" />
+</head>
+<body class="background">
+<div class="logo"><img src="css/logo.png"alt="Kenzie Gains" height="100px"/></div>
+<nav id="menu">
+</nav>
+<div class="card" id="classes">
+    <h2>Create Class</h2>
+    <form class="card-content" id="create-form">
+        <p class="form-field"><label for="name">Name:</label><input type="text" required class="validated-field" id="name"></p>
+        <p class="form-field"><label for="description">Description:</label><input type="text" required class="validated-field" id="description"></p>
+        <p class="form-field"><label for="classType">Class Type:</label>
+            <select id="classType">
+                <option id="Boxing">Boxing</option>
+                <option id="Dancing">Dancing</option>
+                <option id="Spinning">Spinning</option>
+            </select></p>
+        <p class="form-field"><input type="hidden" required class="validated-field" id="userId"></p>
+        <p class="form-field"><label for="classCapacity">Class Capacity:</label><input type="number" min="1" max="30" required class="validated-field" id="classCapacity"></p>
+        <p class="form-field"><label for="dateTime">Date:</label><input type="datetime-local" required class="validated-field" id="dateTime"></p>
+        <br>
+        <button class="button-12" type="submit">Create</button>
+    </form>
+</div>
+</body>
+</html>

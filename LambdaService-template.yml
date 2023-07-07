@@ -132,7 +132,7 @@ Resources:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
       Handler: com.kenzie.capstone.service.lambda.GetAllInstructorLeadClassData
       Runtime: java11
-      Description: Get InstructorLeadClass Data for given id
+      Description: Get All InstructorLeadClass in database
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -156,7 +156,7 @@ Resources:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
       Handler: com.kenzie.capstone.service.lambda.UpdateInstructorLeadClassData
       Runtime: java11
-      Description: Get InstructorLeadClass Data for given id
+      Description: Update InstructorLeadClass Data for given id
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -204,7 +204,7 @@ Resources:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
       Handler: com.kenzie.capstone.service.lambda.GetClassAttendanceData
       Runtime: java11
-      Description: Get InstructorLeadClass Data for given userId and classId
+      Description: Get ClassAttendance Data for given userId and classId
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -252,7 +252,7 @@ Resources:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
       Handler: com.kenzie.capstone.service.lambda.GetAllUsersData
       Runtime: java11
-      Description: Get all users in database.
+      Description: Get All Users in database.
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -276,7 +276,7 @@ Resources:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
       Handler: com.kenzie.capstone.service.lambda.GetAllClassAttendanceData
       Runtime: java11
-      Description: Get All ClassAttendance Data
+      Description: Get All ClassAttendance in database
       MemorySize: 512
       Timeout: 240
       # Function's execution role
