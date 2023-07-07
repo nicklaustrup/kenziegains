@@ -2,7 +2,7 @@
 <html lang="en-US">
 <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
 <head>
-    <script type="text/javascript" src="classes_administratorPage.js"></script>
+    <script type="text/javascript" src="classes_instructorPage.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <base href="/" />
@@ -14,7 +14,7 @@
 <div class="card" id="classes">
     <h2>List of Classes</h2>
     <table id="results" border="1" cellpadding="1" cellspacing="1">
-<!--        style="width:1500px;">-->
+        <!--        style="width:1500px;">-->
         <thead>
         <tr>
             <th scope="col" style="width:110px;">Date - Time</th>
@@ -35,7 +35,7 @@
     <script>
     function store_redirect(classId){ //stores items in the localStorage
         window.localStorage.setItem('classId', classId);
-        window.location.href="class_update_administrator.html";
+        window.location.href="class_update_instructor.html";
     }
     </script>
 </div>

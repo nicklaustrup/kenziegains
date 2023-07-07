@@ -9,11 +9,11 @@ import axios from 'axios'
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins
  * https://javascript.info/mixins
  */
-export default class ClassesAdministratorClient extends BaseClass {
+export default class ClassCreateClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'getAllClasses', 'getUsers', 'getAttendance', 'getUser'];
+        const methodsToBind = ['clientLoaded', 'getUser', 'createClass'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -37,33 +37,6 @@ export default class ClassesAdministratorClient extends BaseClass {
      * @returns The concert
      */
 
-     async getAllClasses(errorCallback) {
-         try {
-             const response = await this.client.get(`/instructorleadclass/all`);
-             return response.data;
-         } catch (error) {
-             this.handleError("getAllClasses", error, errorCallback)
-         }
-     }
-
-     async getUsers(errorCallback) {
-         try {
-             const response = await this.client.get(`/user/all`);
-             return response.data;
-         } catch (error) {
-             this.handleError("getUsers", error, errorCallback)
-         }
-     }
-
-     async getAttendance(errorCallback) {
-         try {
-             const response = await this.client.get(`/classAttendance/all`);
-             return response.data;
-         } catch (error) {
-             this.handleError("getAttendance", error, errorCallback)
-         }
-     }
-
      async getUser(username, password, errorCallback) {
          try {
              const response = await this.client.get(`/user/${username}_${password}`);
@@ -72,6 +45,23 @@ export default class ClassesAdministratorClient extends BaseClass {
              this.handleError("getUser", error, errorCallback)
          }
      }
+
+    async createClass(name, description, classType, userId, classCapacity, dateTime, status, errorCallback) {
+        try {
+            const response = await this.client.post(`/instructorleadclass`, {
+                name: name,
+                description: description,
+                classType: classType,
+                userId: userId,
+                classCapacity: classCapacity,
+                dateTime: dateTime,
+                status: status
+            });
+            return response.data;
+        } catch (error) {
+            this.handleError("createClass", error, errorCallback);
+        }
+    }
 
     /**
      * Helper method to log the error and run any error functions.

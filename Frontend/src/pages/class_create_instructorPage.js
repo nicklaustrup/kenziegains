@@ -1,6 +1,6 @@
 import BaseClass from "../util/baseClass";
 import DataStore from "../util/DataStore";
-import ClassCreateClient from "../api/class_createClient";
+import ClassCreateClient from "../api/class_create_instructorClient";
 
 /**
  * Logic needed for the view playlist page of the website.
@@ -9,7 +9,7 @@ class ClassCreatePage extends BaseClass {
 
     constructor() {
         super();
-        this.bindClassMethods(['getUser', 'getUsers', 'renderClass', 'renderLogin', 'renderMenu', 'onCreate'], this);
+        this.bindClassMethods(['getUser', 'renderClass', 'renderLogin', 'renderMenu', 'onCreate'], this);
         this.dataStore = new DataStore();
     }
 
@@ -18,10 +18,9 @@ class ClassCreatePage extends BaseClass {
      */
     async mount() {
         this.client = new ClassCreateClient();
-        var username = 'hamza'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
+        var username = 'nick'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
         var password = '1234'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
         this.getUser(username, password);
-        this.getUsers();
         this.dataStore.addChangeListener(this.renderMenu);
         this.dataStore.addChangeListener(this.renderLogin);
         this.dataStore.addChangeListener(this.renderClass);
@@ -31,19 +30,11 @@ class ClassCreatePage extends BaseClass {
     // Render Methods --------------------------------------------------------------------------------------------------
 
     async renderClass() {
-        let resultInstructors = document.getElementById("instructor");
-        const instructors = this.dataStore.get("users");
-        let instructorHTML = "";
 
-        //Instructor elements for the dropdown list
-        if (instructors) {
-            for (let element of instructors) {
-            {
-                if((element.userType == "instructor") && (element.status == "active"))
-                instructorHTML += `<option id="${element.userId}">${element.firstName} ${element.lastName}</option>`;
-             }
-        }
-        resultInstructors.innerHTML = instructorHTML;}
+        let userId = document.getElementById("userId");
+        const instructor = this.dataStore.get("user");
+        if (instructor)
+            userId.value = instructor.userId;
         //Date should not be in the past
         let dateField = document.getElementById("dateTime");
         dateField.min = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
@@ -73,10 +64,10 @@ class ClassCreatePage extends BaseClass {
     async renderMenu() {
         document.getElementById("menu").innerHTML = `
                   <ul>
-                    <li><a href="classes_administrator.html">Class +</a>
+                    <li><a href="classes_instructor.html">Class +</a>
                       <!-- First Tier Drop Down -->
                       <ul>
-                        <li><a href="class_create.html">Create Class</a></li>
+                        <li><a href="class_create_instructor.html">Create Class</a></li>
                       </ul>
                     </li>
                     <li><a href="index.html" id="login"></a></li>
@@ -97,16 +88,6 @@ class ClassCreatePage extends BaseClass {
         }
     }
 
-    async getUsers() {
-        let result = await this.client.getUsers(this.errorHandler);
-        this.dataStore.set("users", result);
-        if (result) {
-            this.showMessage(`Got All Users!`)
-        } else {
-            this.errorHandler("Error doing GET!  Try again...");
-        }
-    }
-
     async onCreate(event) {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
@@ -116,14 +97,12 @@ class ClassCreatePage extends BaseClass {
         let name = document.getElementById("name").value;
         let description = document.getElementById("description").value;
         let classType = document.getElementById("classType").value;
-        let instructor = document.getElementById("instructor");
-        let userId = instructor.options[instructor.selectedIndex].id;
+        let userId = document.getElementById("userId").value;;
         let classCapacity = document.getElementById("classCapacity").value;
         let dateTime = document.getElementById("dateTime").value;
         let status = true;
 
         //Submits all the information in order to create the record
-//        this.dataStore.set("eventCreate", null);
         const createdClass = await this.client.createClass(name, description, classType, userId, classCapacity, dateTime, status, this.errorHandler);
         this.dataStore.set("classCreate", createdClass);
 
