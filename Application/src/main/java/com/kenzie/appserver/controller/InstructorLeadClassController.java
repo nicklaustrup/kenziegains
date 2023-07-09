@@ -1,5 +1,6 @@
 package com.kenzie.appserver.controller;
 
+import com.kenzie.appserver.controller.model.ClassAttendanceResponse;
 import com.kenzie.appserver.controller.model.InstructorLeadClassCreateRequest;
 import com.kenzie.appserver.controller.model.InstructorLeadClassResponse;
 import com.kenzie.appserver.controller.model.InstructorLeadClassUpdateRequest;
@@ -10,8 +11,7 @@ import com.kenzie.appserver.service.model.InstructorLeadClass;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/instructorleadclass")
@@ -62,14 +62,9 @@ public class InstructorLeadClassController {
             instructorLeadClassResponse.setClassCapacity(instructorLeadClass.getClassCapacity());
             instructorLeadClassResponse.setDateTime(instructorLeadClass.getDateTime());
             instructorLeadClassResponse.setStatus(instructorLeadClass.isStatus());
-            //Todo get instructor details (might not be necessary)
-//            Movie movie = movieService.findById(eventRecord.getMovieId());
-//            if (movie == null) {
-//                return ResponseEntity.notFound().build();
-//            }
             instructorLeadClassResponseList.add(instructorLeadClassResponse);
         }
-
+        Collections.sort(instructorLeadClassResponseList, Comparator.comparing(InstructorLeadClassResponse::getDateTime));
         return ResponseEntity.ok(instructorLeadClassResponseList);
     }
 

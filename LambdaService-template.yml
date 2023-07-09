@@ -317,7 +317,7 @@ Resources:
           Type: Api
           Properties:
             Path: /classAttendance/update
-            Method: put
+            Method: post
   UpdateUserDataFunction:
     Type: AWS::Serverless::Function
     Properties:

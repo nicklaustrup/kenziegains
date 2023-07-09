@@ -9,11 +9,11 @@ import axios from 'axios'
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins
  * https://javascript.info/mixins
  */
-export default class ClassUpdateClient extends BaseClass {
+export default class ClassesGymMemberClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'getClass', 'getUser', 'getUsers', 'getAttendance', 'updateClass'];
+        const methodsToBind = ['clientLoaded', 'getAllClasses', 'getUsers', 'getAttendance', 'getUser'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -37,21 +37,12 @@ export default class ClassUpdateClient extends BaseClass {
      * @returns The concert
      */
 
-     async getClass(classId, errorCallback) {
+     async getAllClasses(errorCallback) {
          try {
-             const response = await this.client.get(`/instructorleadclass/${classId}`);
+             const response = await this.client.get(`/instructorleadclass/all`);
              return response.data;
          } catch (error) {
-             this.handleError("getClass", error, errorCallback)
-         }
-     }
-
-     async getUser(username, password, errorCallback) {
-         try {
-             const response = await this.client.get(`/user/${username}_${password}`);
-             return response.data;
-         } catch (error) {
-             this.handleError("getUser", error, errorCallback)
+             this.handleError("getAllClasses", error, errorCallback)
          }
      }
 
@@ -73,23 +64,14 @@ export default class ClassUpdateClient extends BaseClass {
          }
      }
 
-    async updateClass(classId, name, description, classType, userId, classCapacity, dateTime, status, errorCallback) {
-        try {
-            const response = await this.client.put(`/instructorleadclass/update`, {
-                classId: classId,
-                name: name,
-                description: description,
-                classType: classType,
-                userId: userId,
-                classCapacity: classCapacity,
-                dateTime: dateTime,
-                status: status
-            });
-            return response.data;
-        } catch (error) {
-            this.handleError("updateRegistration", error, errorCallback);
-        }
-    }
+     async getUser(username, password, errorCallback) {
+         try {
+             const response = await this.client.get(`/user/${username}_${password}`);
+             return response.data;
+         } catch (error) {
+             this.handleError("getUser", error, errorCallback)
+         }
+     }
 
     /**
      * Helper method to log the error and run any error functions.

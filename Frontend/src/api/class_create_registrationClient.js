@@ -9,11 +9,11 @@ import axios from 'axios'
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins
  * https://javascript.info/mixins
  */
-export default class ClassUpdateClient extends BaseClass {
+export default class RegistrationCreateClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'getClass', 'getUser', 'getUsers', 'getAttendance', 'updateClass'];
+        const methodsToBind = ['clientLoaded', 'getClass', 'getUser', 'getUsers', 'getAttendance', 'createRegistration'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -73,21 +73,16 @@ export default class ClassUpdateClient extends BaseClass {
          }
      }
 
-    async updateClass(classId, name, description, classType, userId, classCapacity, dateTime, status, errorCallback) {
+    async createRegistration(classId, userId, classAttendance, errorCallback) {
         try {
-            const response = await this.client.put(`/instructorleadclass/update`, {
+            const response = await this.client.post(`/classAttendance`, {
                 classId: classId,
-                name: name,
-                description: description,
-                classType: classType,
                 userId: userId,
-                classCapacity: classCapacity,
-                dateTime: dateTime,
-                status: status
+                classAttendance: classAttendance
             });
             return response.data;
         } catch (error) {
-            this.handleError("updateRegistration", error, errorCallback);
+            this.handleError("createRegistration", error, errorCallback);
         }
     }
 

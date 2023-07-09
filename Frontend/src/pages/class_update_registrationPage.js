@@ -1,11 +1,11 @@
 import BaseClass from "../util/baseClass";
 import DataStore from "../util/DataStore";
-import ClassUpdateClient from "../api/class_update_administratorClient";
+import RegistrationCreateClient from "../api/class_update_registrationClient";
 
 /**
  * Logic needed for the view playlist page of the website.
  */
-class ClassUpdatePage extends BaseClass {
+class RegistrationCreatePage extends BaseClass {
 
     constructor() {
         super();
@@ -17,10 +17,9 @@ class ClassUpdatePage extends BaseClass {
      * Once the page has loaded, set up the event handlers and fetch the concert list.
      */
     async mount() {
-        this.client = new ClassUpdateClient();
-        //var userId = window.localStorage.getItem('userId'); //searches for the userId in localStorage
-        var username = 'hamza'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
-        var password = '1234'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
+        this.client = new RegistrationCreateClient();
+        var username = 'jacob'; //window.localStorage.getItem('username'); //searches for the userId in localStorage
+        var password = '1234'; //window.localStorage.getItem('password'); //searches for the userId in localStorage
         var classId = window.localStorage.getItem('classId'); //searches for the eventId in localStorage
         this.getUsers();
         this.getAttendance();
@@ -35,59 +34,60 @@ class ClassUpdatePage extends BaseClass {
     // Render Methods --------------------------------------------------------------------------------------------------
 
     async renderClass() {
-        const classUpdate = this.dataStore.get("class");
+        const classRecord = this.dataStore.get("class");
         let resultInstructors = document.getElementById("instructor");
         const users = this.dataStore.get("users");
+        const gymMember = this.dataStore.get("user");
         const attendees = this.dataStore.get("attendance");
+        let registration_attendance = false;
         let instructorHTML = "";
-        if (classUpdate) {
-            //Setting the values for all the inputs using the response returned by getClass
-            document.getElementById('classId').value= classUpdate.classId;
-            document.getElementById('name').value= classUpdate.name;
-            document.getElementById('description').value= classUpdate.description;
-            document.getElementById('classType').value= classUpdate.classType;
-
-            //Instructor elements for the dropdown list
+        if (classRecord) {
+            //Posting all the class information using the response returned by getClass
+            document.getElementById('classId').value= window.localStorage.getItem('classId');
+            if (gymMember)
+                document.getElementById('userId').value= gymMember.userId;
+            document.getElementById('name').innerHTML = `Name: ${classRecord.name}`;
+            document.getElementById('description').innerHTML = `Description: ${classRecord.description}`;
+            document.getElementById('classType').innerHTML = `Class Type: ${classRecord.classType}`;
+            //Instructor information
             if (users) {
                 for (let element of users) {
-                    if((element.userType == "instructor") && (element.status == "active")) {
-                        if (element.userId == classUpdate.userId)
-                            instructorHTML += `<option id="${element.userId}" selected>${element.firstName} ${element.lastName}</option>`
-                        else
-                            instructorHTML += `<option id="${element.userId}">${element.firstName} ${element.lastName}</option>`
-                    }
+                   if (element.userId == classRecord.userId)
+                            document.getElementById('instructor').innerHTML = `Instructor: ${element.firstName} ${element.lastName}`
                  }
             }
-            resultInstructors.innerHTML = instructorHTML;
-            document.getElementById('classCapacity').value= classUpdate.classCapacity;
-
-            //Date should not be in the past
-            document.getElementById('dateTime').value= classUpdate.dateTime;
-            let dateField = document.getElementById("dateTime");
-            dateField.min = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
-            if (classUpdate.status) {
-               document.getElementById('active_round_scheduled').checked=true;
-            }
-            else {
-                document.getElementById('active_round_cancelled').checked=true;
-            };
+            document.getElementById('classCapacity').innerHTML = `Class Capacity: ${classRecord.classCapacity}`;
+            document.getElementById('dateTime').innerHTML = `Date-Time: ${classRecord.dateTime}`;
+            if (classRecord.status)
+                document.getElementById('status').innerHTML = `Status: Scheduled`
+            else
+                document.getElementById('status').innerHTML = `Status: Cancelled`;
 
             //Attendance list
             let resultAttendance = document.getElementById("Attendance");
             let attendanceHTML = "";
             if (attendees) {
                 for (let element of attendees){
-                    if (classUpdate.classId == element.classId) {
+                    if (classRecord.classId == element.classId) {
                         if (users) {
                             for (let user of users) {
                                 if ((element.userId == user.userId) && (element.classAttendance == "Attending"))
                                     attendanceHTML += `<tr><td>${user.firstName} ${user.lastName}</td></tr>`;
                             }
                         }
+                        if (gymMember)
+                            if ((gymMember.userId == element.userId) && (element.classAttendance == "Attending"))
+                                registration_attendance = true;
                     }
                 }
                 resultAttendance.innerHTML = attendanceHTML;
             }
+            if (registration_attendance) {
+               document.getElementById('active_round_yes').checked=true;
+            }
+            else {
+                document.getElementById('active_round_no').checked=true;
+            };
         }
     }
 
@@ -115,12 +115,7 @@ class ClassUpdatePage extends BaseClass {
     async renderMenu() {
         document.getElementById("menu").innerHTML = `
                   <ul>
-                    <li><a href="classes_administrator.html">Class +</a>
-                      <!-- First Tier Drop Down -->
-                      <ul>
-                        <li><a href="class_create.html">Create Class</a></li>
-                      </ul>
-                    </li>
+                    <li><a href="classes_gymmember.html">Class</a></li>
                     <li><a href="index.html" id="login"></a></li>
                   </ul>
         `;
@@ -177,23 +172,19 @@ class ClassUpdatePage extends BaseClass {
         // Gathering the values from all the inputs in the form
 
         let classId = document.getElementById("classId").value;
-        let name = document.getElementById("name").value;
-        let description = document.getElementById("description").value;
-        let classType = document.getElementById("classType").value;
-        let instructor = document.getElementById("instructor");
-        let userId = instructor.options[instructor.selectedIndex].id;
-        let classCapacity = document.getElementById("classCapacity").value;
-        let dateTime = document.getElementById("dateTime").value;
+        let userId = document.getElementById("userId").value;
+        let classAttendance = "Attending";
         var activeRadioButtons = document.getElementsByName('active_round');
-        let status = activeRadioButtons[0].checked; //checks the first radio button which is Scheduled
-
+        let status = activeRadioButtons[0].checked; //checks the first radio button which is Yes
+        if (!status)
+            classAttendance = "Not Attending";
         //Submits all the information in order to update the record
-        const updatedClass = await this.client.updateClass(classId, name, description, classType, userId, classCapacity, dateTime, status, this.errorHandler)
+        const updatedRegistration = await this.client.updateRegistration(classId, userId, classAttendance, this.errorHandler)
 
-        this.dataStore.set("class", updatedClass);
+        this.dataStore.set("registrationUpdate", updatedRegistration);
 
-        if (updatedClass) {
-            this.showMessage(`Updated class ${updatedClass.classId}!`)
+        if (updatedRegistration) {
+            this.showMessage(`Updated registration ${updatedRegistration.userId} - ${updatedRegistration.classId}!`)
         } else {
             this.errorHandler("Error updating!  Try again...");
         }
@@ -204,8 +195,8 @@ class ClassUpdatePage extends BaseClass {
  * Main method to run when the page contents have loaded.
  */
 const main = async () => {
-    const classUpdatePage = new ClassUpdatePage();
-    await classUpdatePage.mount();
+    const registrationCreatePage = new RegistrationCreatePage();
+    await registrationCreatePage.mount();
 };
 
 window.addEventListener('DOMContentLoaded', main);
