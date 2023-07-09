@@ -1,6 +1,7 @@
 package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.controller.model.ExampleResponse;
+import com.kenzie.appserver.controller.model.InstructorLeadClassResponse;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.service.UserService;
@@ -10,6 +11,8 @@ import com.kenzie.capstone.service.model.UserData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +66,7 @@ public class UserController {
                         user.getUsername(),
                         user.getPassword()))
                 .collect(Collectors.toList());
-
+        Collections.sort(userResponses, Comparator.comparing(UserResponse::getFirstName));
         return ResponseEntity.ok(userResponses);
     }
     @PostMapping

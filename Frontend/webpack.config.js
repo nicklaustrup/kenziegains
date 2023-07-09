@@ -18,6 +18,9 @@ module.exports = {
     classes_instructorPage: path.resolve(__dirname, 'src', 'pages', 'classes_instructorPage.js'),
     class_create_instructorPage: path.resolve(__dirname, 'src', 'pages', 'class_create_instructorPage.js'),
     class_update_instructorPage: path.resolve(__dirname, 'src', 'pages', 'class_update_instructorPage.js'),
+    classes_gymmemberPage: path.resolve(__dirname, 'src', 'pages', 'classes_gymmemberPage.js'),
+    class_create_registrationPage: path.resolve(__dirname, 'src', 'pages', 'class_create_registrationPage.js'),
+    class_update_registrationPage: path.resolve(__dirname, 'src', 'pages', 'class_update_registrationPage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -91,6 +94,21 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/class_create_instructor.html',
       filename: 'class_create_instructor.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/classes_gymmember.html',
+      filename: 'classes_gymmember.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/class_create_registration.html',
+      filename: 'class_create_registration.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/class_update_registration.html',
+      filename: 'class_update_registration.html',
       inject: false
     }),
     new CopyPlugin({

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
+<head>
+    <script type="text/javascript" src="class_update_registrationPage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <base href="/" />
+</head>
+<body class="background">
+<div class="logo"><img src="css/logo.png"alt="Kenzie Gains" height="100px"/></div>
+<nav id="menu">
+</nav>
+<div class="card" id="class">
+    <h2>Class Registration</h2>
+    <form class="card-content" id="update-form">
+        <p class="form-field"><input type="hidden" required class="validated-field" id="classId"></p>
+        <p class="form-field"><input type="hidden" required class="validated-field" id="userId"></p>
+        <p class="form-field" id="name"></p>
+        <p class="form-field" id="description"></p>
+        <p class="form-field" id="classType"></p>
+        <p class="form-field" id="instructor"></p>
+        <p class="form-field" id="classCapacity"></p>
+        <p class="form-field" id="dateTime"></p>
+        <p class="form-field" id="status"></p>
+        <p class="form-field" id="isAttending">Attending?:</p>
+        <input type="radio" name="active_round" id="active_round_yes"><label class="radio-input" for="active_round_yes">Yes</label>
+        <input type="radio" name="active_round" id="active_round_no"><label class="radio-input" for="active_round_yes">No</label>
+        <br>
+        <br>
+        <button class="button-12" type="submit">Update</button>
+    </form>
+    <h3>Attendance List</h3>
+    <table id="results" border="1" cellpadding="1" cellspacing="1" style="width:200px;">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+        </tr>
+        </thead>
+        <tbody id="Attendance">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
