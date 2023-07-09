@@ -116,4 +116,30 @@ public class UserServiceTest {
         assertEquals("password", result.getPassword());
         verify(lambdaServiceClient).setUserData(any(UserRecord.class));
     }
+
+    @Test
+    void updateUser_WithExistingData() {
+
+        // GIVEN
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setUserType("userType");
+        userCreateRequest.setMembership("membership");
+        userCreateRequest.setUsername("username");
+        userCreateRequest.setPassword("password");
+
+        UserData mockUserData = new UserData();
+        mockUserData.setUserId("123");
+        mockUserData.setFirstName("abc");
+        mockUserData.setLastName("xyz");
+        mockUserData.setUserType("Regular");
+        mockUserData.setStatus("Active");
+
+        // WHEN
+        when(lambdaServiceClient.getUserData(userCreateRequest.getUsername())).thenReturn(mockUserData);
+        when(lambdaServiceClient.updateUserData(any(UserRecord.class))).thenReturn(mockUserData);
+        UserData updatedUserData = userService.updateUser(userCreateRequest);
+
+        // THEN
+        assertEquals(mockUserData, updatedUserData);
+    }
 }
