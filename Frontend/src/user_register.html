@@ -11,12 +11,55 @@
 <div class="card">
     <h2>Register User</h2>
     <form class="card-content" id="create-user-form">
-        <p class="form-field"><label for="create-first-name-field">First Name:</label><input type="text" required class="validated-field" id="create-first-name-field"></p>
-        <p class="form-field"><label for="create-last-name-field">Last Name:</label><input type="text" required class="validated-field" id="create-last-name-field"></p>
-        <p class="form-field"><label for="create-user-name-field">User Name:</label><input type="text" required class="validated-field" id="create-user-name-field"></p>
-        <p class="form-field"><label for="create-password-field">Password:</label><input type="password" required class="validated-field" id="create-password-field"></p>
-        <button class="button-12" type="submit">Register</button>
+        <table>
+            <tr>
+                <td class="bTop">
+                    <p class="form-field"><label for="create-first-name-field">First Name:</label></p>
+                </td>
+                <td>
+                    <input type="text" required class="validated-field" id="create-first-name-field">
+                </td>
+            </tr>
+            <tr>
+                <td class="bTop">
+                    <p class="form-field"><label for="create-last-name-field">Last Name:</label></p>
+                </td>
+                <td>
+                    <input type="text" required class="validated-field" id="create-last-name-field">
+                </td>
+            </tr>
+            <tr>
+                <td class="bTop">
+                    <p class="form-field"><label for="create-user-name-field">User Name:</label></p>
+                </td>
+                <td>
+                    <input type="text" required class="validated-field" id="create-user-name-field">
+                </td>
+            </tr>
+            <tr>
+                <td class="bTop">
+                    <p class="form-field"><label for="create-password-field">Password:</label></p>
+                </td>
+                <td>
+                    <input type="password" required class="validated-field" id="create-password-field">
+                </td>
+            </tr>
+            <tr>
+                <td class="bTop">
+                    <button class="button-12" type="submit">Register</button>
+                </td>
+                <td>
+                    <button id="register" class="button-12" onclick="store_redirect()">Login Page</button>
+                </td>
+            </tr>
+        </table>
     </form>
 </div>
+<script>
+function store_redirect(){ //stores items in the localStorage
+    localStorage.clear();
+    window.location.href="user_login.html";
+}
+</script>
 </body>
 </html>

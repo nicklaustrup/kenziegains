@@ -19,8 +19,8 @@ class ClassUpdatePage extends BaseClass {
     async mount() {
         this.client = new ClassUpdateClient();
         //var userId = window.localStorage.getItem('userId'); //searches for the userId in localStorage
-        var username = 'hamza'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
-        var password = '1234'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
+        var username = window.localStorage.getItem('username'); //searches for the username in localStorage
+        var password = window.localStorage.getItem('password'); //searches for the password in localStorage
         var classId = window.localStorage.getItem('classId'); //searches for the eventId in localStorage
         this.getUsers();
         this.getAttendance();
@@ -121,7 +121,7 @@ class ClassUpdatePage extends BaseClass {
                         <li><a href="class_create.html">Create Class</a></li>
                       </ul>
                     </li>
-                    <li><a href="index.html" id="login"></a></li>
+                    <li><a href="user_login.html" id="login"></a></li>
                   </ul>
         `;
     }
