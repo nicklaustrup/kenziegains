@@ -18,8 +18,8 @@ class ClassCreatePage extends BaseClass {
      */
     async mount() {
         this.client = new ClassCreateClient();
-        var username = 'hamza'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
-        var password = '1234'; //window.localStorage.getItem('userId'); //searches for the userId in localStorage
+        var username = window.localStorage.getItem('username'); //searches for the username in localStorage
+        var password = window.localStorage.getItem('password'); //searches for the password in localStorage
         this.getUser(username, password);
         this.getUsers();
         this.dataStore.addChangeListener(this.renderMenu);
@@ -79,7 +79,7 @@ class ClassCreatePage extends BaseClass {
                         <li><a href="class_create.html">Create Class</a></li>
                       </ul>
                     </li>
-                    <li><a href="index.html" id="login"></a></li>
+                    <li><a href="user_login.html" id="login"></a></li>
                   </ul>
         `;
     }

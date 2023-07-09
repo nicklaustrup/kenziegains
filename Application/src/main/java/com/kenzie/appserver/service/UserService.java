@@ -31,7 +31,6 @@ public class UserService {
         // Example getting data from the lambda
         UserData dataFromLambda = lambdaServiceClient.getUserData(username);
 
-
         // Example getting data from the local repository
 //        User dataFromDynamo = userRepository
 //                .findById(username)
@@ -44,10 +43,10 @@ public class UserService {
 //                        user.getUsername(),
 //                        user.getPassword()))
 //                .orElse(null);
-
-        if (!dataFromLambda.getPassword().equals(password)){
-            throw new IllegalArgumentException("Invalid Password!");
-        }
+        if (dataFromLambda !=null)
+            if (!dataFromLambda.getPassword().equals(password)){
+                throw new IllegalArgumentException("Invalid Password!");
+            }
 
         return dataFromLambda;
     }
