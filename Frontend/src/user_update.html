@@ -14,16 +14,11 @@
 <div class="card" id="class">
     <h2>Update Profile</h2>
     <form class="card-content" id="update-user-form">
-<!--        <p class="form-field"><input type="hidden" required class="validated-field" id="classId"></p>-->
-<!--        <p class="form-field"><label for="user_update_firstname_field">First name:</label><input type="text" id="user_update_firstname_field"></p>-->
-<!--        <p class="form-field"><label for="user_update_lastname_field">Last name:</label><input type="text" id="user_update_lastname_field"></p>-->
         <p class="form-field"><label for="user_update_membership_field">Membership type:</label>
             <select id="user_update_membership_field">
                 <option id="gold" value="gold">Gold</option>
                 <option id="regular" value="regular">Regular</option>
             </select></p>
-<!--        <p class="form-field"><label for="membershipstatus">Membership Status:</label><select id="membershipstatus"></select></p>-->
-<!--        <p class="form-field"><label for="classCapacity">Change Password:</label><input type="number" min="1" max="30" required class="validated-field" id="classCapacity"></p>-->
         <p class="form-field"><label for="user_update_password1">Change password:</label><input type="text" id="user_update_password1"></p>
         <p class="form-field"><label for="user_update_password2">Retype password:</label><input type="text" id="user_update_password2"></p>
         <p class="form-field"><label for="user_update_password3">Old password:</label><input type="text" id="user_update_password3"></p>
@@ -34,6 +29,27 @@
         <br>
         <button class="button-12" type="submit">Update</button>
     </form>
+
+    <script>
+        window.onload = function () {
+            const oldPasswordInput = document.getElementById('user_update_password3');
+            const newPasswordInput = document.getElementById('user_update_password1');
+            const confirmPasswordInput = document.getElementById('user_update_password2');
+            const form = document.getElementById('update-user-form');
+
+            form.addEventListener('submit', function (event) {
+                if (newPasswordInput.value.length > 0) {
+                    if (oldPasswordInput.value.length === 0) {
+                        alert("Please enter your old password.");
+                        event.preventDefault();
+                    } else if (newPasswordInput.value !== confirmPasswordInput.value) {
+                        alert("The new passwords do not match.");
+                        event.preventDefault();
+                    }
+                }
+            });
+        };
+    </script>
 </div>
 </body>
 </html>

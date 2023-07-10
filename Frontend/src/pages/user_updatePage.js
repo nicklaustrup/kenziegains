@@ -70,8 +70,9 @@ class UserUpdatePage extends BaseClass {
                         <li><a href="class_create.html">Create Class</a></li>
                       </ul>
                     </li>
+                    <li><a href="user_update.html" id="update_user">Update Profile</a></li>
                     <li><a href="user_login.html" id="login"></a></li>
-                    <li><a href="user_update.html" id="login"></a></li>
+                    
                   </ul>
         `;
     }
@@ -102,16 +103,18 @@ class UserUpdatePage extends BaseClass {
         if (!status)
             membershipStatus = "inactive"
         let newPassword = document.getElementById("user_update_password1").value;
-        let verifyNewPassword = document.getElementById("user_update_password2").value;
-        let oldPassword = document.getElementById("user_update_password3").value;
 
-        if (newPassword !== verifyNewPassword){
-            alert("Passwords do not match!")
-        }
-
-        if (oldPassword !== password){
-            alert("Old password is incorrect.")
-        }
+        //Added a script tag in the HTML to check for password validity
+        // let verifyNewPassword = document.getElementById("user_update_password2").value;
+        // let oldPassword = document.getElementById("user_update_password3").value;
+        //
+        // if (newPassword !== verifyNewPassword){
+        //     this.showMessage("Passwords do not match!")
+        // }
+        //
+        // if (oldPassword !== password){
+        //     this.showMessage("Old password is incorrect.")
+        // }
 
         const updatedUser = await this.client.updateUser(username, membership, newPassword, status, this.errorHandler);
         this.dataStore.set("userUpdated", updatedUser);

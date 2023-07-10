@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.appserver.config.CacheUser;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
+import com.kenzie.appserver.controller.model.UserUpdateRequest;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.service.model.InstructorLeadClass;
 import com.kenzie.appserver.service.model.User;
@@ -32,7 +33,7 @@ public class UserService {
 
     public UserData findById(String username, String password) {
         User cachedUser = cache.get(username);
-        // Check if InstructorLeadClass is cached and return it if true
+        // Check if User is cached and return it if true
         if (cachedUser != null) {
             return new UserData(cachedUser.getUserId(), cachedUser.getFirstName(), cachedUser.getLastName(), cachedUser.getUserType(), cachedUser.getMembership(), cachedUser.getStatus(), cachedUser.getUsername(), cachedUser.getPassword());
         }
@@ -60,39 +61,52 @@ public class UserService {
         }
         return dataFromLambda;
     }
-    public UserData updateUser(UserCreateRequest userCreateRequest) {
+    public UserData updateUser(UserUpdateRequest userUpdateRequest) {
 
         // Example getting data from the lambda
-        UserData dataFromLambda = lambdaServiceClient.getUserData(userCreateRequest.getUsername());
+        User cachedUser = cache.get(userUpdateRequest.getUsername());
+        UserData dataFromLambda = new UserData();
+        if (cachedUser != null) {
+            dataFromLambda.setFirstName(cachedUser.getFirstName());
+            dataFromLambda.setLastName(cachedUser.getLastName());
+            dataFromLambda.setMembership(cachedUser.getMembership());
+            dataFromLambda.setUserType(cachedUser.getUserType());
+            dataFromLambda.setUserId(cachedUser.getUserId());
+            dataFromLambda.setStatus(cachedUser.getStatus());
+            dataFromLambda.setUsername(cachedUser.getUsername());
+            dataFromLambda.setPassword(cachedUser.getPassword());
+            cache.evict(userUpdateRequest.getUsername());
+        } else {
+            dataFromLambda = lambdaServiceClient.getUserData(userUpdateRequest.getUsername());
+        }
 
-
-        // Example getting data from the local repository
-//        User dataFromDynamo = userRepository
-//                .findById(username)
-//                .map(user -> new User(user.getUserId(),
-//                        user.getFirstName(),
-//                        user.getLastName(),
-//                        user.getUserType(),
-//                        user.getMembership(),
-//                        user.getStatus(),
-//                        user.getUsername(),
-//                        user.getPassword()))
-//                .orElse(null);
 
         UserRecord userRecord = new UserRecord();
         userRecord.setUserId(dataFromLambda.getUserId());
         userRecord.setFirstName(dataFromLambda.getFirstName());
         userRecord.setLastName(dataFromLambda.getLastName());
         userRecord.setUserType(dataFromLambda.getUserType());
-        userRecord.setMembership(userCreateRequest.getMembership());
-        userRecord.setStatus(dataFromLambda.getStatus());
-        if (userCreateRequest.getPassword() != null){
-            userRecord.setPassword(userCreateRequest.getPassword());
+        if (userUpdateRequest.getMembership() != null){
+            userRecord.setMembership(userUpdateRequest.getMembership());
+        } else {
+            userRecord.setMembership(dataFromLambda.getMembership());
+        }
+        if (userUpdateRequest.getPassword() != null){
+            userRecord.setStatus(userUpdateRequest.getStatus());
+        } else {
+            userRecord.setStatus(dataFromLambda.getStatus());
+        }
+        if (userUpdateRequest.getPassword() != null){
+            userRecord.setPassword(userUpdateRequest.getPassword());
+        } else {
+            userRecord.setPassword(dataFromLambda.getPassword());
         }
         userRecord.setUsername(dataFromLambda.getUsername());
-        userRecord.setPassword(userCreateRequest.getPassword());
 
-        return lambdaServiceClient.updateUserData(userRecord);
+        UserData lambdaUser = lambdaServiceClient.updateUserData(userRecord);
+
+        cache.add(dataFromLambda.getUsername(), new User(lambdaUser.getUserId(), lambdaUser.getFirstName(), lambdaUser.getLastName(), lambdaUser.getUserType(), lambdaUser.getMembership(), lambdaUser.getStatus(), lambdaUser.getUsername(), lambdaUser.getPassword()));
+        return lambdaUser;
     }
     public List<UserData> findAll() {
         return lambdaServiceClient.getAllUsersData();
@@ -130,6 +144,8 @@ public class UserService {
                 dataFromLambda.getStatus(),
                 dataFromLambda.getUsername(),
                 dataFromLambda.getPassword());
+
+        cache.add(registeredUser.getUsername(), registeredUser);
 
         return registeredUser;
     }

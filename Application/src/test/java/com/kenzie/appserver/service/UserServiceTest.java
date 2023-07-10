@@ -2,6 +2,7 @@ package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.config.CacheUser;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
+import com.kenzie.appserver.controller.model.UserUpdateRequest;
 import com.kenzie.appserver.repositories.UserRepository;
 
 import com.kenzie.appserver.service.model.User;
@@ -124,7 +125,7 @@ public class UserServiceTest {
     void updateUser_WithExistingData() {
 
         // GIVEN
-        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        UserUpdateRequest userCreateRequest = new UserUpdateRequest();
         userCreateRequest.setUserType("userType");
         userCreateRequest.setMembership("membership");
         userCreateRequest.setUsername("username");
