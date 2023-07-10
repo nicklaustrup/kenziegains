@@ -1,12 +1,14 @@
 package com.kenzie.appserver.service;
 
 
+import com.kenzie.appserver.config.CacheClassAttendance;
 import com.kenzie.appserver.converter.LocalDateTimeConverter;
 import com.kenzie.appserver.repositories.ClassAttendanceRepository;
 import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
 import com.kenzie.appserver.repositories.model.ClassAttendanceRecord;
 import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.service.model.ClassAttendance;
+import com.kenzie.appserver.service.model.InstructorLeadClass;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.ClassAttendanceData;
 import com.kenzie.capstone.service.model.InstructorLeadClassData;
@@ -19,13 +21,20 @@ import java.util.List;
 public class ClassAttendanceService {
     private ClassAttendanceRepository classAttendanceRepository;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheClassAttendance cache;
 
-    public ClassAttendanceService(ClassAttendanceRepository classAttendanceRepository, LambdaServiceClient lambdaServiceClient) {
+    public ClassAttendanceService(ClassAttendanceRepository classAttendanceRepository, LambdaServiceClient lambdaServiceClient, CacheClassAttendance cache) {
         this.classAttendanceRepository = classAttendanceRepository;
         this.lambdaServiceClient = lambdaServiceClient;
+        this.cache = cache;
     }
 
     public ClassAttendance findById(ClassAttendanceCompositeId compositeId) {
+        ClassAttendance cachedclassAttendance = cache.get(compositeId.getClassId() + "/" + compositeId.getUserId());
+        // Check if InstructorLeadClass is cached and return it if true
+        if (cachedclassAttendance != null) {
+            return cachedclassAttendance;
+        }
 
         // Example getting data from the lambda
         ClassAttendanceData dataFromLambda = lambdaServiceClient.getClassAttendanceData(compositeId.getUserId(), compositeId.getUserId());
@@ -39,6 +48,10 @@ public class ClassAttendanceService {
                         classAttendance.getAttendanceStatus()))
                 .orElse(null);
 
+        if (dataFromLambda!= null) {
+            // if InstructorLeadClass found, cache it
+            cache.add(dataFromLambda.getClassId() + "/" + dataFromLambda.getUserId(), dataFromDynamo);
+        }
         return dataFromDynamo;
     }
 
@@ -75,6 +88,7 @@ public class ClassAttendanceService {
         String classId = classAttendance.getClassId();
         if (lambdaServiceClient.getClassAttendanceData(userId,classId) != null) {
             lambdaServiceClient.updateClassAttendance(userId,classId,classAttendance.getAttendanceStatus());
+            cache.evict(classAttendance.getClassId() + "/" + classAttendance.getUserId());
         }
         ClassAttendanceRecord classAttendanceRecordLocal = new ClassAttendanceRecord();
         classAttendanceRecordLocal.setUserId(classAttendance.getUserId());

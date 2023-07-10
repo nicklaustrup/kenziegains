@@ -3,9 +3,11 @@ package com.kenzie.appserver.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kenzie.appserver.config.CacheUser;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.repositories.UserRepository;
+import com.kenzie.appserver.service.model.InstructorLeadClass;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.ApiGatewayException;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
@@ -20,13 +22,20 @@ import java.util.UUID;
 public class UserService {
     private UserRepository userRepository;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheUser cache;
 
-    public UserService(UserRepository userRepository, LambdaServiceClient lambdaServiceClient) {
+    public UserService(UserRepository userRepository, LambdaServiceClient lambdaServiceClient, CacheUser cache) {
         this.userRepository = userRepository;
         this.lambdaServiceClient = lambdaServiceClient;
+        this.cache = cache;
     }
 
     public UserData findById(String username, String password) {
+        User cachedUser = cache.get(username);
+        // Check if InstructorLeadClass is cached and return it if true
+        if (cachedUser != null) {
+            return new UserData(cachedUser.getUserId(), cachedUser.getFirstName(), cachedUser.getLastName(), cachedUser.getUserType(), cachedUser.getMembership(), cachedUser.getStatus(), cachedUser.getUsername(), cachedUser.getPassword());
+        }
 
         // Example getting data from the lambda
         UserData dataFromLambda = lambdaServiceClient.getUserData(username);
@@ -43,11 +52,12 @@ public class UserService {
 //                        user.getUsername(),
 //                        user.getPassword()))
 //                .orElse(null);
-        if (dataFromLambda !=null)
-            if (!dataFromLambda.getPassword().equals(password)){
+        if (dataFromLambda !=null) {
+            if (!dataFromLambda.getPassword().equals(password)) {
                 throw new IllegalArgumentException("Invalid Password!");
             }
-
+            cache.add(dataFromLambda.getUsername(), new User(dataFromLambda.getUserId(), dataFromLambda.getFirstName(), dataFromLambda.getLastName(), dataFromLambda.getUserType(), dataFromLambda.getMembership(), dataFromLambda.getStatus(), dataFromLambda.getUsername(), dataFromLambda.getPassword()));
+        }
         return dataFromLambda;
     }
     public UserData updateUser(UserCreateRequest userCreateRequest) {
