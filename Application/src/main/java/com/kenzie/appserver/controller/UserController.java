@@ -1,9 +1,6 @@
 package com.kenzie.appserver.controller;
 
-import com.kenzie.appserver.controller.model.ExampleResponse;
-import com.kenzie.appserver.controller.model.InstructorLeadClassResponse;
-import com.kenzie.appserver.controller.model.UserCreateRequest;
-import com.kenzie.appserver.controller.model.UserResponse;
+import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.Example;
 import com.kenzie.appserver.service.model.User;
@@ -86,9 +83,9 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
     @PostMapping("/update")
-    public ResponseEntity<UserResponse> getUser(@RequestBody UserCreateRequest userCreateRequest) {
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
 
-        UserData user  = userService.updateUser(userCreateRequest);
+        UserData user  = userService.updateUser(userUpdateRequest);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
