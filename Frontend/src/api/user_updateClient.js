@@ -23,12 +23,13 @@ export default class UserUpdateClient extends BaseClass {
         }
     }
 
-    async updateUser(username, membership, newPassword, status, errorCallback) {
+    async updateUser(username, newPassword, userType, membership, status, errorCallback) {
         try {
             const response = await this.client.post(`/user/update`, {
                 username: username,
-                membership: membership,
                 password: newPassword,
+                userType: userType,
+                membership: membership,
                 status: status,
             });
             return response.data;

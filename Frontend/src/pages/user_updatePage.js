@@ -116,7 +116,11 @@ class UserUpdatePage extends BaseClass {
         //     this.showMessage("Old password is incorrect.")
         // }
 
-        const updatedUser = await this.client.updateUser(username, membership, newPassword, status, this.errorHandler);
+        if (newPassword.length === 0){
+            newPassword = password;
+        }
+        let userType = "gymMember";
+        const updatedUser = await this.client.updateUser(username, newPassword, userType, membership, status, this.errorHandler);
         this.dataStore.set("userUpdated", updatedUser);
 
         if (updatedUser) {

@@ -101,11 +101,11 @@ public class UserService {
         } else {
             userRecord.setPassword(dataFromLambda.getPassword());
         }
-        userRecord.setUsername(dataFromLambda.getUsername());
+        userRecord.setUsername(userUpdateRequest.getUsername());
 
         UserData lambdaUser = lambdaServiceClient.updateUserData(userRecord);
 
-        cache.add(dataFromLambda.getUsername(), new User(lambdaUser.getUserId(), lambdaUser.getFirstName(), lambdaUser.getLastName(), lambdaUser.getUserType(), lambdaUser.getMembership(), lambdaUser.getStatus(), lambdaUser.getUsername(), lambdaUser.getPassword()));
+        cache.add(userUpdateRequest.getUsername(), new User(lambdaUser.getUserId(), lambdaUser.getFirstName(), lambdaUser.getLastName(), lambdaUser.getUserType(), lambdaUser.getMembership(), lambdaUser.getStatus(), lambdaUser.getUsername(), lambdaUser.getPassword()));
         return lambdaUser;
     }
     public List<UserData> findAll() {
