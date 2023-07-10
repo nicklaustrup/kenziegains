@@ -56,7 +56,8 @@ class RegistrationCreatePage extends BaseClass {
                  }
             }
             document.getElementById('classCapacity').innerHTML = `Class Capacity: ${classRecord.classCapacity}`;
-            document.getElementById('dateTime').innerHTML = `Date-Time: ${classRecord.dateTime}`;
+            let dateFormatted = new Date(classRecord.dateTime).toLocaleString();
+            document.getElementById('dateTime').innerHTML = `Date-Time: ${dateFormatted}`;
             if (classRecord.status)
                 document.getElementById('status').innerHTML = `Status: Scheduled`
             else
