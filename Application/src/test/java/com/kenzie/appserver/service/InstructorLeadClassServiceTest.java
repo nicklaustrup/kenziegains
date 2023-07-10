@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheInstructorLeadClass;
 import com.kenzie.appserver.repositories.InstructorLeadClassRepository;
 import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.service.model.InstructorLeadClass;
@@ -23,12 +24,14 @@ public class InstructorLeadClassServiceTest {
     private InstructorLeadClassRepository instructorLeadClassRepository;
     private InstructorLeadClassService instructorLeadClassService;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheInstructorLeadClass cacheInstructorLeadClass;
 
     @BeforeEach
     void setup() {
         instructorLeadClassRepository = mock(InstructorLeadClassRepository.class);
         lambdaServiceClient = mock(LambdaServiceClient.class);
-        instructorLeadClassService = new InstructorLeadClassService(instructorLeadClassRepository, lambdaServiceClient);
+        cacheInstructorLeadClass = mock(CacheInstructorLeadClass.class);
+        instructorLeadClassService = new InstructorLeadClassService(instructorLeadClassRepository, lambdaServiceClient, cacheInstructorLeadClass);
     }
     /** ------------------------------------------------------------------------
      *  instructorLeadClassService.findById
@@ -116,7 +119,6 @@ public class InstructorLeadClassServiceTest {
         assertEquals(dateTime, result.getDateTime());
         assertEquals(status, result.isStatus());
         verify(lambdaServiceClient).setInstructorLeadClassData(name, description, classType, userId, classCapacity, dateTime, status);
-        verify(instructorLeadClassRepository).save(any(InstructorLeadClassRecord.class));
     }
 
     @Test

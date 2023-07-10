@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheClassAttendance;
 import com.kenzie.appserver.repositories.ClassAttendanceRepository;
 import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
 import com.kenzie.appserver.repositories.model.ClassAttendanceRecord;
@@ -21,12 +22,14 @@ public class ClassAttendanceServiceTest {
     private ClassAttendanceRepository classAttendanceRepository;
     private ClassAttendanceService classAttendanceService;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheClassAttendance cacheClassAttendance;
 
     @BeforeEach
     void setup() {
         classAttendanceRepository = mock(ClassAttendanceRepository.class);
         lambdaServiceClient = mock(LambdaServiceClient.class);
-        classAttendanceService = new ClassAttendanceService(classAttendanceRepository, lambdaServiceClient);
+        cacheClassAttendance = mock(CacheClassAttendance.class);
+        classAttendanceService = new ClassAttendanceService(classAttendanceRepository, lambdaServiceClient, cacheClassAttendance);
     }
     /** ------------------------------------------------------------------------
      *  classAttendanceService.findById

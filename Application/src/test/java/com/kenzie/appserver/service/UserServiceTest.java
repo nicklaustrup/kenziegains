@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheUser;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.repositories.UserRepository;
 
@@ -21,12 +22,14 @@ public class UserServiceTest {
     private UserRepository userRepository;
     private UserService userService;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheUser cacheUser;
 
     @BeforeEach
     void setup() {
         userRepository = mock(UserRepository.class);
         lambdaServiceClient = mock(LambdaServiceClient.class);
-        userService = new UserService(userRepository, lambdaServiceClient);
+        cacheUser = mock(CacheUser.class);
+        userService = new UserService(userRepository, lambdaServiceClient, cacheUser);
     }
     /** ------------------------------------------------------------------------
      *  instructorLeadClassService.findById

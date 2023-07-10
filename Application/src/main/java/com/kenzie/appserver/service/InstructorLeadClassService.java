@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheInstructorLeadClass;
 import com.kenzie.appserver.converter.LocalDateTimeConverter;
 import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.repositories.InstructorLeadClassRepository;
@@ -17,20 +18,30 @@ import java.util.List;
 public class InstructorLeadClassService {
     private InstructorLeadClassRepository instructorLeadClassRepository;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheInstructorLeadClass cache;
 
-    public InstructorLeadClassService(InstructorLeadClassRepository instructorLeadClassRepository, LambdaServiceClient lambdaServiceClient) {
+    public InstructorLeadClassService(InstructorLeadClassRepository instructorLeadClassRepository, LambdaServiceClient lambdaServiceClient, CacheInstructorLeadClass cache) {
         this.instructorLeadClassRepository = instructorLeadClassRepository;
         this.lambdaServiceClient = lambdaServiceClient;
+        this.cache = cache;
     }
 
     public InstructorLeadClass findById(String classId) {
+        InstructorLeadClass cachedInstructorLeadClass = cache.get(classId);
+        // Check if InstructorLeadClass is cached and return it if true
+        if (cachedInstructorLeadClass != null) {
+            return cachedInstructorLeadClass;
+        }
 
         // Getting data from the lambda
         InstructorLeadClassData dataFromLambda = lambdaServiceClient.getInstructorLeadClassData(classId);
         LocalDateTimeConverter converter = new LocalDateTimeConverter();
         InstructorLeadClass instructorLeadClass = null;
-        if (dataFromLambda!= null)
+        if (dataFromLambda!= null) {
             instructorLeadClass = new InstructorLeadClass(dataFromLambda.getClassId(), dataFromLambda.getName(), dataFromLambda.getDescription(), dataFromLambda.getClassType(), dataFromLambda.getUserId(), dataFromLambda.getClassCapacity(), converter.unconvert(dataFromLambda.getDateTime()), dataFromLambda.isStatus());
+            // if InstructorLeadClass found, cache it
+            cache.add(dataFromLambda.getClassId(), instructorLeadClass);
+        }
 
         // Getting data from the local repository
 //        InstructorLeadClass dataFromDynamo = instructorLeadClassRepository
@@ -69,17 +80,17 @@ public class InstructorLeadClassService {
         InstructorLeadClassData dataFromLambda = lambdaServiceClient.setInstructorLeadClassData(name, description, classType, userId, classCapacity, dateTime, status);
 
         // Sending data to the local repository
-        LocalDateTimeConverter converter = new LocalDateTimeConverter();
-        InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
-        instructorLeadClassRecord.setClassId(dataFromLambda.getClassId());
-        instructorLeadClassRecord.setName(dataFromLambda.getName());
-        instructorLeadClassRecord.setDescription(dataFromLambda.getDescription());
-        instructorLeadClassRecord.setClassType(dataFromLambda.getClassType());
-        instructorLeadClassRecord.setUserId(dataFromLambda.getUserId());
-        instructorLeadClassRecord.setClassCapacity(dataFromLambda.getClassCapacity());
-        instructorLeadClassRecord.setDateTime(converter.unconvert(dataFromLambda.getDateTime()));
-        instructorLeadClassRecord.setStatus(dataFromLambda.isStatus());
-        instructorLeadClassRepository.save(instructorLeadClassRecord);
+//        LocalDateTimeConverter converter = new LocalDateTimeConverter();
+//        InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
+//        instructorLeadClassRecord.setClassId(dataFromLambda.getClassId());
+//        instructorLeadClassRecord.setName(dataFromLambda.getName());
+//        instructorLeadClassRecord.setDescription(dataFromLambda.getDescription());
+//        instructorLeadClassRecord.setClassType(dataFromLambda.getClassType());
+//        instructorLeadClassRecord.setUserId(dataFromLambda.getUserId());
+//        instructorLeadClassRecord.setClassCapacity(dataFromLambda.getClassCapacity());
+//        instructorLeadClassRecord.setDateTime(converter.unconvert(dataFromLambda.getDateTime()));
+//        instructorLeadClassRecord.setStatus(dataFromLambda.isStatus());
+//        instructorLeadClassRepository.save(instructorLeadClassRecord);
 
         InstructorLeadClass instructorLeadClass = new InstructorLeadClass(dataFromLambda.getClassId(), name, description, classType, userId, classCapacity, dateTime, status);
         return instructorLeadClass;
@@ -87,6 +98,12 @@ public class InstructorLeadClassService {
 
     public void updateInstructorLeadClass(InstructorLeadClass instructorLeadClass) {
         if (lambdaServiceClient.getInstructorLeadClassData(instructorLeadClass.getClassId()) != null) {
+            lambdaServiceClient.updateInstructorLeadClassData(instructorLeadClass.getClassId(), instructorLeadClass.getName(), instructorLeadClass.getDescription(), instructorLeadClass.getClassType(), instructorLeadClass.getUserId(), instructorLeadClass.getClassCapacity(), instructorLeadClass.getDateTime(), instructorLeadClass.isStatus());
+            cache.evict(instructorLeadClass.getClassId()); //deleting from the cache (if available) since it became stale data after the update
+        }
+
+        //TODO implement but with Lambda similar to the above
+//        if (instructorLeadClassRepository.existsById(instructorLeadClass.getClassId())) {
 //            InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
 //            instructorLeadClassRecord.setClassId(instructorLeadClass.getClassId());
 //            instructorLeadClassRecord.setName(instructorLeadClass.getName());
@@ -96,21 +113,7 @@ public class InstructorLeadClassService {
 //            instructorLeadClassRecord.setClassCapacity(instructorLeadClass.getClassCapacity());
 //            instructorLeadClassRecord.setDateTime(instructorLeadClass.getDateTime());
 //            instructorLeadClassRecord.setStatus(instructorLeadClass.isStatus());
-            lambdaServiceClient.updateInstructorLeadClassData(instructorLeadClass.getClassId(), instructorLeadClass.getName(), instructorLeadClass.getDescription(), instructorLeadClass.getClassType(), instructorLeadClass.getUserId(), instructorLeadClass.getClassCapacity(), instructorLeadClass.getDateTime(), instructorLeadClass.isStatus());
-        }
-
-        //TODO implement but with Lambda similar to the above
-        if (instructorLeadClassRepository.existsById(instructorLeadClass.getClassId())) {
-            InstructorLeadClassRecord instructorLeadClassRecord = new InstructorLeadClassRecord();
-            instructorLeadClassRecord.setClassId(instructorLeadClass.getClassId());
-            instructorLeadClassRecord.setName(instructorLeadClass.getName());
-            instructorLeadClassRecord.setDescription(instructorLeadClass.getDescription());
-            instructorLeadClassRecord.setClassType(instructorLeadClass.getClassType());
-            instructorLeadClassRecord.setUserId(instructorLeadClass.getUserId());
-            instructorLeadClassRecord.setClassCapacity(instructorLeadClass.getClassCapacity());
-            instructorLeadClassRecord.setDateTime(instructorLeadClass.getDateTime());
-            instructorLeadClassRecord.setStatus(instructorLeadClass.isStatus());
-            instructorLeadClassRepository.save(instructorLeadClassRecord);
-        }
+//            instructorLeadClassRepository.save(instructorLeadClassRecord);
+//        }
     }
 }
