@@ -5,7 +5,7 @@ import com.kenzie.appserver.repositories.model.ClassAttendanceCompositeId;
 import com.kenzie.appserver.repositories.model.ClassAttendanceRecord;
 import com.kenzie.appserver.repositories.model.InstructorLeadClassRecord;
 import com.kenzie.appserver.service.ClassAttendanceService;
-import com.kenzie.appserver.service.ExampleService;
+//import com.kenzie.appserver.service.ExampleService;
 import com.kenzie.appserver.service.InstructorLeadClassService;
 import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.ClassAttendance;

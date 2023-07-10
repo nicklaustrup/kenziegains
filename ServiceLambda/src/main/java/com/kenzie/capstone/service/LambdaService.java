@@ -32,19 +32,19 @@ public LambdaService(ExampleDao exampleDao) {
 }
 
 
-    public ExampleData getExampleData(String id) {
-        List<ExampleRecord> records = exampleDao.getExampleData(id);
-        if (records.size() > 0) {
-            return new ExampleData(records.get(0).getId(), records.get(0).getData());
-        }
-        return null;
-    }
+//    public ExampleData getExampleData(String id) {
+//        List<ExampleRecord> records = exampleDao.getExampleData(id);
+//        if (records.size() > 0) {
+//            return new ExampleData(records.get(0).getId(), records.get(0).getData());
+//        }
+//        return null;
+//    }
 
-    public ExampleData setExampleData(String data) {
-        String id = UUID.randomUUID().toString();
-        ExampleRecord record = exampleDao.setExampleData(id, data);
-        return new ExampleData(id, data);
-    }
+//    public ExampleData setExampleData(String data) {
+//        String id = UUID.randomUUID().toString();
+//        ExampleRecord record = exampleDao.setExampleData(id, data);
+//        return new ExampleData(id, data);
+//    }
 
 
     /***************        INSTRUCTOR LEAD CLASS         *********************/
