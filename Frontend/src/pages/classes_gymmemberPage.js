@@ -125,6 +125,7 @@ class ClassesGymMemberPage extends BaseClass {
         document.getElementById("menu").innerHTML = `
                   <ul>
                     <li><a href="classes_gymmember.html">Class</a></li>
+                    <li><a href="user_update.html" id="update">Update Profile</a></li>
                     <li><a href="user_login.html" id="login"></a></li>
                   </ul>
         `;

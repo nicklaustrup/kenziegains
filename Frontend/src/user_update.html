@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"/>
+<head>
+    <script type="text/javascript" src="user_updatePage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <base href="/" />
+</head>
+<body class="background">
+<div class="logo"><img src="css/logo.png"alt="Kenzie Gains" height="100px"/></div>
+<nav id="menu">
+</nav>
+<div class="card" id="class">
+    <h2>Update Profile</h2>
+    <form class="card-content" id="update-user-form">
+<!--        <p class="form-field"><input type="hidden" required class="validated-field" id="classId"></p>-->
+<!--        <p class="form-field"><label for="user_update_firstname_field">First name:</label><input type="text" id="user_update_firstname_field"></p>-->
+<!--        <p class="form-field"><label for="user_update_lastname_field">Last name:</label><input type="text" id="user_update_lastname_field"></p>-->
+        <p class="form-field"><label for="user_update_membership_field">Membership type:</label>
+            <select id="user_update_membership_field">
+                <option id="Gold" value="Gold">Gold</option>
+                <option id="Regular" value="Regular">Regular</option>
+            </select></p>
+<!--        <p class="form-field"><label for="membershipstatus">Membership Status:</label><select id="membershipstatus"></select></p>-->
+<!--        <p class="form-field"><label for="classCapacity">Change Password:</label><input type="number" min="1" max="30" required class="validated-field" id="classCapacity"></p>-->
+        <p class="form-field"><label for="user_update_password1">Change password:</label><input type="text" id="user_update_password1"></p>
+        <p class="form-field"><label for="user_update_password2">Retype password:</label><input type="text" id="user_update_password2"></p>
+        <p class="form-field"><label for="user_update_password3">Old password:</label><input type="text" id="user_update_password3"></p>
+        <p class="form-field"><label>Membership Status:</label></p>
+        <input type="radio" name="active_round" id="active_round_active"><label class="radio-input" for="active_round_active">Active</label>
+        <input type="radio" name="active_round" id="active_round_inactive"><label class="radio-input" for="active_round_inactive">Pause</label>
+        <br>
+        <br>
+        <button class="button-12" type="submit">Update</button>
+    </form>
+</div>
+</body>
+</html>

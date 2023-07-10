@@ -76,7 +76,10 @@ public class UserService {
         userRecord.setUserType(dataFromLambda.getUserType());
         userRecord.setMembership(userCreateRequest.getMembership());
         userRecord.setStatus(dataFromLambda.getStatus());
-        userRecord.setUsername(userCreateRequest.getUsername());
+        if (userCreateRequest.getPassword() != null){
+            userRecord.setPassword(userCreateRequest.getPassword());
+        }
+        userRecord.setUsername(dataFromLambda.getUsername());
         userRecord.setPassword(userCreateRequest.getPassword());
 
         return lambdaServiceClient.updateUserData(userRecord);
