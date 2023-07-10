@@ -8,7 +8,7 @@ module.exports = {
     usedExports: true
   },
   entry: {
-    examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+//    examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
     registerUserPage: path.resolve(__dirname, 'src', 'pages', 'registerUserPage.js'),
     user_loginPage: path.resolve(__dirname, 'src', 'pages', 'user_loginPage.js'),
     user_registerPage: path.resolve(__dirname, 'src', 'pages', 'user_registerPage.js'),
@@ -48,11 +48,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html',
-      inject: false
-    }),
+//    new HtmlWebpackPlugin({
+//      template: './src/index.html',
+//      filename: 'index.html',
+//      inject: false
+//    }),
     new HtmlWebpackPlugin({
       template: './src/registerUser.html',
       filename: 'registerUser.html',

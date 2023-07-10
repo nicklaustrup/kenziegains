@@ -25,7 +25,7 @@ public class UpdateUserData implements RequestHandler<APIGatewayProxyRequestEven
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
 
-        log.info(gson.toJson(input));
+        log.info("thi is the request" + gson.toJson(input));
 
         ServiceComponent serviceComponent = DaggerServiceComponent.create();
         LambdaService lambdaService = serviceComponent.provideLambdaService();

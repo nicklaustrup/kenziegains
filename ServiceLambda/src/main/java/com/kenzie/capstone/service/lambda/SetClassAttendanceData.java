@@ -12,7 +12,7 @@ import com.kenzie.capstone.service.LambdaService;
 import com.kenzie.capstone.service.dependency.DaggerServiceComponent;
 import com.kenzie.capstone.service.dependency.ServiceComponent;
 import com.kenzie.capstone.service.model.ClassAttendanceData;
-import com.kenzie.capstone.service.model.ExampleData;
+//import com.kenzie.capstone.service.model.ExampleData;
 import com.kenzie.capstone.service.model.InstructorLeadClassData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

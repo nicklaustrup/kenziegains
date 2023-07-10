@@ -1,8 +1,8 @@
 package com.kenzie.capstone.service.dependency;
 
 
-import com.kenzie.capstone.service.caching.CacheClient;
-import com.kenzie.capstone.service.caching.CachingDao;
+//import com.kenzie.capstone.service.caching.CacheClient;
+//import com.kenzie.capstone.service.caching.CachingDao;
 import com.kenzie.capstone.service.dao.ExampleDao;
 import com.kenzie.capstone.service.util.DynamoDbClientProvider;
 
@@ -34,14 +34,14 @@ public class DaoModule {
         return new ExampleDao(mapper);
     }
 
-    @Singleton
-    @Provides
-    @Named("CachingDao")
-    @Inject
-    public CachingDao CachingDao(
-            @Named("CachingClient") CacheClient cacheClient,
-            @Named("ExampleDao")ExampleDao nonCachingDao) {
-        return new CachingDao(cacheClient, nonCachingDao);
-    }
+//    @Singleton
+//    @Provides
+//    @Named("CachingDao")
+//    @Inject
+//    public CachingDao CachingDao(
+//            @Named("CachingClient") CacheClient cacheClient,
+//            @Named("ExampleDao")ExampleDao nonCachingDao) {
+//        return new CachingDao(cacheClient, nonCachingDao);
+//    }
 
 }

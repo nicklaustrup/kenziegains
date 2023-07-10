@@ -25,48 +25,48 @@ public class ExampleDao {
         this.mapper = mapper;
     }
 
-    public ExampleData storeExampleData(ExampleData exampleData) {
-        try {
-            mapper.save(exampleData, new DynamoDBSaveExpression()
-                    .withExpected(ImmutableMap.of(
-                            "id",
-                            new ExpectedAttributeValue().withExists(false)
-                    )));
-        } catch (ConditionalCheckFailedException e) {
-            throw new IllegalArgumentException("id has already been used");
-        }
+//    public ExampleData storeExampleData(ExampleData exampleData) {
+//        try {
+//            mapper.save(exampleData, new DynamoDBSaveExpression()
+//                    .withExpected(ImmutableMap.of(
+//                            "id",
+//                            new ExpectedAttributeValue().withExists(false)
+//                    )));
+//        } catch (ConditionalCheckFailedException e) {
+//            throw new IllegalArgumentException("id has already been used");
+//        }
+//
+//        return exampleData;
+//    }
 
-        return exampleData;
-    }
+//    public List<ExampleRecord> getExampleData(String id) {
+//        ExampleRecord exampleRecord = new ExampleRecord();
+//        exampleRecord.setId(id);
+//
+//        DynamoDBQueryExpression<ExampleRecord> queryExpression = new DynamoDBQueryExpression<ExampleRecord>()
+//                .withHashKeyValues(exampleRecord)
+//                .withConsistentRead(false);
+//
+//        return mapper.query(ExampleRecord.class, queryExpression);
+//    }
 
-    public List<ExampleRecord> getExampleData(String id) {
-        ExampleRecord exampleRecord = new ExampleRecord();
-        exampleRecord.setId(id);
-
-        DynamoDBQueryExpression<ExampleRecord> queryExpression = new DynamoDBQueryExpression<ExampleRecord>()
-                .withHashKeyValues(exampleRecord)
-                .withConsistentRead(false);
-
-        return mapper.query(ExampleRecord.class, queryExpression);
-    }
-
-    public ExampleRecord setExampleData(String id, String data) {
-        ExampleRecord exampleRecord = new ExampleRecord();
-        exampleRecord.setId(id);
-        exampleRecord.setData(data);
-
-        try {
-            mapper.save(exampleRecord, new DynamoDBSaveExpression()
-                    .withExpected(ImmutableMap.of(
-                            "id",
-                            new ExpectedAttributeValue().withExists(false)
-                    )));
-        } catch (ConditionalCheckFailedException e) {
-            throw new IllegalArgumentException("id already exists");
-        }
-
-        return exampleRecord;
-    }
+//    public ExampleRecord setExampleData(String id, String data) {
+//        ExampleRecord exampleRecord = new ExampleRecord();
+//        exampleRecord.setId(id);
+//        exampleRecord.setData(data);
+//
+//        try {
+//            mapper.save(exampleRecord, new DynamoDBSaveExpression()
+//                    .withExpected(ImmutableMap.of(
+//                            "id",
+//                            new ExpectedAttributeValue().withExists(false)
+//                    )));
+//        } catch (ConditionalCheckFailedException e) {
+//            throw new IllegalArgumentException("id already exists");
+//        }
+//
+//        return exampleRecord;
+//    }
 
     //Set additional methods for each of the classes/tables
     public List<InstructorLeadClassRecord> getInstructorLeadClassData(String classId) {

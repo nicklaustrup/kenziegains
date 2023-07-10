@@ -2,7 +2,7 @@ package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.service.UserService;
-import com.kenzie.appserver.service.model.Example;
+//import com.kenzie.appserver.service.model.Example;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.model.UserData;
 import org.springframework.http.ResponseEntity;
