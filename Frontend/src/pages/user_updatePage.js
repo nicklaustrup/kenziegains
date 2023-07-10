@@ -25,7 +25,7 @@ class UserUpdatePage extends BaseClass {
         this.dataStore.addChangeListener(this.renderMenu);
         this.dataStore.addChangeListener(this.renderLogin);
         this.dataStore.addChangeListener(this.renderUser);
-        document.getElementById('update-user-form').addEventListener('submit', this.onCreate);
+        document.getElementById('update-user-form').addEventListener('submit', this.onUpdate);
     }
 
     async renderUser() {
@@ -120,7 +120,7 @@ class UserUpdatePage extends BaseClass {
             newPassword = password;
         }
         let userType = "gymMember";
-        const updatedUser = await this.client.updateUser(username, newPassword, userType, membership, status, this.errorHandler);
+        const updatedUser = await this.client.updateUser(username, newPassword, userType, membership, membershipStatus, this.errorHandler);
         this.dataStore.set("userUpdated", updatedUser);
 
         if (updatedUser) {

@@ -6,7 +6,6 @@ import javax.validation.constraints.NotEmpty;
 
 public class UserUpdateRequest {
 
-    @NotEmpty
     @JsonProperty("username")
     private String username;
 

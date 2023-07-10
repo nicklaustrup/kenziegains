@@ -1,6 +1,7 @@
 package com.kenzie.capstone.service.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.kenzie.capstone.service.converter.LocalDateTimeConverter;
 import com.kenzie.capstone.service.model.*;
 
@@ -189,12 +190,15 @@ public class ExampleDao {
         record.setUserType(data.getUserType());
         record.setPassword(data.getPassword());
 
+        String username = record.getUsername();
+
 
         try {
             mapper.save(record, new DynamoDBSaveExpression()
                     .withExpected(ImmutableMap.of(
                             "username",
-                            new ExpectedAttributeValue().withExists(true)
+                            new ExpectedAttributeValue(new AttributeValue(username))
+                                    .withExists(true)
                     )));
         } catch (ConditionalCheckFailedException e) {
             throw new IllegalArgumentException("username does not exist, register a new user");
