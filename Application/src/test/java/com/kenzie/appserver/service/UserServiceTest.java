@@ -125,11 +125,11 @@ public class UserServiceTest {
     void updateUser_WithExistingData() {
 
         // GIVEN
-        UserUpdateRequest userCreateRequest = new UserUpdateRequest();
-        userCreateRequest.setUserType("userType");
-        userCreateRequest.setMembership("membership");
-        userCreateRequest.setUsername("username");
-        userCreateRequest.setPassword("password");
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
+        userUpdateRequest.setUserType("userType");
+        userUpdateRequest.setMembership("membership");
+        userUpdateRequest.setUsername("username");
+        userUpdateRequest.setPassword("password");
 
         UserData mockUserData = new UserData();
         mockUserData.setUserId("123");
@@ -139,11 +139,64 @@ public class UserServiceTest {
         mockUserData.setStatus("Active");
 
         // WHEN
-        when(lambdaServiceClient.getUserData(userCreateRequest.getUsername())).thenReturn(mockUserData);
+        when(lambdaServiceClient.getUserData(userUpdateRequest.getUsername())).thenReturn(mockUserData);
         when(lambdaServiceClient.updateUserData(any(UserRecord.class))).thenReturn(mockUserData);
-        UserData updatedUserData = userService.updateUser(userCreateRequest);
+        UserData updatedUserData = userService.updateUser(userUpdateRequest);
 
         // THEN
         assertEquals(mockUserData, updatedUserData);
+    }
+    @Test
+    void updateUser_WithNonExistingData() {
+
+        // GIVEN
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
+        userUpdateRequest.setUserType("userType");
+        userUpdateRequest.setMembership("membership");
+        userUpdateRequest.setUsername("username");
+        userUpdateRequest.setPassword("password");
+
+        UserData mockUserData = new UserData();
+        mockUserData.setUserId("123");
+        mockUserData.setFirstName("abc");
+        mockUserData.setLastName("xyz");
+        mockUserData.setUserType("Regular");
+        mockUserData.setStatus("Active");
+
+        // WHEN
+        when(cacheUser.get("username")).thenReturn(null);
+        when(lambdaServiceClient.getUserData(userUpdateRequest.getUsername())).thenReturn(mockUserData);
+
+        // THEN
+        assertThrows(NullPointerException.class, () -> userService.updateUser(userUpdateRequest));
+        verify(cacheUser, never()).evict(any());
+    }
+        @Test
+        void updateUser_CacheUserExists() {
+
+            // GIVEN
+            UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
+            userUpdateRequest.setUsername("username");
+
+            User cachedUser = new User("123", "abc", "xyz",
+                    "userType", "membership", "Active", "username", "password");
+            when(cacheUser.get("username")).thenReturn(cachedUser);
+
+            UserData mockUserData = new UserData();
+            mockUserData.setUserId("123");
+            mockUserData.setFirstName("abc");
+            mockUserData.setLastName("xyz");
+            mockUserData.setUserType("userType");
+            mockUserData.setStatus("Active");
+            mockUserData.setUsername("username");
+            when(lambdaServiceClient.getUserData("username")).thenReturn(mockUserData);
+            when(lambdaServiceClient.updateUserData(any(UserRecord.class))).thenReturn(mockUserData);
+
+            // WHEN
+            UserData updatedUserData = userService.updateUser(userUpdateRequest);
+
+            // THEN
+            assertNotNull(updatedUserData);
+            verify(cacheUser, times(1)).evict("username");
     }
 }
