@@ -29,27 +29,6 @@
         <br>
         <button class="button-12" type="submit">Update</button>
     </form>
-
-    <script>
-        window.onload = function () {
-            const oldPasswordInput = document.getElementById('user_update_password3');
-            const newPasswordInput = document.getElementById('user_update_password1');
-            const confirmPasswordInput = document.getElementById('user_update_password2');
-            const form = document.getElementById('update-user-form');
-
-            form.addEventListener('submit', function (event) {
-                if (newPasswordInput.value.length > 0) {
-                    if (oldPasswordInput.value.length === 0) {
-                        alert("Please enter your old password.");
-                        event.preventDefault();
-                    } else if (newPasswordInput.value !== confirmPasswordInput.value) {
-                        alert("The new passwords do not match.");
-                        event.preventDefault();
-                    }
-                }
-            });
-        };
-    </script>
 </div>
 </body>
 </html>

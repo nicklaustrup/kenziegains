@@ -105,20 +105,25 @@ class UserUpdatePage extends BaseClass {
         let newPassword = document.getElementById("user_update_password1").value;
 
         //Added a script tag in the HTML to check for password validity
-        // let verifyNewPassword = document.getElementById("user_update_password2").value;
-        // let oldPassword = document.getElementById("user_update_password3").value;
-        //
-        // if (newPassword !== verifyNewPassword){
-        //     this.showMessage("Passwords do not match!")
-        // }
-        //
-        // if (oldPassword !== password){
-        //     this.showMessage("Old password is incorrect.")
-        // }
+        let verifyNewPassword = document.getElementById("user_update_password2").value;
+        let oldPassword = document.getElementById("user_update_password3").value;
+
+        if (newPassword.value !== verifyNewPassword.value){
+            alert("Passwords do not match!")
+            await this.renderLogin();
+            return;
+        }
+
+        if (oldPassword.value !== password){
+            alert("Old password is incorrect.")
+            await this.renderLogin();
+            return;
+        }
 
         if (newPassword.length === 0){
             newPassword = password;
         }
+
         let userType = "gymMember";
         const updatedUser = await this.client.updateUser(username, newPassword, userType, membership, membershipStatus, this.errorHandler);
         this.dataStore.set("userUpdated", updatedUser);
