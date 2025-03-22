@@ -24,21 +24,17 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-name: Deploy to Amazon ECS
+name: Deploy to AWS
 
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:  # Allows manual triggering
 
 env:
-  AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: MY_ECR_REPOSITORY           # set this to your Amazon ECR repository name
-  ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
-                                               # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
-                                               # containerDefinitions section of your task definition
+  AWS_REGION: us-east-1  # Your preferred AWS region
+  CAPSTONE_PROJECT_NAME: kenziegains
+  GITHUB_GROUP_NAME: kenziegains
 
 permissions:
   contents: read
@@ -60,35 +56,32 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'
+        java-version: '11'
 
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+    - name: Build project
       run: |
-        # Build a docker container and
-        # push it to ECR so that it can
-        # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        chmod +x gradlew
+        ./gradlew build
 
-    - name: Fill in the new image ID in the Amazon ECS task definition
-      id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: ${{ env.ECS_TASK_DEFINITION }}
-        container-name: ${{ env.CONTAINER_NAME }}
-        image: ${{ steps.build-image.outputs.image }}
+    - name: Create DynamoDB Tables
+      run: |
+        aws cloudformation create-stack --stack-name lambda-instructor-class-table --template-body file://LambdaInstructorLeadClassTable.yml --capabilities CAPABILITY_IAM || true
+        aws cloudformation create-stack --stack-name lambda-user-table --template-body file://LambdaUserTable.yml --capabilities CAPABILITY_IAM || true
+        aws cloudformation create-stack --stack-name lambda-class-attendance-table --template-body file://LambdaClassAttendanceTable.yml --capabilities CAPABILITY_IAM || true
 
-    - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: ${{ env.ECS_SERVICE }}
-        cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true
+    - name: Deploy Lambda Service
+      run: |
+        source ./setupEnvironment.sh
+        aws s3 mb s3://$CAPSTONE_ARTIFACT_BUCKET || true
+        aws cloudformation package --template-file LambdaService-template.yml --s3-bucket $CAPSTONE_ARTIFACT_BUCKET --output-template-file lambda-service.yml
+        aws cloudformation deploy --template-file lambda-service.yml --stack-name $CAPSTONE_SERVICE_STACK --capabilities CAPABILITY_NAMED_IAM
+
+    - name: Deploy Application
+      run: |
+        source ./setupEnvironment.sh
+        aws s3 cp Application/build/libs/Application-0.0.1-SNAPSHOT.jar s3://$CAPSTONE_ARTIFACT_BUCKET/Application-0.0.1-SNAPSHOT.jar
+        aws cloudformation deploy --template-file Application-template.yml --stack-name $CAPSTONE_APPLICATION_STACK --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ProjectName=$CAPSTONE_PROJECT_NAME ApplicationName=$GITHUB_GROUP_NAME AppS3Key=Application-0.0.1-SNAPSHOT.jar
