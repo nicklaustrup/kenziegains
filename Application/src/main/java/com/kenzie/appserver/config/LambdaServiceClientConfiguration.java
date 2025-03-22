@@ -36,4 +36,3 @@ public class LambdaServiceClientConfiguration {
 //         return new MockLambdaServiceClient();
 //     }
 
-}
