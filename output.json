@@ -1,0 +1,1 @@
+{"statusCode":400,"headers":{"Content-Type":"application/json"},"body":"\"Requested resource not found (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: ResourceNotFoundException; Request ID: T4I1GETL950JP95PCF3U34SKDRVV4KQNSO5AEMVJF66Q9ASUAAJG; Proxy: null)\""}
