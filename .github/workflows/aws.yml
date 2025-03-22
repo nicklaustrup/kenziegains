@@ -61,6 +61,21 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
+
+      - name: Check Application Stack Status
+        run: |
+            source ./setupEnvironment.sh
+            STACK_STATUS=$(aws cloudformation describe-stacks --stack-name $CAPSTONE_APPLICATION_STACK --query "Stacks[0].StackStatus" --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+            echo "Application stack status is: $STACK_STATUS"
+            
+            if [[ $STACK_STATUS == "ROLLBACK_COMPLETE" || $STACK_STATUS == "CREATE_FAILED" ]]; then
+              echo "Stack is in failed state. Deleting stack before redeployment..."
+              aws cloudformation delete-stack --stack-name $CAPSTONE_APPLICATION_STACK
+              aws cloudformation wait stack-delete-complete --stack-name $CAPSTONE_APPLICATION_STACK
+            elif [[ $STACK_STATUS == *"_IN_PROGRESS" ]]; then
+              echo "Stack is currently being updated. Waiting for completion..."
+              aws cloudformation wait stack-${STACK_STATUS%_IN_PROGRESS}-complete --stack-name $CAPSTONE_APPLICATION_STACK || true
+            fi
           
       - name: Check Stack Status
         run: |
