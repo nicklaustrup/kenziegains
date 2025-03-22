@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Elastic Beanstalk
 
 Parameters:
+  GithubGroupName:
+    Type: String
+    Description: GitHub group name
 
   ProjectName:
     Type: String
