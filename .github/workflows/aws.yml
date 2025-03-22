@@ -104,4 +104,4 @@ jobs:
         run: |
           source ./setupEnvironment.sh
           aws s3 cp Application/build/libs/Application-0.0.1-SNAPSHOT.jar s3://$CAPSTONE_ARTIFACT_BUCKET/Application-0.0.1-SNAPSHOT.jar
-          aws cloudformation deploy --template-file Application-template.yml --stack-name $CAPSTONE_APPLICATION_STACK --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ProjectName=$CAPSTONE_PROJECT_NAME ApplicationName=$GITHUB_GROUP_NAME AppS3Key=Application-0.0.1-SNAPSHOT.jar
+          aws cloudformation deploy --template-file Application-template.yml --stack-name $CAPSTONE_APPLICATION_STACK --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ProjectName=$CAPSTONE_PROJECT_NAME GithubGroupName=$GITHUB_GROUP_NAME ApplicationName=$GITHUB_GROUP_NAME AppS3Key=Application-0.0.1-SNAPSHOT.jar
