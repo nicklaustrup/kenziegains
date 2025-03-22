@@ -2,6 +2,14 @@
 
 Follow the instructions in the course for completing the group Capstone project.
 
+### Preview
+![image](https://github.com/user-attachments/assets/cbf5eac5-8efb-44db-915b-180ae3a4bb60)
+
+
+
+
+
+
 ### Fill out the environment variables
 Complete `setupEnvironment.sh` with the group repo name and the github username of the team member holding the repo.
 Confirm these are in lower case.
