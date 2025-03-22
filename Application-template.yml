@@ -90,9 +90,9 @@ Resources:
       SourceBundle:
         S3Bucket: !Join
           - ''
-          - - !Ref ProjectName
+          - - !Ref ${ProjectName}
             - '-'
-            - !Ref GithubGroupName
+            - !Ref ${GithubGroupName}
             - '-artifacts'  # Make sure this matches your actual bucket name
         S3Key: !Ref AppS3Key
 

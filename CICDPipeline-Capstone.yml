@@ -159,7 +159,7 @@ Resources:
                 - aws cloudformation deploy --template-file lambda-service.yml --stack-name $CAPSTONE_SERVICE_STACK --capabilities CAPABILITY_NAMED_IAM
                 - echo Deploying Application
                 - aws s3 cp Application-0.0.1-SNAPSHOT.jar s3://$CAPSTONE_ARTIFACT_BUCKET/Application-0.0.1-SNAPSHOT.jar
-                - aws cloudformation deploy --template-file Application-template.yml --stack-name $CAPSTONE_APPLICATION_STACK --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ProjectName=$CAPSTONE_PROJECT_NAME ApplicationName=$GITHUB_GROUP_NAME AppS3Key=Application-0.0.1-SNAPSHOT.jar
+                - aws cloudformation deploy --template-file Application-template.yml --stack-name $CAPSTONE_APPLICATION_STACK --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ProjectName=$CAPSTONE_PROJECT_NAME ApplicationName=$GITHUB_GROUP_NAME GithubGroupName=$GITHUB_GROUP_NAME AppS3Key=Application-0.0.1-SNAPSHOT.jar
             post_build:
               commands:
                 - echo Deployment completed on `date`
