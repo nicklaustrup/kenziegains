@@ -102,7 +102,7 @@ Resources:
             install:
               runtime-versions:
                 java: corretto11
-                nodejs: 16
+                nodejs: 12
             pre_build:
               commands:
                 - echo Building the Java application
