@@ -3,11 +3,9 @@
 Follow the instructions in the course for completing the group Capstone project.
 
 ### Preview
-![image](https://github.com/user-attachments/assets/cbf5eac5-8efb-44db-915b-180ae3a4bb60)
+![image](https://github.com/user-attachments/assets/a0d90738-c7c5-469e-9a5b-2f9864f86939)
 
-
-
-
+![image](https://github.com/user-attachments/assets/4787b634-dee3-4175-ace5-53effb82e26a)
 
 
 ### Fill out the environment variables
