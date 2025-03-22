@@ -24,4 +24,15 @@ echo "Github Group Name: $GITHUB_GROUP_NAME"
 echo "Repo path: $CAPSTONE_REPO_NAME"
 echo "Branch: $branch"
 
-aws cloudformation create-stack --stack-name $CAPSTONE_PROJECT_NAME-$GITHUB_GROUP_NAME --template-url https://ata-deployment-scripts.s3.us-east-1.amazonaws.com/CICDPipeline-Capstone.yml --parameters ParameterKey=ProjectName,ParameterValue=$CAPSTONE_PROJECT_NAME ParameterKey=GithubUserName,ParameterValue=$GITHUB_USERNAME ParameterKey=GithubGroupName,ParameterValue=$GITHUB_GROUP_NAME ParameterKey=Repo,ParameterValue=$CAPSTONE_REPO_NAME ParameterKey=Branch,ParameterValue=$branch ParameterKey=GithubToken,ParameterValue=$GITHUB_TOKEN --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+# aws cloudformation create-stack --stack-name $CAPSTONE_PROJECT_NAME-$GITHUB_GROUP_NAME --template-body ./CICDPipeline-Capstone.yml --parameters ParameterKey=ProjectName,ParameterValue=$CAPSTONE_PROJECT_NAME ParameterKey=GithubUserName,ParameterValue=$GITHUB_USERNAME ParameterKey=GithubGroupName,ParameterValue=$GITHUB_GROUP_NAME ParameterKey=Repo,ParameterValue=$CAPSTONE_REPO_NAME ParameterKey=Branch,ParameterValue=$branch ParameterKey=GithubToken,ParameterValue=$GITHUB_TOKEN --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+aws cloudformation create-stack \
+  --stack-name nicklaustrup-kenziegains \
+  --template-body file://CICDPipeline-Capstone.yml \
+  --parameters \
+    ParameterKey=ProjectName,ParameterValue=nicklaustrup \
+    ParameterKey=GithubUserName,ParameterValue=nicklaustrup \
+    ParameterKey=GithubGroupName,ParameterValue=kenziegains \
+    ParameterKey=Repo,ParameterValue=kenziegains \
+    ParameterKey=Branch,ParameterValue=main \
+    ParameterKey=GithubToken,ParameterValue=$GITHUB_TOKEN \
+  --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM

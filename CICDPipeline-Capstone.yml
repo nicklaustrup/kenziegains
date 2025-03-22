@@ -1,0 +1,225 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CI/CD Pipeline for KenzieGains project'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Project name to use for resource naming
+    
+  GithubUserName:
+    Type: String
+    Description: GitHub username
+    
+  GithubGroupName:
+    Type: String
+    Description: GitHub group name for the project
+    
+  Repo:
+    Type: String
+    Description: GitHub repository name
+    
+  Branch:
+    Type: String
+    Description: Branch to use for deployment
+    Default: main
+    
+  GithubToken:
+    Type: String
+    Description: GitHub personal access token
+    NoEcho: true
+
+Resources:
+  # S3 Bucket for storing artifacts
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProjectName}-${GithubGroupName}-artifacts'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # CodeBuild Service Role
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+        - arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+      RoleName: !Sub '${ProjectName}-${GithubGroupName}-codebuild-role'
+
+  # CodePipeline Service Role
+  CodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+      RoleName: !Sub '${ProjectName}-${GithubGroupName}-codepipeline-role'
+
+  # CodeBuild Project for building the application
+  BuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub '${ProjectName}-${GithubGroupName}-build'
+      Description: 'Build and prepare deployment artifacts'
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+        PrivilegedMode: true
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          version: 0.2
+          phases:
+            install:
+              runtime-versions:
+                java: corretto11
+                nodejs: 16
+            pre_build:
+              commands:
+                - echo Building the Java application
+                - chmod +x gradlew
+            build:
+              commands:
+                - echo Build started on `date`
+                - ./gradlew build
+            post_build:
+              commands:
+                - echo Build completed on `date`
+                - cp Application/build/libs/Application-0.0.1-SNAPSHOT.jar .
+          artifacts:
+            files:
+              - Application-0.0.1-SNAPSHOT.jar
+              - LambdaService-template.yml
+              - Application-template.yml
+              - LambdaInstructorLeadClassTable.yml
+              - LambdaUserTable.yml
+              - LambdaClassAttendanceTable.yml
+              - setupEnvironment.sh
+              - ServiceLambda/build/distributions/ServiceLambda.zip
+            discard-paths: no
+
+  # CodeBuild Project for deploying the application
+  DeployProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub '${ProjectName}-${GithubGroupName}-deploy'
+      Description: 'Deploy application to AWS'
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          version: 0.2
+          phases:
+            pre_build:
+              commands:
+                - echo Deployment started on `date`
+                - source ./setupEnvironment.sh
+            build:
+              commands:
+                - echo Creating DynamoDB tables
+                - aws cloudformation create-stack --stack-name lambda-instructor-class-table --template-body file://LambdaInstructorLeadClassTable.yml --capabilities CAPABILITY_IAM || true
+                - aws cloudformation create-stack --stack-name lambda-user-table --template-body file://LambdaUserTable.yml --capabilities CAPABILITY_IAM || true
+                - aws cloudformation create-stack --stack-name lambda-class-attendance-table --template-body file://LambdaClassAttendanceTable.yml --capabilities CAPABILITY_IAM || true
+                - echo Deploying Lambda Service
+                - aws cloudformation package --template-file LambdaService-template.yml --s3-bucket $CAPSTONE_ARTIFACT_BUCKET --output-template-file lambda-service.yml
+                - aws cloudformation deploy --template-file lambda-service.yml --stack-name $CAPSTONE_SERVICE_STACK --capabilities CAPABILITY_NAMED_IAM
+                - echo Deploying Application
+                - aws s3 cp Application-0.0.1-SNAPSHOT.jar s3://$CAPSTONE_ARTIFACT_BUCKET/Application-0.0.1-SNAPSHOT.jar
+                - aws cloudformation deploy --template-file Application-template.yml --stack-name $CAPSTONE_APPLICATION_STACK --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ProjectName=$CAPSTONE_PROJECT_NAME ApplicationName=$GITHUB_GROUP_NAME AppS3Key=Application-0.0.1-SNAPSHOT.jar
+            post_build:
+              commands:
+                - echo Deployment completed on `date`
+
+  # CodePipeline Definition
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Sub '${ProjectName}-${GithubGroupName}-pipeline'
+      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactBucket
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: '1'
+              Configuration:
+                Owner: !Ref GithubUserName
+                Repo: !Ref Repo
+                Branch: !Ref Branch
+                OAuthToken: !Ref GithubToken
+              OutputArtifacts:
+                - Name: SourceCode
+        - Name: Build
+          Actions:
+            - Name: BuildApp
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Configuration:
+                ProjectName: !Ref BuildProject
+              InputArtifacts:
+                - Name: SourceCode
+              OutputArtifacts:
+                - Name: BuildOutput
+        - Name: Deploy
+          Actions:
+            - Name: DeployToAWS
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Configuration:
+                ProjectName: !Ref DeployProject
+              InputArtifacts:
+                - Name: BuildOutput
+
+Outputs:
+  PipelineURL:
+    Description: URL to the CodePipeline console
+    Value: !Sub 'https://console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${Pipeline}'
+  ArtifactBucketName:
+    Description: S3 bucket for storing artifacts
+    Value: !Ref ArtifactBucket

@@ -1,0 +1,284 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Lambda application that calls the Lambda API.
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: dev
+Resources:
+  GetUserDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.GetUserData
+      Runtime: java11
+      Description: Get User Data for given Username
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /user/{username}
+            Method: get
+  SetUserDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.SetUserData
+      Runtime: java11
+      Description: Create User Data
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /user/
+            Method: post
+  GetInstructorLeadClassDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.GetInstructorLeadClassData
+      Runtime: java11
+      Description: Get InstructorLeadClass Data for given id
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /instructorleadclass/{classid}
+            Method: get
+  GetAllInstructorLeadClassDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.GetAllInstructorLeadClassData
+      Runtime: java11
+      Description: Get All InstructorLeadClass in database
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /instructorleadclass/all
+            Method: get
+  PutInstructorLeadClassDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.UpdateInstructorLeadClassData
+      Runtime: java11
+      Description: Update InstructorLeadClass Data for given id
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /instructorleadclass/update
+            Method: post
+  SetInstructorLeadClassDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.SetInstructorLeadClassData
+      Runtime: java11
+      Description: Set InstructorLeadClass Data
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /instructorleadclass/
+            Method: post
+  GetClassAttendanceDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.GetClassAttendanceData
+      Runtime: java11
+      Description: Get ClassAttendance Data for given userId and classId
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /classAttendance/{userId}/{classid}
+            Method: get
+  SetClassAttendanceDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.SetClassAttendanceData
+      Runtime: java11
+      Description: Set ClassAttendance Data
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /classAttendance/
+            Method: post
+  GetAllUsersDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.GetAllUsersData
+      Runtime: java11
+      Description: Get All Users in database.
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /user/all
+            Method: get
+  GetAllClassAttendanceDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.GetAllClassAttendanceData
+      Runtime: java11
+      Description: Get All ClassAttendance in database
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /classAttendance/all
+            Method: get
+  PutClassAttendanceDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.UpdateClassAttendanceData
+      Runtime: java11
+      Description: Update ClassAttendance Data for given id
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /classAttendance/update
+            Method: post
+  UpdateUserDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      Handler: com.kenzie.capstone.service.lambda.UpdateUserData
+      Runtime: java11
+      Description: Update user in database (preserves user ID)
+      MemorySize: 512
+      Timeout: 240
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - AWSLambda_ReadOnlyAccess
+      - AWSXrayWriteOnlyAccess
+      - AWSLambdaVPCAccessExecutionRole
+      - AmazonS3FullAccess
+      - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /user/update
+            Method: post

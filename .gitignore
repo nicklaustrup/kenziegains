@@ -26,7 +26,10 @@ bin
 
 /aws.xml
 
-lambda-service-development.yml
+# lambda-service-development.yml
 
 package-lock.json
 yarn.lock
+.env
+/.env
+./.env
