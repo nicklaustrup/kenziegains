@@ -1,21 +1,17 @@
 #!/bin/bash
-# Populating tables in AWS account
-# Create InstructorLeadClass table
-#!/bin/bash
-# Populating tables in local repository only
+# Populating tables in AWS account production environment
 
 # Check if InstructorLeadClass table exists
 echo "Checking if InstructorLeadClass table exists..."
-table_exists=$(aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name InstructorLeadClass 2>/dev/null || echo "false")
+table_exists=$(aws dynamodb describe-table --table-name InstructorLeadClass 2>/dev/null || echo "false")
 
 if [[ $table_exists == "false" ]]; then
     echo "Creating InstructorLeadClass table..."
     aws dynamodb create-table \
-        --endpoint-url http://localhost:8000 \
         --table-name InstructorLeadClass \
         --attribute-definitions AttributeName=classId,AttributeType=S \
         --key-schema AttributeName=classId,KeyType=HASH \
-        --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+        --billing-mode PAY_PER_REQUEST
     echo "InstructorLeadClass table created successfully."
 else
     echo "InstructorLeadClass table already exists."
@@ -23,16 +19,15 @@ fi
 
 # Check if User table exists
 echo "Checking if User table exists..."
-table_exists=$(aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name User 2>/dev/null || echo "false")
+table_exists=$(aws dynamodb describe-table --table-name User 2>/dev/null || echo "false")
 
 if [[ $table_exists == "false" ]]; then
     echo "Creating User table..."
     aws dynamodb create-table \
-        --endpoint-url http://localhost:8000 \
         --table-name User \
         --attribute-definitions AttributeName=username,AttributeType=S \
         --key-schema AttributeName=username,KeyType=HASH \
-        --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+        --billing-mode PAY_PER_REQUEST
     echo "User table created successfully."
 else
     echo "User table already exists."
@@ -40,12 +35,11 @@ fi
 
 # Check if ClassAttendance table exists
 echo "Checking if ClassAttendance table exists..."
-table_exists=$(aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name ClassAttendance 2>/dev/null || echo "false")
+table_exists=$(aws dynamodb describe-table --table-name ClassAttendance 2>/dev/null || echo "false")
 
 if [[ $table_exists == "false" ]]; then
     echo "Creating ClassAttendance table..."
     aws dynamodb create-table \
-        --endpoint-url http://localhost:8000 \
         --table-name ClassAttendance \
         --attribute-definitions \
             AttributeName=userId,AttributeType=S \
@@ -53,16 +47,21 @@ if [[ $table_exists == "false" ]]; then
         --key-schema \
             AttributeName=userId,KeyType=HASH \
             AttributeName=classId,KeyType=RANGE \
-        --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+        --billing-mode PAY_PER_REQUEST
     echo "ClassAttendance table created successfully."
 else
     echo "ClassAttendance table already exists."
 fi
 
+# Wait for tables to be active
+echo "Waiting for tables to be active..."
+aws dynamodb wait table-exists --table-name InstructorLeadClass
+aws dynamodb wait table-exists --table-name User
+aws dynamodb wait table-exists --table-name ClassAttendance
+
 echo "Adding Morning Yoga class..."
 # Populating InstructorLeadClass table with multiple classes
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name InstructorLeadClass \
     --item \
     '{"classId": {"S": "9dff584d-98d0-45c5-9f43-b8eb1679295c"},
@@ -77,7 +76,6 @@ echo "Morning Yoga class added."
 
 echo "Adding HIIT Challenge class..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name InstructorLeadClass \
     --item \
     '{"classId": {"S": "a5ff721e-bcde-4321-9876-c1d2e3f4g5h6"},
@@ -92,7 +90,6 @@ echo "HIIT Challenge class added."
 
 echo "Adding Boxing Fundamentals class..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name InstructorLeadClass \
     --item \
     '{"classId": {"S": "b7cc835f-abcd-9876-5432-d1e2f3a4b5c6"},
@@ -107,7 +104,6 @@ echo "Boxing Fundamentals class added."
 
 echo "Adding Spinning Session class..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name InstructorLeadClass \
     --item \
     '{"classId": {"S": "c8dd946g-3456-7890-abcd-e1f2g3h4i5j6"},
@@ -123,7 +119,6 @@ echo "Spinning Session class added."
 echo "Adding Advanced Pilates class (cancelled)..."
 # Add a class that's cancelled
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name InstructorLeadClass \
     --item \
     '{"classId": {"S": "d9ee057h-6543-2109-fedc-j1k2l3m4n5o6"},
@@ -139,7 +134,6 @@ echo "Advanced Pilates class added."
 echo "Adding Admin user..."
 # Add an admin user
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name User \
     --item \
     '{"userId": {"S": "admin-id-123"},
@@ -155,7 +149,6 @@ echo "Admin user added."
 echo "Adding John Smith instructor..."
 # Add instructor users
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name User \
     --item \
     '{"userId": {"S": "instructor-id-1"},
@@ -170,7 +163,6 @@ echo "John Smith instructor added."
 
 echo "Adding Sarah Johnson instructor..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name User \
     --item \
     '{"userId": {"S": "instructor-id-2"},
@@ -185,7 +177,6 @@ echo "Sarah Johnson instructor added."
 
 echo "Adding Mike Williams instructor..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name User \
     --item \
     '{"userId": {"S": "instructor-id-3"},
@@ -201,7 +192,6 @@ echo "Mike Williams instructor added."
 echo "Adding Emily Davis gym member..."
 # Add regular gym members
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name User \
     --item \
     '{"userId": {"S": "member-id-1"},
@@ -216,7 +206,6 @@ echo "Emily Davis gym member added."
 
 echo "Adding Robert Brown gym member..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name User \
     --item \
     '{"userId": {"S": "member-id-2"},
@@ -232,7 +221,6 @@ echo "Robert Brown gym member added."
 echo "Adding Emily Davis attending Morning Yoga..."
 # Add some class attendances
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name ClassAttendance \
     --item \
     '{"userId": {"S": "member-id-1"},
@@ -242,7 +230,6 @@ echo "Emily Davis attending Morning Yoga added."
 
 echo "Adding Robert Brown attending Morning Yoga..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name ClassAttendance \
     --item \
     '{"userId": {"S": "member-id-2"},
@@ -252,7 +239,6 @@ echo "Robert Brown attending Morning Yoga added."
 
 echo "Adding Emily Davis attending HIIT Challenge..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name ClassAttendance \
     --item \
     '{"userId": {"S": "member-id-1"},
@@ -262,7 +248,6 @@ echo "Emily Davis attending HIIT Challenge added."
 
 echo "Adding Robert Brown not attending Spinning Session..."
 aws dynamodb put-item \
-    --endpoint-url http://localhost:8000 \
     --table-name ClassAttendance \
     --item \
     '{"userId": {"S": "member-id-2"},
@@ -270,23 +255,4 @@ aws dynamodb put-item \
     "attendanceStatus": {"S": "Not Attending"}}'
 echo "Robert Brown not attending Spinning Session added."
 
-echo "Tables populated with test data!"
-
-
-
-
-# Populating InstructorLeadClass table
-# aws dynamodb put-item \
-#     --table-name InstructorLeadClass  \
-#     --item \
-# 	'{"classId": {"S": "9dff584d-98d0-45c5-9f43-b8eb1679295c"},
-# 	"name": {"S": "Drew"},
-# 	"description": {"S": "string"},
-# 	"classType": {"S": "string"},
-# 	"userId": {"S": "string"},
-# 	"classCapacity": {"N": "0"},
-# 	"dateTime":{"S": "2023-06-28T19:20:45.218"},
-# 	"status": {"BOOL": true}}'
-
-# Populating tables in local repository
-
+echo "AWS tables populated with test data!"

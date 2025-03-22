@@ -1,15 +1,21 @@
 import BaseClass from "../util/baseClass";
 import axios from 'axios'
+import config from '../config';
 
 
 export default class UserRegisterClient extends BaseClass {
 
-    constructor(props = {}){
+    constructor(props = {}) {
         super();
         const methodsToBind = ['clientLoaded', 'createUser'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
-        this.clientLoaded(axios);
+        // Create axios instance with base URL
+        const axiosInstance = axios.create({
+            baseURL: config.apiUrl
+        });
+
+        this.clientLoaded(axiosInstance);
     }
 
     /**
@@ -18,7 +24,7 @@ export default class UserRegisterClient extends BaseClass {
      */
     clientLoaded(client) {
         this.client = client;
-        if (this.props.hasOwnProperty("onReady")){
+        if (this.props.hasOwnProperty("onReady")) {
             this.props.onReady();
         }
     }

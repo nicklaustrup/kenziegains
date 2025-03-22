@@ -1,15 +1,21 @@
 import BaseClass from "../util/baseClass";
 import axios from 'axios'
+import config from '../config';
 
 
 export default class UserLoginClient extends BaseClass {
 
-    constructor(props = {}){
+    constructor(props = {}) {
         super();
         const methodsToBind = ['clientLoaded', 'getUser'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
-        this.clientLoaded(axios);
+        // Create axios instance with base URL
+        const axiosInstance = axios.create({
+            baseURL: config.apiUrl
+        });
+
+        this.clientLoaded(axiosInstance);
     }
 
     /**
@@ -18,19 +24,19 @@ export default class UserLoginClient extends BaseClass {
      */
     clientLoaded(client) {
         this.client = client;
-        if (this.props.hasOwnProperty("onReady")){
+        if (this.props.hasOwnProperty("onReady")) {
             this.props.onReady();
         }
     }
 
-     async getUser(username, password, errorCallback) {
-         try {
-             const response = await this.client.get(`/user/${username}_${password}`);
-             return response.data;
-         } catch (error) {
-             this.handleError("getUser", error, errorCallback)
-         }
-     }
+    async getUser(username, password, errorCallback) {
+        try {
+            const response = await this.client.get(`/user/${username}_${password}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("getUser", error, errorCallback)
+        }
+    }
 
     /**
      * Helper method to log the error and run any error functions.

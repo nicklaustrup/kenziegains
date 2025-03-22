@@ -1,5 +1,6 @@
 import BaseClass from "../util/baseClass";
 import axios from 'axios'
+import config from '../config';
 
 /**
  * Client to call the MusicPlaylistService.
@@ -11,12 +12,17 @@ import axios from 'axios'
  */
 export default class ExampleClient extends BaseClass {
 
-    constructor(props = {}){
+    constructor(props = {}) {
         super();
         const methodsToBind = ['clientLoaded', 'getExample', 'createExample'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
-        this.clientLoaded(axios);
+        // Create axios instance with base URL
+        const axiosInstance = axios.create({
+            baseURL: config.apiUrl
+        });
+
+        this.clientLoaded(axiosInstance);
     }
 
     /**
@@ -25,7 +31,7 @@ export default class ExampleClient extends BaseClass {
      */
     clientLoaded(client) {
         this.client = client;
-        if (this.props.hasOwnProperty("onReady")){
+        if (this.props.hasOwnProperty("onReady")) {
             this.props.onReady();
         }
     }

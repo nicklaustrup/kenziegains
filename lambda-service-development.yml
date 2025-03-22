@@ -9,7 +9,7 @@ Resources:
   GetUserDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.GetUserData
       Runtime: java11
       Description: Get User Data for given Username
@@ -32,7 +32,7 @@ Resources:
   SetUserDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.SetUserData
       Runtime: java11
       Description: Create User Data
@@ -55,7 +55,7 @@ Resources:
   GetInstructorLeadClassDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.GetInstructorLeadClassData
       Runtime: java11
       Description: Get InstructorLeadClass Data for given id
@@ -78,7 +78,7 @@ Resources:
   GetAllInstructorLeadClassDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.GetAllInstructorLeadClassData
       Runtime: java11
       Description: Get All InstructorLeadClass in database
@@ -101,7 +101,7 @@ Resources:
   PutInstructorLeadClassDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.UpdateInstructorLeadClassData
       Runtime: java11
       Description: Update InstructorLeadClass Data for given id
@@ -124,7 +124,7 @@ Resources:
   SetInstructorLeadClassDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.SetInstructorLeadClassData
       Runtime: java11
       Description: Set InstructorLeadClass Data
@@ -147,7 +147,7 @@ Resources:
   GetClassAttendanceDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.GetClassAttendanceData
       Runtime: java11
       Description: Get ClassAttendance Data for given userId and classId
@@ -170,7 +170,7 @@ Resources:
   SetClassAttendanceDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.SetClassAttendanceData
       Runtime: java11
       Description: Set ClassAttendance Data
@@ -193,7 +193,7 @@ Resources:
   GetAllUsersDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.GetAllUsersData
       Runtime: java11
       Description: Get All Users in database.
@@ -216,7 +216,7 @@ Resources:
   GetAllClassAttendanceDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.GetAllClassAttendanceData
       Runtime: java11
       Description: Get All ClassAttendance in database
@@ -239,7 +239,7 @@ Resources:
   PutClassAttendanceDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.UpdateClassAttendanceData
       Runtime: java11
       Description: Update ClassAttendance Data for given id
@@ -262,7 +262,7 @@ Resources:
   UpdateUserDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://nicklaustrup-kenziegains-artifacts/f80b646eb268084412918101fc8125b1
+      CodeUri: s3://nicklaustrup-kenziegains-artifacts/c8eed6435ae92e123b9e8f0bfeaa2337
       Handler: com.kenzie.capstone.service.lambda.UpdateUserData
       Runtime: java11
       Description: Update user in database (preserves user ID)

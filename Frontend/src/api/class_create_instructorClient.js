@@ -1,5 +1,6 @@
 import BaseClass from "../util/baseClass";
 import axios from 'axios'
+import config from '../config';
 
 /**
  * Client to call the MusicPlaylistService.
@@ -11,12 +12,17 @@ import axios from 'axios'
  */
 export default class ClassCreateClient extends BaseClass {
 
-    constructor(props = {}){
+    constructor(props = {}) {
         super();
         const methodsToBind = ['clientLoaded', 'getUser', 'createClass'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
-        this.clientLoaded(axios);
+        // Create axios instance with base URL
+        const axiosInstance = axios.create({
+            baseURL: config.apiUrl
+        });
+
+        this.clientLoaded(axiosInstance);
     }
 
     /**
@@ -25,7 +31,7 @@ export default class ClassCreateClient extends BaseClass {
      */
     clientLoaded(client) {
         this.client = client;
-        if (this.props.hasOwnProperty("onReady")){
+        if (this.props.hasOwnProperty("onReady")) {
             this.props.onReady();
         }
     }
@@ -37,14 +43,14 @@ export default class ClassCreateClient extends BaseClass {
      * @returns The concert
      */
 
-     async getUser(username, password, errorCallback) {
-         try {
-             const response = await this.client.get(`/user/${username}_${password}`);
-             return response.data;
-         } catch (error) {
-             this.handleError("getUser", error, errorCallback)
-         }
-     }
+    async getUser(username, password, errorCallback) {
+        try {
+            const response = await this.client.get(`/user/${username}_${password}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("getUser", error, errorCallback)
+        }
+    }
 
     async createClass(name, description, classType, userId, classCapacity, dateTime, status, errorCallback) {
         try {
