@@ -15,13 +15,12 @@ import java.net.http.HttpResponse;
 
 import static com.kenzie.capstone.service.client.EnvironmentVariableUtility.getEnvVarFromSetupEnvironment;
 
-
 public class EndpointUtility {
     private String apiEndpoint;
 
-    //----------------------------------------------------------------------------------------------
-    //do not modify any of the inbetween code unless explicitly told to do so
-    //VVVVVV
+    // ----------------------------------------------------------------------------------------------
+    // do not modify any of the inbetween code unless explicitly told to do so
+    // VVVVVV
 
     public EndpointUtility() {
         this.apiEndpoint = getApiEndpint();
@@ -39,47 +38,67 @@ public class EndpointUtility {
             deploymentName = getEnvVarFromSetupEnvironment("CAPSTONE_SERVICE_STACK_DEV");
         }
         if (deploymentName == null) {
-            throw new IllegalArgumentException("Could not find the deployment name in environment variables.  Make sure that you have set up your environment variables using the setupEnvironment.sh script.");
+            throw new IllegalArgumentException(
+                    "Could not find the deployment name in environment variables.  Make sure that you have set up your environment variables using the setupEnvironment.sh script.");
         }
         return deploymentName;
     }
 
     public static String getApiEndpint() {
-        String region = System.getenv("AWS_REGION");
-        if (region == null) {
-            region = "us-east-1";
-        }
+        // For local development, return a local endpoint
+        return "http://localhost:5001/";
 
-        String deploymentName = getStackName();
+        // String region = System.getenv("AWS_REGION");
+        // if (region == null) {
+        // region = "us-east-1";
+        // }
 
-        AmazonApiGateway apiGatewayClient = AmazonApiGatewayClientBuilder.defaultClient();
-        GetRestApisRequest request = new GetRestApisRequest();
-        request.setLimit(500);
-        GetRestApisResult result = apiGatewayClient.getRestApis(request);
+        // String deploymentName = getStackName();
 
-        String endpointId = null;
-        for (RestApi restApi : result.getItems()) {
-            if (restApi.getName().equals(deploymentName)) {
-                endpointId = restApi.getId();
-                break;
-            }
-        }
-        if (endpointId == null) {
-            throw new IllegalArgumentException("Could not locate the API Gateway endpoint.  Make sure that your API is deployed and that your AWS credentials are valid.");
-        }
+        // AmazonApiGateway apiGatewayClient =
+        // AmazonApiGatewayClientBuilder.defaultClient();
+        // GetRestApisRequest request = new GetRestApisRequest();
+        // request.setLimit(500);
+        // GetRestApisResult result = apiGatewayClient.getRestApis(request);
 
-        return "https://" + endpointId + ".execute-api." + region + ".amazonaws.com/Prod/";
+        // String endpointId = null;
+        // for (RestApi restApi : result.getItems()) {
+        // if (restApi.getName().equals(deploymentName)) {
+        // endpointId = restApi.getId();
+        // break;
+        // }
+        // }
+        // if (endpointId == null) {
+        // throw new IllegalArgumentException("Could not locate the API Gateway
+        // endpoint. Make sure that your API is deployed and that your AWS credentials
+        // are valid.");
+        // }
+
+        // return "https://" + endpointId + ".execute-api." + region +
+        // ".amazonaws.com/Prod/";
     }
 
-    //^^^^^^^^^^
-    //do not modify the above code unless told to do so
-    //---------------------------------------------------------------------------------------------
+    // ^^^^^^^^^^
+    // do not modify the above code unless told to do so
+    // ---------------------------------------------------------------------------------------------
 
-
-    //The code below can be modified as needed to modify how it handles status codes, etc
-
+    // The code below can be modified as needed to modify how it handles status
+    // codes, etc
 
     public String postEndpoint(String endpoint, String data) {
+            // String api = getApiEndpint();
+            // String url = api + endpoint;
+
+            // HttpClient client = HttpClient.newHttpClient();
+            // URI uri = URI.create(url);
+            // HttpRequest request = HttpRequest.newBuilder()
+            // .uri(uri)
+            // .header("Accept", "application/json")
+            // .POST(HttpRequest.BodyPublishers.ofString(data))
+            // .build();
+            // try {
+            // HttpResponse<String> httpResponse = client.send(request,
+            // HttpResponse.BodyHandlers.ofString());
         String api = getApiEndpint();
         String url = api + endpoint;
 
@@ -88,11 +107,11 @@ public class EndpointUtility {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .header("Accept", "application/json")
+                .header("Content-Type", "application/json") // Add this line
                 .POST(HttpRequest.BodyPublishers.ofString(data))
                 .build();
         try {
             HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
-
             int statusCode = httpResponse.statusCode();
             if (statusCode == 200) {
                 return httpResponse.body();

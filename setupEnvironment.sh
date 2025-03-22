@@ -7,7 +7,7 @@
 #If the casing is different you will have issues.
 #for example if the username was tHisIS-bOb this would read:
 #export CAPSTONE_REPO_NAME=ata-capstone-project-tHisIS-bOb
-export CAPSTONE_REPO_NAME=ata-capstone-project-kenziegains
+export CAPSTONE_REPO_NAME=kenziegains
 
 # Fill out the following value with the group name in all lowercase and no spaces or special characters.
 export GITHUB_GROUP_NAME=kenziegains
@@ -27,7 +27,7 @@ export GITHUB_GROUP_NAME=kenziegains
 
 
 # Do not modify the rest of these unless you have been instructed to do so.
-export CAPSTONE_PROJECT_NAME=capstone
+export CAPSTONE_PROJECT_NAME=nicklaustrup
 export CAPSTONE_PIPELINE_STACK=$CAPSTONE_PROJECT_NAME-$GITHUB_GROUP_NAME
 export CAPSTONE_ARTIFACT_BUCKET=$CAPSTONE_PROJECT_NAME-$GITHUB_GROUP_NAME-artifacts
 export CAPSTONE_APPLICATION_STACK=$CAPSTONE_PROJECT_NAME-$GITHUB_GROUP_NAME-application
