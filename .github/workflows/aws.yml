@@ -32,7 +32,7 @@ on:
   workflow_dispatch:  # Allows manual triggering
 
 env:
-  AWS_REGION: us-east-1  # Your preferred AWS region
+  AWS_REGION: us-west-2  # Your preferred AWS region
   CAPSTONE_PROJECT_NAME: kenziegains
   GITHUB_GROUP_NAME: kenziegains
 
